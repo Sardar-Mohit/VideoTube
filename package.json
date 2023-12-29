@@ -1,0 +1,20 @@
+{
+  "name": "backend-mega-project",
+  "version": "1.0.0",
+  "description": "Mega Project of backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "backend",
+    "mega",
+    "project"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "prettier": "^3.1.1"
+  }
+}
