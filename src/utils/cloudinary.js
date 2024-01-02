@@ -15,7 +15,7 @@ const cloudinary = async (localFilePath) => {
       resource_type: "auto",
     });
     fs.unlinkSync(localFilePath);
-    console.log(response);
+    response.log(response);
   } catch (error) {
     fs.unlinkSync(localFilePath);
     return null;
