@@ -113,3 +113,15 @@ router.route("/register").post(registerUser);
 controller // Task
 route // That user visited and has controller in it
 middleware // it will redirect the program from app.js to routes.js so that the code is not poluted
+
+<!-- Registeration : -->
+
+// get user details ✅
+// vaidation - not empty ✅
+// check if user already exists : username , email ✅
+// check for images, check for avatar ✅
+// upload them to cloudinary, avatar ✅
+// create user object create entry in the db ✅
+// remove password and refresh token field from the response ✅
+// check for user creation ✅
+// return response ✅

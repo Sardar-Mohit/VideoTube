@@ -4,36 +4,46 @@ import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema(
   {
-    videoFile: {
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+      unique: true,
+      index: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+      lowercase: true,
+    },
+    fullname: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+    },
+    avatar: {
       type: String,
       required: true,
     },
-    thumbnail: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    description: {
+    coverImage: {
       type: String,
     },
-    duration: {
+    watchHistory: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Video",
+      },
+    ],
+    refreshToken: {
       type: String,
-      required: true,
-    },
-    isPublished: {
-      type: Boolean,
-      required: true,
-    },
-    views: {
-      type: Number,
-      default: 0,
-    },
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Video",
     },
   },
   { timestamps: true }
@@ -65,6 +75,7 @@ userSchema.methods.generateAccessToken = function () {
     }
   );
 };
+
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
