@@ -98,3 +98,18 @@ expiresIn: process.env.ACCESS_REFRESH_EXPIRY,
 }
 );
 };
+
+<!-- Routers and controllers  -->
+
+in app.js we have defined a middleware route that will be activated every time so that we dont have to create multiple routes and polute the file
+
+a common route is deined as a middleware in the app.js so that we dont polute the file by creating multiple routes in the app.js
+that route will redirect you to the user.routes.js file that have different routes
+like /register if the user go to register route it will perform the especific task that task is writtem in the user.controllers.js
+means every time user will go to any route middleware will be activated in app.js it will redirect the program to the routes file according the link that user want to visit the program will choice the route and in that route the task is mentioned and that task is writtem in the controllers we import the controller and use it as a callback
+///////////// Link ///////////// Controller
+router.route("/register").post(registerUser);
+
+controller // Task
+route // That user visited and has controller in it
+middleware // it will redirect the program from app.js to routes.js so that the code is not poluted
