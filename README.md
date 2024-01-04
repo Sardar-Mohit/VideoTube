@@ -125,3 +125,12 @@ middleware // it will redirect the program from app.js to routes.js so that the 
 // remove password and refresh token field from the response ✅
 // check for user creation ✅
 // return response ✅
+
+<!-- Registeration resting  -->
+
+// Wrote code to see if coverImage is available or not if not then send data without it if yes then send data with it
+
+<!-- Postman -->
+// Created Collection in Postman for a project so all the requests are saved there so i don't have to write the form from start just changeing the values will work
+// Created environment variabe in postman and make it available in the particular project
+// We created env so that we don't have to write the whole url again and agian we could just use the env/varibale in which the url is stored.
