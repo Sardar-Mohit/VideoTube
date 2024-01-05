@@ -3,10 +3,11 @@ import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { userModel } from "../models/userModel.js";
 
-const authMiddleware = asyncHandler(
+export const verifyJWT = asyncHandler(
   async (req, _ /* we can change res to _ if not being used*/, next) => {
     try {
-      const token = req.cookie?.accessToken;
+      const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
+      console.log(token);
       if (!token) {
         throw new ApiError(401, "Unauthorized request");
       }
@@ -21,12 +22,10 @@ const authMiddleware = asyncHandler(
         throw new ApiError(401, "Invalid Access Token");
       }
 
-      req.user = user;
+      req.body = user;
       next();
     } catch (error) {
       throw new ApiError(401, error?.message || "Invalid access token");
     }
   }
 );
-
-export { authMiddleware };

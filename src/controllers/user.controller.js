@@ -3,62 +3,56 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import mongoose from "mongoose";
 
-const TokenGenerator = asyncHandler(async (userId) => {
+const TokenGenerator = async (userId) => {
   try {
-    let user = await userModel.findById({ userId });
-    let accessToken = await user.generateAccessToken({ userId });
-    let refreshToken = await user.generateRefreshToken({ userId });
+    const user = await userModel.findById(userId);
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
 
     user.refreshToken = refreshToken;
-    user.save({ validateBeforeSave: false });
+    await user.save({ validateBeforeSave: false });
+
     return { accessToken, refreshToken };
+    
   } catch (error) {
     throw new ApiError(
       500,
-      "Something went wrong while creating the refresh token"
+      "Something went wrong while generating referesh and access token"
     );
   }
-});
+};
 
 const registerUser = asyncHandler(async (req, res) => {
-  // get user details ✅
-  // vaidation - not empty ✅
-  // check if user already exists : username , email ✅
-  // check for images, check for avatar ✅
-  // upload them to cloudinary, avatar ✅
-  // create user object create entry in the db ✅
-  // remove password and refresh token field from the response ✅
-  // check for user creation ✅
-  // return response ✅
-
-  // get user details ✅
-  const { fullname, username, password, email } = req.body;
-
-  // vaidation - not empty ✅
+  // get user details from frontend
+  // validation - not empty
+  // check if user already exists: username, email
+  // check for images, check for avatar
+  // upload them to cloudinary, avatar
+  // create user object - create entry in db
+  // remove password and refresh token field from response
+  // check for user creation
+  // return res
+  const { fullname, email, username, password } = req.body;
+  //console.log("email: ", email);
   if (
-    [fullname, username, password, email].some(
-      (field) => !field || !field.trim()
-    )
+    [fullname, email, username, password].some((field) => field?.trim() === "")
   ) {
-    throw new ApiError(400, "All the fields are required");
+    throw new ApiError(400, "All fields are required");
   }
 
-  // check if user already exists : username , email ✅
   const existedUser = await userModel.findOne({
-    $or: [{ email: email }, { username: username }],
+    $or: [{ username }, { email }],
   });
 
   if (existedUser) {
-    throw new ApiError(
-      409,
-      "User already exists with the same email or username"
-    );
+    throw new ApiError(409, "User with email or username already exists");
   }
+  //console.log(req.files);
 
-  // check for images, check for avatar ✅
-  const avatarLocalPath = req.files?.avatar?.[0]?.path;
-  // const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
+  const avatarLocalPath = req.files?.avatar[0]?.path;
+  //const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
   let coverImageLocalPath;
   if (
@@ -68,43 +62,38 @@ const registerUser = asyncHandler(async (req, res) => {
   ) {
     coverImageLocalPath = req.files.coverImage[0].path;
   }
+
   if (!avatarLocalPath) {
-    throw new ApiError(400, "Avatar is required");
+    throw new ApiError(400, "Avatar file is required");
   }
 
-  // upload them to cloudinary, avatar ✅
   const avatar = await uploadOnCloudinary(avatarLocalPath);
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
   if (!avatar) {
-    throw new ApiError(400, "Avatar is required ::");
+    throw new ApiError(400, "Avatar file is required");
   }
 
-  // console.dir("hellp " + req.files);
-
-  // create user object create entry in the db
   const user = await userModel.create({
-    username: username.toLowerCase(),
     fullname,
-    email,
-    password,
     avatar: avatar.url,
     coverImage: coverImage?.url || "",
+    email,
+    password,
+    username: username.toLowerCase(),
   });
 
-  // remove password and refresh token field from the response ✅
   const createdUser = await userModel
     .findById(user._id)
     .select("-password -refreshToken");
 
-  // check for user creation
   if (!createdUser) {
-    throw new ApiError(500, "Something went wrong while regietering the user");
+    throw new ApiError(500, "Something went wrong while registering the user");
   }
-
+  console.log("created user:", req.body);
   return res
-    .status(200)
-    .json(new ApiResponse(200, createdUser, "User Successfully Created"));
+    .status(201)
+    .json(new ApiResponse(200, createdUser, "User registered Successfully"));
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -114,25 +103,32 @@ const loginUser = asyncHandler(async (req, res) => {
   //password check
   //access and referesh token
   //send cookie
-  const { username, email, password } = req.body;
-  if (!username && !email) {
+  console.log("Incoming login request body:", req.body);
+  console.dir(req, { depth: null }); // Add this line
+  const { email, username, password } = req.body;
+  console.log("Incoming login request body:", req.body);
+
+  if (!(username || email)) {
     throw new ApiError(400, "username or email is required");
   }
 
-  const user = await userModel.findOne({ $or: [{ email }, { username }] });
+  const user = await userModel.findOne({
+    $or: [{ username }, { email }],
+  });
+
   if (!user) {
     throw new ApiError(404, "User does not exist");
   }
 
-  let isPasswordValid = await user.isPasswordCorrect(password);
+  const isPasswordValid = await user.isPasswordCorrect(password);
 
   if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid password");
+    throw new ApiError(401, "Invalid user credentials");
   }
 
-  const { accessToken, refreshToken } = TokenGenerator(user._id);
+  const { accessToken, refreshToken } = await TokenGenerator(user._id);
 
-  let loggedInUser = await userModel
+  const loggedInUser = await userModel
     .findById(user._id)
     .select("-password -refreshToken");
 
@@ -141,6 +137,7 @@ const loginUser = asyncHandler(async (req, res) => {
     secure: true,
   };
 
+  console.log("Incoming login request body:", req.body);
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
