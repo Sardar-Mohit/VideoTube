@@ -16,12 +16,21 @@ const uploadOnCloudinary = async (localFilePath) => {
     });
 
     fs.unlinkSync(localFilePath);
+
     return response;
-    
   } catch (error) {
-    fs.unlinkSync(localFilePath);
+    fs.unlinkSync(localFilePath); // remove the locally saved temporary file as the upload operation got failed
     return null;
   }
 };
 
-export { uploadOnCloudinary };
+const deleteFromCloudinary = async (publicId) => {
+  try {
+    const response = await cloudinary.uploader.destroy(publicId);
+    return response.result === "ok";
+  } catch (error) {
+    return false;
+  }
+};
+
+export { uploadOnCloudinary, deleteFromCloudinary };

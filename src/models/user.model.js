@@ -1,52 +1,60 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import mongoose, { Schema } from "mongoose";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
     username: {
       type: String,
       required: true,
-      trim: true,
-      lowercase: true,
       unique: true,
+      lowercase: true,
+      trim: true,
       index: true,
     },
     email: {
       type: String,
       required: true,
-      trim: true,
       unique: true,
       lowercase: true,
+      trim: true,
     },
-    fullname: {
+    fullName: {
       type: String,
       required: true,
       trim: true,
       index: true,
     },
+    avatar: {
+      type: String, // cloudinary url
+      required: true,
+    },
+    coverImage: {
+      type: String, // cloudinary url
+    },
+    watchHistory: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Video",
+      },
+    ],
     password: {
       type: String,
       required: [true, "Password is required"],
     },
-    avatar: {
-      type: String,
-      required: true,
-    },
-    coverImage: {
-      type: String,
-    },
-    watchHistory: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Video",
-      },
-    ],
     refreshToken: {
       type: String,
     },
+    videos: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Video",
+      },
+    ],
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 userSchema.pre("save", async function (next) {
@@ -64,9 +72,9 @@ userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
-      username: this.username,
-      fullname: this.fullname,
       email: this.email,
+      username: this.username,
+      fullName: this.fullName,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
@@ -74,17 +82,16 @@ userSchema.methods.generateAccessToken = function () {
     }
   );
 };
-userSchema.methods.generateRefreshToken = function(){
+userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
-      {
-          _id: this._id,
-          
-      },
-      process.env.REFRESH_TOKEN_SECRET,
-      {
-          expiresIn: process.env.REFRESH_TOKEN_EXPIRY
-      }
-  )
-}
+    {
+      _id: this._id,
+    },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+    }
+  );
+};
 
-export const userModel = mongoose.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);
