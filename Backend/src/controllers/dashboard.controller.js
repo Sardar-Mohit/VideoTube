@@ -81,7 +81,6 @@ const getChannelStats = asyncHandler(async (req, res) => {
 });
 
 const getChannelVideos = asyncHandler(async (req, res) => {
-  // TODO: Get all the videos uploaded by the channel
   let user = req.user;
   if (!user) {
     throw new ApiError(200, "User not found while getting videos");

@@ -5,7 +5,6 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const toggleVideoLike = asyncHandler(async (req, res) => {
-  //TODO: toggle like on video
   const { videoId } = req.params;
   const user = req.user;
 
@@ -38,7 +37,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
 
 const toggleCommentLike = asyncHandler(async (req, res) => {
   const { commentId } = req.params;
-  //TODO: toggle like on comment
+
   const user = req.user;
 
   // User unliking a comment
@@ -70,7 +69,6 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
 
 const toggleTweetLike = asyncHandler(async (req, res) => {
   const { tweetId } = req.params;
-  //TODO: toggle like on tweet
   const user = req.user;
 
   // User unliking a Tweet
@@ -101,9 +99,8 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
 });
 
 const getLikedVideos = asyncHandler(async (req, res) => {
-  //TODO: get all liked videos
   let user = req.user;
-  
+
   let likedVideos = await Like.find({
     video: { $exists: true },
     likedBy: user._id,

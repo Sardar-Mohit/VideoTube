@@ -8,8 +8,6 @@ import { Video } from "../models/video.model.js";
 const createPlaylist = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
 
-  //TODO: create playlist
-
   let playlist = await Playlist.create({
     name: name,
     description: description,
@@ -26,7 +24,6 @@ const createPlaylist = asyncHandler(async (req, res) => {
 
 const getUserPlaylists = asyncHandler(async (req, res) => {
   const { userId } = req.params;
-  //TODO: get user playlists
 
   let userPlaylists = await Playlist.findOne({ owner: userId });
   if (!userPlaylists) {
@@ -42,7 +39,6 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
 
 const getPlaylistById = asyncHandler(async (req, res) => {
   const { playlistId } = req.params;
-  //TODO: get playlist by id
 
   let getPlaylists = await Playlist.findById({ _id: playlistId });
   if (!getPlaylists) {
@@ -105,14 +101,13 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 
 const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
   const { playlistId, videoId } = req.params;
-  // TODO: remove video from playlist
 
   let playlistBeforeUpdate = await Playlist.findById(playlistId);
   // Error if video not present
   if (!playlistBeforeUpdate.videos.includes(videoId)) {
     throw new ApiError(400, "Video not found in the playlist");
   }
-  
+
   // Get playlist
   let playlist = await Playlist.findByIdAndUpdate(
     { _id: playlistId },
@@ -122,7 +117,6 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
   if (!playlist) {
     throw new ApiError(404, "Playlist not found to delete video");
   }
-
 
   // send response
   res
@@ -138,7 +132,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
 
 const deletePlaylist = asyncHandler(async (req, res) => {
   const { playlistId } = req.params;
-  // TODO: delete playlist
+
   let getPlaylistsToDelete = await Playlist.findByIdAndDelete({
     _id: playlistId,
   });
@@ -161,7 +155,6 @@ const updatePlaylist = asyncHandler(async (req, res) => {
   const { playlistId } = req.params;
   const { name, description } = req.body;
 
-  //TODO: update playlist
   let PlaylistsToUpdate = await Playlist.findById({ _id: playlistId });
   if (!PlaylistsToUpdate) {
     throw new ApiError(404, "Playlist not found to update");
