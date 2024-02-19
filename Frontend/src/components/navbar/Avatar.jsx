@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
-import { AlertBox } from "./index";
+import { AlertBox } from "../index";
 
 const Avatar = () => {
   const navigate = useNavigate();

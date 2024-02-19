@@ -1,30 +1,43 @@
-import AlertBox from "./AlertBox";
-import Aside from "./Aside";
-import Avatar from "./Avatar";
-import ChannelCardInSubscribed from "./ChannelCardInSubscribed";
-import CommentCard from "./CommentCard";
-import DashboardTableRow from "./DashboardTableRow";
+// Aside 
+import Aside from "./aside/Aside";
+import VideoAside from "./aside/VideoAside";
+
+// Cards 
+import ChannelCardInSubscribed from "./cards/ChannelCardInSubscribed";
+import CommentCard from "./cards/CommentCard";
+import PlaylistCard from "./cards/PlaylistCard";
+import TweetCard from "./cards/TweetCard";
+import LandingVideoPageCard from "./cards/LandingVideoPageCard";
+import VideoCard from "./cards/VideoCard";
+import VideoListingForSearch from "./cards/VideoListForSearch";
+import VideoPlaying from "./cards/VideoPlaying";
+import VideoSuggestion from "./cards/VideoSuggestion";
+import DashboardTableRow from "./cards/DashboardTableRow";
+
+// Edit 
+import EditVideoModelPopUp from "./edit/EditVideoModelPopUp";
+
+// Empty page 
+import NoVideosAvailable from "./empty-page/NoVideosAvailable";
+
+// Navbar
+import Avatar from "./navbar/Avatar";
+import AlertBox from "./navbar/AlertBox";
+import Input from "./navbar/Input";
+import Logo from "./navbar/Logo";
+import Logout from "./navbar/Logout";
+import NavbarOne from "./navbar/NavbarOne";
+import NavbarTwo from "./navbar/NavbarTwo";
+
+// Profile
+import ProfileBanner from "./profile/ProfileBanner";
+import ProfileBannerPicture from "./profile/ProfileBannerPicture";
+
+// Others 
 import DeleteVideoModel from "./DeleteVideoModel";
-import EditVideoModelPopUp from "./EditVideoModelPopUp";
 import Footer from "./Footer";
-import Input from "./Input";
-import LandingVideoPageCard from "./LandingVideoPageCard";
-import Logo from "./Logo";
-import Logout from "./Logout";
-import NavbarOne from "./NavbarOne";
-import NavbarTwo from "./NavbarTwo";
-import NoVideosAvailable from "./NoVideosAvailable";
-import PlaylistCard from "./PlaylistCard";
-import ProfileBanner from "./ProfileBanner";
-import ProfileBannerPicture from "./ProfileBannerPicture";
-import TweetCard from "./TweetCard";
 import UploadPopUp from "./UploadPopUp";
 import UploadingVideoLoading from "./UploadingVideoLoading";
-import VideoAside from "./VideoAside";
-import VideoCard from "./VideoCard";
-import VideoListingForSearch from "./VideoListForSearch";
-import VideoPlaying from "./VideoPlaying";
-import VideoSuggestion from "./VideoSuggestion";
 
 export {
   AlertBox,

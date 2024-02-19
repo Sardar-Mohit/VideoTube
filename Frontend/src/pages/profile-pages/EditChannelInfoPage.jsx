@@ -1,6 +1,6 @@
-import "../index.css";
 import { Aside, ProfileBanner, ProfileBannerPicture } from "@/components";
 import { useNavigate } from "react-router-dom";
+
 const EditChannelInfoPage = () => {
   const navigate = useNavigate();
   return (

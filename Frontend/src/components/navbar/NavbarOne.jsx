@@ -1,4 +1,4 @@
-import { Avatar, Logo } from "./index.jsx";
+import { Avatar, Logo } from "../index.jsx";
 import { useNavigate } from "react-router-dom";
 const NavbarOne = () => {
   const navigate = useNavigate();

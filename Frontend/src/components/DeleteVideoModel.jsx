@@ -1,5 +1,3 @@
-import { NavbarTwo } from "@/components";
-import Aside from "@/components/Aside";
 const DeleteVideoModel = () => {
   return (
     <>

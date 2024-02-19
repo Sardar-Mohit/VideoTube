@@ -1,3 +1,4 @@
+import "../index.css"
 import { Aside, LandingVideoPageCard } from "@/components/index";
 
 const LandingPage = () => {

@@ -1,39 +1,52 @@
-import LandingPage from "./LandingPage";
-import Subscribed from "./Subscribed";
-import Tweet from "./Tweet";
-import PrivacyPolicy from "./PrivacyPolicy";
-import TermsAndCondition from "./TermsAndCondition";
-import Dashboard from "./Dashboard";
-import IndividualPage from "./IndividualPage";
-import Playlist from "./Playlist";
-import VideoListing from "./VideoListing";
-import OpenedPlaylist from "./OpenedPlaylist";
-import EditPersonalInfoPage from "./EditPersonalInfoPage";
-import EditChannelInfoPage from "./EditChannelInfoPage";
-import ChangePasswordPage from "./ChangePasswordPage";
-import Register from "./Register";
-import Login from "./login";
-import Profile from "./Profile";
-import LikedVideosPage from "./LikedVideosPage";
-import WatchHistoryPage from "./WatchHistoryPage";
+//  Aside
+import Subscribed from "./aside/Subscribed";
+import Tweet from "./aside/Tweet";
+import LikedVideosPage from "./aside/LikedVideosPage";
+import WatchHistoryPage from "./aside/WatchHistoryPage";
+
+//  Landing page
+import LandingPage from "./landing-pages/LandingPage";
+import IndividualPage from "./landing-pages/IndividualPage";
+
+// Playlist
+import Playlist from "./playlist/Playlist";
+import OpenedPlaylist from "./playlist/OpenedPlaylist";
+
+// Support
+import PrivacyPolicy from "./support/PrivacyPolicy";
+import TermsAndCondition from "./support/TermsAndCondition";
+
+// Profile
+import Profile from "./profile-pages/Profile";
+import Dashboard from "./profile-pages/Dashboard";
+import EditPersonalInfoPage from "./profile-pages/EditPersonalInfoPage";
+import EditChannelInfoPage from "./profile-pages/EditChannelInfoPage";
+import ChangePasswordPage from "./profile-pages/ChangePasswordPage";
+
+// Registeration
+import Register from "./registeration/Register";
+import Login from "./registeration/login";
+
+// Others
+import VideoListing from "./searchResult";
 
 export {
   Subscribed,
-  WatchHistoryPage,
-  LikedVideosPage,
   Tweet,
+  LikedVideosPage,
+  WatchHistoryPage,
+  IndividualPage,
+  LandingPage,
+  Playlist,
+  OpenedPlaylist,
   PrivacyPolicy,
   TermsAndCondition,
+  Profile,
   Dashboard,
-  LandingPage,
-  IndividualPage,
-  Playlist,
-  VideoListing,
-  OpenedPlaylist,
   EditPersonalInfoPage,
   EditChannelInfoPage,
   ChangePasswordPage,
   Register,
   Login,
-  Profile,
+  VideoListing,
 };
