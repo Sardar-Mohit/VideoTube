@@ -8,8 +8,7 @@ export const loginUser = createAsyncThunk(
       "http://localhost:8000/api/v1/users/login",
       userCredentials
     );
-    console.log(request);
-    const response = request.data.data;
+    const response = request.data;
     localStorage.setItem("user", JSON.stringify(response));
     return response;
   }
@@ -21,27 +20,27 @@ const initialState = {
   loading: null,
 };
 
-const userSlice = createSlice({
+const loginSlice = createSlice({
   name: "user",
   initialState: initialState,
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
-        state.loading = true;
         state.user = null;
         state.error = null;
+        state.loading = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = false;
         state.user = action.payload;
         state.error = null;
+        state.loading = false;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
         state.user = null;
         state.error = action.error;
+        state.loading = false;
       });
   },
 });
 
-export default userSlice.reducer;
+export default loginSlice.reducer;

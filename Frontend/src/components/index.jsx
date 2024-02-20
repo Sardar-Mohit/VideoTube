@@ -34,10 +34,10 @@ import ProfileBanner from "./profile/ProfileBanner";
 import ProfileBannerPicture from "./profile/ProfileBannerPicture";
 
 // Others 
-import DeleteVideoModel from "./DeleteVideoModel";
+import DeleteVideoModel from "./video-crud/DeleteVideoModel";
 import Footer from "./Footer";
-import UploadPopUp from "./UploadPopUp";
-import UploadingVideoLoading from "./UploadingVideoLoading";
+import UploadPopUp from "./video-crud/UploadPopUp";
+import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
 
 export {
   AlertBox,

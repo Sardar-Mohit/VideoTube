@@ -27,7 +27,7 @@ import {
 
 function App() {
   console.log("store:",store)
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <Provider store={store}>
       <Router>

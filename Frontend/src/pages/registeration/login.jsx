@@ -3,7 +3,7 @@ import { Input, Logo } from "@/components/index";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "@/store/UserSlice";
+import { loginUser } from "@/store/LoginSlice";
 import { useDispatch } from "react-redux";
 
 const Login = () => {

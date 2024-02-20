@@ -1,68 +1,50 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Input, Logo } from "@/components/index";
 import { Button } from "@/components/ui/button";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { userRegisteration } from "@/store/RegisterationSlice";
 
 const Register = () => {
-  const [button, setButton] = useState("disabled");
-
-  const [form, setForm] = useState({
-    username: "aaa",
-    fullName: "aaa",
-    email: "aaa@gmail.com",
-    password: "aaa",
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const formSchema = {
+    username: "",
+    fullName: "",
+    email: "",
+    password: "",
     avatar: "",
     coverImage: "",
-  });
+  };
+
+  const [button, setButton] = useState("disabled");
+  const [form, setForm] = useState(formSchema);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setButton("enabled");
-    console.log(form);
+
+    const formData = new FormData();
+    formData.append("username", form.username);
+    formData.append("fullName", form.fullName);
+    formData.append("email", form.email);
+    formData.append("password", form.password);
+    formData.append("avatar", form.avatar);
+    formData.append("coverImage", form.coverImage);
+
+    setButton("enabled"); // Set button state before form submission
 
     try {
-      const formData = new FormData();
-      formData.append("username", form.username);
-      formData.append("fullName", form.fullName);
-      formData.append("email", form.email);
-      formData.append("password", form.password);
-      formData.append("avatar", form.avatar);
-      formData.append("coverImage", form.coverImage);
+      const response = await dispatch(userRegisteration(formData));
+      console.log("Response:", response);
+      setForm(formSchema);
 
-      console.log(formData);
-
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/users/register",
-        formData
-      );
-      console.log(response);
-      console.log(response.data);
-
-      setForm({
-        username: "",
-        fullName: "",
-        email: "",
-        password: "",
-        avatar: "",
-        coverImage: "",
-      });
+      navigate("/landing-page");
       setButton("disabled");
-      if (response.status == 201 || response.status === 200) {
-        console.log("success");
-      }
     } catch (error) {
-      setForm({
-        username: "",
-        fullName: "",
-        email: "",
-        password: "",
-        avatar: "",
-        coverImage: "",
-      });
+      setForm(formSchema);
+      console.error("Error registering user:", error);
       setButton("disabled");
-
-      console.error("Error Registering User:", error);
     }
   };
   const handleChange = (event) => {
@@ -85,9 +67,9 @@ const Register = () => {
         <div className="w-full items-center justify-center flex">
           <Logo biggerDeviceWidth={28} width={28} />
         </div>
-          <h2 className="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Register to create an account
-          </h2>
+        <h2 className="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          Register to create an account
+        </h2>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form
@@ -211,7 +193,6 @@ const Register = () => {
                         type="file"
                         className="sr-only"
                         onChange={handleFileChange}
-                        required
                       />
                     </label>
                     <p className="pl-1">or drag and drop</p>
