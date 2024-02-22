@@ -1,64 +1,107 @@
 import React, { useState } from "react";
-import { Input, Logo } from "@/components/index";
-import { Button } from "@/components/ui/button";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { userRegisteration } from "@/store/RegisterationSlice";
+import { Button } from "@/components/ui/button";
+import { Input, Logo, FileUpload } from "@/components/index";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch, useSelector } from "react-redux";
+import { userRegisteration } from "@/store/RegisterationSlice.js";
 
 const Register = () => {
   const navigate = useNavigate();
+  const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
-  const formSchema = {
-    username: "",
-    fullName: "",
-    email: "",
-    password: "",
-    avatar: "",
-    coverImage: "",
-  };
+  const [button, setButton] = useState(false);
 
-  const [button, setButton] = useState("disabled");
-  const [form, setForm] = useState(formSchema);
+  function isImage(url) {
+    const imageExtensions = /\.(jpg|jpeg|png|gif)$/i;
+    return imageExtensions.test(url);
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const zodSchema = z.object({
+    username: z
+      .string()
+      .min(2, { message: "Username must be at least 2 characters long" })
+      .max(20, { message: "Username cannot exceed 20 characters" }),
 
-    const formData = new FormData();
-    formData.append("username", form.username);
-    formData.append("fullName", form.fullName);
-    formData.append("email", form.email);
-    formData.append("password", form.password);
-    formData.append("avatar", form.avatar);
-    formData.append("coverImage", form.coverImage);
+    fullName: z
+      .string()
+      .min(2, { message: "Full name must be at least 2 characters long" })
+      .max(40, { message: "Full name cannot exceed 40 characters" }),
 
-    setButton("enabled"); // Set button state before form submission
+    email: z
+      .string()
+      .min(2)
+      .max(50, { message: "Email cannot exceed 50 characters" })
+      .email({ message: "Invalid email format" }),
 
+    password: z
+      .string()
+      .min(8)
+      .max(50)
+      .refine((password) => {
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+          password
+        );
+      }, "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."),
+
+    avatar: z
+      .object({
+        name: z.string(), // Name of the file
+        type: z.string(), // Mime type of the file
+        size: z.number(), // Size of the file in bytes
+        data: z.string(), // Base64 encoded representation of the file data
+      })
+      .refine((value) => isImage(value.name), {
+        message: "Avatar must be an image file",
+      }),
+
+    coverImage: z
+      .object({
+        name: z.string(),
+        type: z.string(),
+        size: z.number(),
+        data: z.string(),
+      })
+      .refine((value) => isImage(value.name), {
+        message: "Cover image must be an image file",
+      }),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(zodSchema),
+  });
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    setButton(true);
     try {
+      const formData = new FormData();
+      formData.append("username", form.username);
+      formData.append("fullName", form.fullName);
+      formData.append("email", form.email);
+      formData.append("password", form.password);
+      formData.append("avatar", form.avatar);
+      formData.append("coverImage", form.coverImage);
+
       const response = await dispatch(userRegisteration(formData));
-      console.log("Response:", response);
-      setForm(formSchema);
 
-      navigate("/landing-page");
-      setButton("disabled");
+      if (response.payload) {
+        if (response.payload.status === 200) {
+          navigate("/landing-page");
+        }
+      }
     } catch (error) {
-      setForm(formSchema);
       console.error("Error registering user:", error);
-      setButton("disabled");
+    } finally {
+      setButton(false);
     }
-  };
-  const handleChange = (event) => {
-    setForm({ ...form, [event.target.name]: event.target.value });
-  };
-
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-
-    console.log([e.target.name], selectedFile);
-    setForm({
-      ...form,
-      [e.target.name]: selectedFile,
-    });
   };
 
   return (
@@ -74,138 +117,73 @@ const Register = () => {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form
             className="space-y-2"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)} // Pass onSubmit directly to onSubmit attribute
             encType="multipart/form-data"
           >
             <Input
-              placeholderName="Username :"
-              name="username"
-              id="username"
-              type="text"
-              autoComplete="username"
-              value={form.username}
-              handleChange={handleChange}
+              label={"Username :"}
+              name={"username"}
+              type={"text"}
+              register={register}
+              errors={errors}
+              required
             />
 
             <Input
-              placeholderName="Fullname :"
-              name="fullName"
-              id="fullName"
-              type="text"
-              autoComplete="fullName"
-              value={form.fullName}
-              handleChange={handleChange}
-            />
-            <Input
-              placeholderName="Email :"
-              name="email"
-              id="email"
-              type="email"
-              autoComplete="email"
-              value={form.email}
-              handleChange={handleChange}
-            />
-            <Input
-              placeholderName="Password :"
-              name="password"
-              id="password"
-              type="password"
-              autoComplete="password"
-              value={form.password}
-              handleChange={handleChange}
+              label={"Fullname :"}
+              name={"fullName"}
+              type={"fullName"}
+              register={register}
+              errors={errors}
+              required
             />
 
-            <div className="col-span-full">
-              <label
-                htmlFor="avatar"
-                className="text-sm font-medium leading-6 text-gray-900 items-start flex"
-              >
-                Avatar :
-              </label>
-              <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                <div className="text-center">
-                  <svg
-                    className="mx-auto h-12 w-12 text-gray-300"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                    <label
-                      htmlFor="avatar"
-                      className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                    >
-                      <span>Upload a file</span>
-                      <input
-                        id="avatar"
-                        name="avatar"
-                        type="file"
-                        className="sr-only"
-                        onChange={handleFileChange}
-                        required
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs leading-5 text-gray-600">
-                    PNG, JPG, GIF up to 10MB
-                  </p>
-                </div>
-              </div>
-            </div>
+            <Input
+              label={"Email :"}
+              name={"email"}
+              type={"email"}
+              register={register}
+              errors={errors}
+              required
+            />
 
-            <div className="col-span-full">
-              <label
-                htmlFor="coverImage"
-                className="text-sm font-medium leading-6 text-gray-900 items-start flex"
-              >
-                Cover image :
-              </label>
-              <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                <div className="text-center">
-                  <svg
-                    className="mx-auto h-12 w-12 text-gray-300"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                    <label
-                      htmlFor="coverImage"
-                      className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                    >
-                      <span>Upload a file</span>
-                      <input
-                        id="coverImage"
-                        name="coverImage"
-                        type="file"
-                        className="sr-only"
-                        onChange={handleFileChange}
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs leading-5 text-gray-600">
-                    PNG, JPG, GIF up to 10MB
-                  </p>
-                </div>
-              </div>
-            </div>
+            <Input
+              label={"Password :"}
+              name={"password"}
+              type={"password"}
+              register={register}
+              errors={errors}
+              required
+            />
+
+            <FileUpload
+              label={"Avatar :"}
+              name={"avatar"}
+              type={"file"}
+              register={register}
+              errors={errors}
+              required
+            />
+
+            <FileUpload
+              label={"Cover Image :"}
+              name={"coverImage"}
+              type={"file"}
+              register={register}
+              errors={errors}
+              required
+            />
+
+            {error && (
+              <p className="mt-2 text-sm text-red-500">
+                {"1" + error}
+                {/* Displaying the error message */}
+                {"2" + errors.file && errors.file.message}
+              </p>
+            )}
 
             <div>
-              {button == "disabled" ? (
+              {button == false ? (
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

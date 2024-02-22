@@ -4,31 +4,50 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "@/store/LoginSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Login = () => {
   const navigate = useNavigate();
+  const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
+  const [button, setButton] = useState(false);
 
-  const [form, setForm] = useState({ username: "", password: "" });
-  const [button, setButton] = useState("disabled");
+  const zodSchema = z.object({
+    username: z
+      .string()
+      .min(2, { message: "Username must be at least 2 characters long" })
+      .max(20, { message: "Username cannot exceed 20 characters" }),
 
-  const handleSubmit = async (e) => {
+    password: z.string().min(2).max(50),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(zodSchema),
+  });
+
+  const onSubmit = async (data, e) => {
     e.preventDefault();
-    setButton("enabled");
-
-    let userCredentials = form;
-    dispatch(loginUser(userCredentials)).then((result) => {
-      if (result.payload) {
-        setForm({ username: "", password: "" });
-        setButton("disabled");
-        navigate("/landing-page");
+    setButton(true);
+    console.log(data);
+    try {
+      const response = await dispatch(loginUser(data));
+      if (response.payload) {
+        if (response.payload.message === 200) {
+          navigate("/landing-page");
+        }
       }
-    });
-  };
-
-  const handleChange = (event) => {
-    setForm({ ...form, [event.target.name]: event.target.value });
+    } catch (error) {
+      console.error("Error logging in:", error);
+    } finally {
+      setButton(false);
+    }
   };
 
   return (
@@ -44,42 +63,31 @@ const Login = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <Input
-              placeholderName="Username :"
-              name="username"
-              id="username"
-              type="text"
-              autoComplete="username"
-              value={form.username}
-              handleChange={handleChange}
+              label={"Username :"}
+              name={"username"}
+              type={"text"}
+              register={register}
+              errors={errors}
+              required
             />
 
+            <Input
+              label={"Password :"}
+              name={"password"}
+              type={"password"}
+              register={register}
+              errors={errors}
+              required
+            />
+            {error && (
+              <p className="mt-2 text-sm text-red-500">
+                {error} {/* Displaying the error message */}
+              </p>
+            )}
             <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Password :
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  value={form.password}
-                  onChange={handleChange}
-                  required
-                  className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              {button == "disabled" ? (
+              {button == false ? (
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

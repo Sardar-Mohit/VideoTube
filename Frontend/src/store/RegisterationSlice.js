@@ -1,19 +1,28 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const userRegisteration = createAsyncThunk(
   "user/registerUser",
-  async (userData) => {
+  async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const request = await axios.post(
         "http://localhost:8000/api/v1/users/register",
         userData
       );
-      localStorage.setItem("user", JSON.stringify(response.data));
-      console.log(response.data)
-      return response.data;
+
+      const response = request.data;
+      localStorage.setItem("user", JSON.stringify(response));
+      return response;
     } catch (error) {
-        throw new Error("Error Registering User: " + (error.response?.data || "Unknown Error"));
+      if (error.response && error.response.status === 409) {
+        return rejectWithValue("User with this email or username already exists");
+      } else if (error.response && error.response.status === 500) {
+        return rejectWithValue(
+          "Something went wrong while registering the user"
+        );
+      } else {
+        throw error;
+      }
     }
   }
 );
@@ -41,7 +50,7 @@ const registerationSlice = createSlice({
       })
       .addCase(userRegisteration.rejected, (state, action) => {
         state.user = null;
-        state.error = action.error;
+        state.error = action.payload || "Unknown error occurred";
         state.loading = false;
       });
   },

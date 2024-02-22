@@ -3,14 +3,26 @@ import axios from "axios";
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
-  async (userCredentials) => {
-    const request = await axios.post(
-      "http://localhost:8000/api/v1/users/login",
-      userCredentials
-    );
-    const response = request.data;
-    localStorage.setItem("user", JSON.stringify(response));
-    return response;
+  async (userCredentials, { rejectWithValue }) => {
+    try {
+      const request = await axios.post(
+        "http://localhost:8000/api/v1/users/login",
+        userCredentials
+      );
+
+      const response = request.data;
+      localStorage.setItem("user", JSON.stringify(response));
+      console.log(response)
+      return response;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        return rejectWithValue("User not found");
+      } else if (error.response && error.response.status === 401) {
+        return rejectWithValue("Invalid user credentials");
+      } else {
+        throw error;
+      }
+    }
   }
 );
 
@@ -37,8 +49,9 @@ const loginSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.user = null;
-        state.error = action.error;
+        state.error = action.payload || "Unknown error occurred";
         state.loading = false;
+        console.log(state.error);
       });
   },
 });

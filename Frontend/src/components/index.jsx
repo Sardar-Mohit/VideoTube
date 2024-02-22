@@ -23,7 +23,6 @@ import NoVideosAvailable from "./empty-page/NoVideosAvailable";
 // Navbar
 import Avatar from "./navbar/Avatar";
 import AlertBox from "./navbar/AlertBox";
-import Input from "./navbar/Input";
 import Logo from "./navbar/Logo";
 import Logout from "./navbar/Logout";
 import NavbarOne from "./navbar/NavbarOne";
@@ -33,6 +32,10 @@ import NavbarTwo from "./navbar/NavbarTwo";
 import ProfileBanner from "./profile/ProfileBanner";
 import ProfileBannerPicture from "./profile/ProfileBannerPicture";
 
+// Input 
+import Input from "./navbar/Input";
+import FileUpload from "./navbar/FileUpload";
+
 // Others 
 import DeleteVideoModel from "./video-crud/DeleteVideoModel";
 import Footer from "./Footer";
@@ -41,6 +44,7 @@ import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
 
 export {
   AlertBox,
+  FileUpload,
   Avatar,
   Aside,
   ChannelCardInSubscribed,
