@@ -1,8 +1,7 @@
-import { Aside, ProfileBanner, ProfileBannerPicture } from "@/components";
-import { useNavigate } from "react-router-dom";
+import { Aside, ProfileBanner, ProfileBannerPicture,ProfileEditNavbar } from "@/components/index";
 
 const EditPersonalInfoPage = () => {
-  const navigate = useNavigate();
+
   return (
     <>
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
@@ -11,32 +10,8 @@ const EditPersonalInfoPage = () => {
           <ProfileBannerPicture />
           <div className="px-4 pb-4">
             <ProfileBanner />
-            <ul className="no-scrollbar sticky top-[66px] z-[2] flex flex-row gap-x-2 overflow-auto border-b-2 border-gray-400 bg-[#121212] py-2 sm:top-[82px]">
-              <li
-                className="w-full"
-                onClick={() => navigate("/edit-personal-info")}
-              >
-                <button className="w-full border-b-2 border-[#ae7aff] bg-white px-3 py-1.5 text-[#ae7aff]">
-                  Personal Information
-                </button>
-              </li>
-              <li
-                className="w-full"
-                onClick={() => navigate("/edit-channel-info")}
-              >
-                <button className="w-full border-b-2 border-transparent px-3 py-1.5 text-gray-400">
-                  Channel Information
-                </button>
-              </li>
-              <li
-                className="w-full"
-                onClick={() => navigate("/change-password")}
-              >
-                <button className="w-full border-b-2 border-transparent px-3 py-1.5 text-gray-400">
-                  Change Password
-                </button>
-              </li>
-            </ul>
+            <ProfileEditNavbar />
+            
             <div className="flex flex-wrap justify-center gap-y-4 py-4">
               <div className="w-full sm:w-1/2 lg:w-1/3">
                 <h5 className="font-semibold">Personal Info</h5>
@@ -48,31 +23,31 @@ const EditPersonalInfoPage = () => {
                 <div className="rounded-lg border">
                   <div className="flex flex-wrap gap-y-4 p-4">
                     <div className="w-full lg:w-1/2 lg:pr-2">
-                      <label htmlFor="firstname" className="mb-1 inline-block">
-                        First name
+                      <label htmlFor="username" className="mb-1 inline-block">
+                        Username
                       </label>
                       <input
                         type="text"
                         className="w-full rounded-lg border bg-transparent px-2 py-1.5"
-                        id="firstname"
-                        placeholder="Enter first name"
+                        id="username"
+                        placeholder="Enter your username"
                         defaultValue="React"
                       />
                     </div>
                     <div className="w-full lg:w-1/2 lg:pl-2">
-                      <label htmlFor="lastname" className="mb-1 inline-block">
-                        Last name
+                      <label htmlFor="fullName" className="mb-1 inline-block">
+                        Fullname
                       </label>
                       <input
                         type="text"
                         className="w-full rounded-lg border bg-transparent px-2 py-1.5"
-                        id="lastname"
-                        placeholder="Enter last name"
+                        id="fullName"
+                        placeholder="Enter your Fullname"
                         defaultValue="Patterns"
                       />
                     </div>
                     <div className="w-full">
-                      <label htmlFor="lastname" className="mb-1 inline-block">
+                      <label htmlFor="email" className="mb-1 inline-block">
                         Email address
                       </label>
                       <div className="relative">
@@ -95,7 +70,7 @@ const EditPersonalInfoPage = () => {
                         <input
                           type="email"
                           className="w-full rounded-lg border bg-transparent py-1.5 pl-10 pr-2"
-                          id="lastname"
+                          id="email"
                           placeholder="Enter email address"
                           defaultValue="patternsreact@gmail.com"
                         />

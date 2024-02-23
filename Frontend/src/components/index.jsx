@@ -1,8 +1,8 @@
-// Aside 
-import Aside from "./aside/Aside";
-import VideoAside from "./aside/VideoAside";
+// Aside
+import Aside from "./navigation/Aside";
+import VideoAside from "./navigation/VideoAside";
 
-// Cards 
+// Cards
 import ChannelCardInSubscribed from "./cards/ChannelCardInSubscribed";
 import CommentCard from "./cards/CommentCard";
 import PlaylistCard from "./cards/PlaylistCard";
@@ -14,37 +14,41 @@ import VideoPlaying from "./cards/VideoPlaying";
 import VideoSuggestion from "./cards/VideoSuggestion";
 import DashboardTableRow from "./cards/DashboardTableRow";
 
-// Edit 
+// Edit
 import EditVideoModelPopUp from "./edit/EditVideoModelPopUp";
 
-// Empty page 
+// Empty page
 import NoVideosAvailable from "./empty-page/NoVideosAvailable";
 
 // Navbar
-import Avatar from "./navbar/Avatar";
-import AlertBox from "./navbar/AlertBox";
-import Logo from "./navbar/Logo";
-import Logout from "./navbar/Logout";
-import NavbarOne from "./navbar/NavbarOne";
-import NavbarTwo from "./navbar/NavbarTwo";
+import Avatar from "./navbar-components/Avatar";
+import AlertBox from "./navbar-components/AlertBox";
+import Logo from "./navbar-components/Logo";
+import Logout from "./navbar-components/Logout";
+import NavbarOne from "./navigation/NavbarOne";
+import NavbarTwo from "./navigation/NavbarTwo";
 
 // Profile
 import ProfileBanner from "./profile/ProfileBanner";
 import ProfileBannerPicture from "./profile/ProfileBannerPicture";
+import ProfileEditNavbar from "@/components/navigation/ProfileEditNavbar";
+import ProfileNavbar from "./navigation/ProfileNavbar";
 
-// Input 
-import Input from "./navbar/Input";
-import FileUpload from "./navbar/FileUpload";
+// Input
+import Input from "./form/Input";
+import FileUpload from "./form/FileUpload";
 
-// Others 
+// Others
 import DeleteVideoModel from "./video-crud/DeleteVideoModel";
 import Footer from "./Footer";
 import UploadPopUp from "./video-crud/UploadPopUp";
 import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
 
 export {
+  ProfileNavbar,
   AlertBox,
   FileUpload,
+  ProfileEditNavbar,
   Avatar,
   Aside,
   ChannelCardInSubscribed,

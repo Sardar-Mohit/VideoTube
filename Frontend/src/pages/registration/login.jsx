@@ -3,15 +3,15 @@ import { Input, Logo } from "@/components/index";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "@/store/LoginSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { loginUser } from "@/store/actions/authActions";
 
 const Login = () => {
   const navigate = useNavigate();
-  const error = useSelector((state) => state.user.error);
+  const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
   const [button, setButton] = useState(false);
 

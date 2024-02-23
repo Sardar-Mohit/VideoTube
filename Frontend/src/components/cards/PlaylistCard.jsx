@@ -12,7 +12,7 @@ const PlaylistCard = ({
   const navigate = useNavigate();
 
   return (
-    <div className="w-full" onClick={() => navigate("/opened-playlist")}>
+    <div className="w-full cursor-pointer" onClick={() => navigate("/opened-playlist")}>
       <div className="relative mb-2 w-full pt-[56%]">
         <div className="absolute inset-0">
           <img src={thumbnail} alt="React Mastery" className="h-full w-full" />

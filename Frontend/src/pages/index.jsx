@@ -24,12 +24,11 @@ import EditChannelInfoPage from "./profile-pages/EditChannelInfoPage";
 import ChangePasswordPage from "./profile-pages/ChangePasswordPage";
 
 // Registeration
-import Register from "./registeration/Register";
-import Login from "./registeration/login";
+import Register from "./registration/Register";
+import Login from "./registration/login";
 
 // Others
 import VideoListing from "./searchResult";
-
 
 export {
   Subscribed,

@@ -1,8 +1,12 @@
-import { Aside, ProfileBanner, ProfileBannerPicture } from "@/components";
-import { useNavigate } from "react-router-dom";
+import {
+  Aside,
+  ProfileBanner,
+  ProfileBannerPicture,
+  ProfileEditNavbar,
+} from "@/components";
 
 const EditChannelInfoPage = () => {
-  const navigate = useNavigate();
+  
   return (
     <>
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
@@ -11,33 +15,7 @@ const EditChannelInfoPage = () => {
           <ProfileBannerPicture />
           <div className="px-4 pb-4">
             <ProfileBanner />
-            <ul className="no-scrollbar sticky top-[66px] z-[2] flex flex-row gap-x-2 overflow-auto border-b-2 border-gray-400 bg-[#121212] py-2 sm:top-[82px]">
-              <li
-                className="w-full"
-                onClick={() => navigate("/edit-personal-info")}
-              >
-                <button className="w-full border-b-2 border-transparent px-3 py-1.5 text-gray-400">
-                  Personal Information
-                </button>
-              </li>
-              <li
-                className="w-full"
-                onClick={() => navigate("/edit-channel-info")}
-              >
-                <button className="w-full border-b-2 border-[#ae7aff] bg-white px-3 py-1.5 text-[#ae7aff]">
-                  Channel Information
-                </button>
-              </li>
-              <li
-                className="w-full"
-                onClick={() => navigate("/change-password")}
-              >
-                <button className="w-full border-b-2 border-transparent px-3 py-1.5 text-gray-400">
-                  Change Password
-                </button>
-              </li>
-            </ul>
-
+            <ProfileEditNavbar />
             <div className="flex flex-wrap justify-center gap-y-4 py-4">
               <div className="w-full sm:w-1/2 lg:w-1/3">
                 <h5 className="font-semibold">Channel Info</h5>
