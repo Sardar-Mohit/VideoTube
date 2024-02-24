@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser } from "@/store/actions/authActions";
+import { loginUserAction } from "@/store/actions/authActions";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,7 +37,9 @@ const Login = () => {
     setButton(true);
     console.log(data);
     try {
-      const response = await dispatch(loginUser(data));
+      const response = await dispatch(loginUserAction(data));
+      console.log(response);
+      
       if (response.payload) {
         if (response.payload.message === 200) {
           navigate("/landing-page");

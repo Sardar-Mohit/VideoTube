@@ -1,12 +1,27 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { loginUserApi, registerUserApi } from "@/api/authApi";
+import { loginUserApi, registerUserApi, changePasswordApi } from "@/api/authApi";
 
-export const userRegistration = createAsyncThunk(
+
+const setCookie = (name, value, days) => {
+  const date = new Date();
+  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+  const expires = "expires=" + date.toUTCString();
+  // Add HttpOnly and SameSite attributes
+  const cookieOptions = { expires: expires, path: '/', HttpOnly: true, SameSite: 'strict' };
+  document.cookie = name + "=" + value + ";" + Object.keys(cookieOptions).map(key => `${key}=${cookieOptions[key]}`).join(';');
+};
+
+
+export const userRegistrationAction = createAsyncThunk(
   "user/registerUser",
   async (userData, { rejectWithValue }) => {
     try {
       const response = await registerUserApi(userData);
-      localStorage.setItem("user", JSON.stringify(response));
+
+      console.log("user login success")
+
+      setCookie("user", JSON.stringify(response), 7); 
+
       return response;
     } catch (error) {
       if (error.response && error.response.status === 409) {
@@ -24,12 +39,13 @@ export const userRegistration = createAsyncThunk(
   }
 );
 
-export const loginUser = createAsyncThunk(
+export const loginUserAction = createAsyncThunk(
   "user/loginUser",
   async (userCredentials, { rejectWithValue }) => {
     try {
       const response = await loginUserApi(userCredentials);
-      localStorage.setItem("user", JSON.stringify(response));
+      setCookie("accessToken", response.accessToken, 7);
+      
       return response;
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -38,6 +54,23 @@ export const loginUser = createAsyncThunk(
         return rejectWithValue("Invalid user credentials");
       } else {
         throw error;
+      }
+    }
+  }
+);
+
+export const changePasswordAction = createAsyncThunk(
+  "user/changePassword",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await changePasswordApi(userData);
+      console.log(response);
+      console.log("action");
+      // localStorage.setItem("user", JSON.stringify(response));
+      return response;
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        return rejectWithValue("Invalid old password");
       }
     }
   }

@@ -1,10 +1,12 @@
-// redux/reducers/authReducer.js
-
 import { createSlice } from "@reduxjs/toolkit";
-import { userRegistration, loginUser } from "../actions/authActions";
+import {
+  userRegistrationAction,
+  loginUserAction,
+  changePasswordAction,
+} from "../actions/authActions";
 
 const initialState = {
-  user: null,
+  user: localStorage.getItem("user") || null,
   error: null,
   loading: null,
 };
@@ -12,38 +14,67 @@ const initialState = {
 const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    logoutUser: (state) => {
+      state.user = null;
+      state.error = "Unauthorized: Please login again.";
+      state.loading = false;
+      localStorage.removeItem("user");
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(userRegistration.pending, (state) => {
+      .addCase(userRegistrationAction.pending, (state) => {
         state.user = null;
         state.error = null;
         state.loading = true;
       })
-      .addCase(userRegistration.fulfilled, (state, action) => {
+      .addCase(userRegistrationAction.fulfilled, (state, action) => {
         state.user = action.payload;
         state.error = null;
         state.loading = false;
       })
-      .addCase(userRegistration.rejected, (state, action) => {
+      .addCase(userRegistrationAction.rejected, (state, action) => {
         state.user = null;
         state.error = action.payload || "Unknown error occurred";
         state.loading = false;
       })
-      .addCase(loginUser.pending, (state) => {
+      .addCase(loginUserAction.pending, (state) => {
         state.user = null;
         state.error = null;
         state.loading = true;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginUserAction.fulfilled, (state, action) => {
         state.user = action.payload;
         state.error = null;
         state.loading = false;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginUserAction.rejected, (state, action) => {
         state.user = null;
         state.error = action.payload || "Unknown error occurred";
         state.loading = false;
+      })
+      .addCase(changePasswordAction.pending, (state) => {
+        state.user = localStorage.getItem("user");
+        state.error = null;
+        state.loading = true;
+        console.log("reducer");
+      })
+      .addCase(changePasswordAction.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.error = null;
+        state.loading = false;
+        console.log(action.payload);
+        console.log("ss");
+      })
+      .addCase(changePasswordAction.rejected, (state, action) => {
+        state.user = null;
+        state.error = action.payload || "Unknown error occurred";
+        state.loading = false;
+        if (action.payload === "Unauthorized") {
+          state.error = "Unauthorized: Please login again.";
+          localStorage.removeItem("user");
+        }
       });
   },
 });

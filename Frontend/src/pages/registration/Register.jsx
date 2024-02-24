@@ -7,7 +7,7 @@ import { Input, Logo, FileUpload } from "@/components/index";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
-import { userRegistration } from "@/store/actions/authActions.js";
+import { userRegistrationAction } from "@/store/actions/authActions.js";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -90,7 +90,7 @@ const Register = () => {
       formData.append("avatar", form.avatar);
       formData.append("coverImage", form.coverImage);
 
-      const response = await dispatch(userRegistration(formData));
+      const response = await dispatch(userRegistrationAction(formData));
 
       if (response.payload) {
         if (response.payload.status === 200) {

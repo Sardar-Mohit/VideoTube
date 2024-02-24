@@ -43,7 +43,9 @@ const registerUser = asyncHandler(async (req, res) => {
     //console.log("email: ", email);
 
     if (
-      [fullName, email, username, password].some((field) => field?.trim() === "")
+      [fullName, email, username, password].some(
+        (field) => field?.trim() === ""
+      )
     ) {
       throw new ApiError(400, "All fields are required");
     }
@@ -94,7 +96,10 @@ const registerUser = asyncHandler(async (req, res) => {
     );
 
     if (!createdUser) {
-      throw new ApiError(500, "Something went wrong while registering the user");
+      throw new ApiError(
+        500,
+        "Something went wrong while registering the user"
+      );
     }
 
     return res
@@ -104,7 +109,6 @@ const registerUser = asyncHandler(async (req, res) => {
     return res.status(error.status || 500).json({ message: error.message });
   }
 });
-
 
 const loginUser = asyncHandler(async (req, res) => {
   // req body -> data
@@ -172,28 +176,32 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  await User.findByIdAndUpdate(
-    req.user._id,
-    {
-      $unset: {
-        refreshToken: 1, // this removes the field from document
+  try {
+    await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $unset: {
+          refreshToken: 1, // this removes the field from document
+        },
       },
-    },
-    {
-      new: true,
-    }
-  );
+      {
+        new: true,
+      }
+    );
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
 
-  return res
-    .status(200)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, {}, "User logged Out"));
+    return res
+      .status(200)
+      .clearCookie("accessToken", options)
+      .clearCookie("refreshToken", options)
+      .json(new ApiResponse(200, {}, "User logged Out"));
+  } catch (error) {
+    return res.status(error.status || 400).json({ message: error.message });
+  }
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
@@ -262,12 +270,13 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
   // replace the old password with the new one
   // save the password
   const { oldPassword, newPassword } = req.body;
+  const user = await User.findById(req.user?._id);
+  console.log("oldpassword " + oldPassword);
+  console.log("newpassword " + newPassword);
 
-  let user = await User.findById(req.user?._id);
-
-  let isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
   if (!isPasswordCorrect) {
-    throw new ApiError(400, "Invalid old password");
+    return res.status(400).json({ message: "Invalid old password" });
   }
 
   user.password = newPassword;
@@ -278,7 +287,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        { user, newPassword, oldPassword, checkPassword },
+        { user, newPassword, oldPassword },
         "Password changed successfully"
       )
     );
