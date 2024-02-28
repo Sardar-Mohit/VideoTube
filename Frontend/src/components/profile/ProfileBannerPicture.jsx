@@ -1,12 +1,17 @@
 import React from "react";
 
-const ProfileBannerPicture = () => {
+const ProfileBannerPicture = ({ banner }) => {
   return (
     <div className="relative min-h-[150px] w-full pt-[16.28%]">
       <div className="absolute inset-0 overflow-hidden">
         <img
-          src="https://images.pexels.com/photos/1092424/pexels-photo-1092424.jpeg?auto=compress"
+          src={
+            banner
+              ? banner
+              : "https://images.pexels.com/photos/1092424/pexels-photo-1092424.jpeg?auto=compress"
+          }
           alt="cover-photo"
+          className="w-full bg-center object-cover"
         />
       </div>
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">

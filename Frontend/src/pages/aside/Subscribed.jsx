@@ -1,13 +1,10 @@
 import {
   Aside,
   ChannelCardInSubscribed,
-  ProfileBanner,
-  ProfileBannerPicture,
-  ProfileNavbar
+  ProfileHeaderWithNavigation,
 } from "@/components";
 
 const Subscribed = () => {
-
   const channels = [
     {
       name: "Code Master",
@@ -121,11 +118,7 @@ const Subscribed = () => {
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
         <Aside />
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-          <ProfileBannerPicture />
-          <div className="px-4 pb-4">
-            <ProfileBanner />
-            <ProfileNavbar />
-
+          <ProfileHeaderWithNavigation>
             <div className="flex flex-col gap-y-4 py-4">
               <div
                 className="relative mb-2 rounded-lg bg-white py-2 pl-8 pr-3 text-black"
@@ -166,7 +159,7 @@ const Subscribed = () => {
                 />
               ))}
             </div>
-          </div>
+          </ProfileHeaderWithNavigation>
         </section>
       </div>
     </>

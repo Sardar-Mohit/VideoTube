@@ -45,9 +45,6 @@ export const changePasswordApi = async (userData) => {
         withCredentials: true,
       }
     );
-    console.log("api");
-
-    console.log(request);
     return request.data;
   } catch (error) {
     throw error;
@@ -55,7 +52,7 @@ export const changePasswordApi = async (userData) => {
 };
 
 // Function to logout a user
-export const logoutUserAction = async () => {
+export const logoutUserApi = async () => {
   try {
     const request = await axios.post(
       "http://localhost:8000/api/v1/users/logout"
@@ -68,7 +65,7 @@ export const logoutUserAction = async () => {
 };
 
 // Function to refresh access token
-export const refreshAccessTokenAction = async () => {
+export const refreshAccessTokenApi = async () => {
   try {
     const request = await axios.post(
       "http://localhost:8000/api/v1/users/refresh-token"
@@ -81,12 +78,16 @@ export const refreshAccessTokenAction = async () => {
 };
 
 // Function to get current user
-export const getCurrentUserAction = async () => {
+export const getCurrentUserApi = async () => {
   try {
     const request = await axios.get(
-      "http://localhost:8000/api/v1/users/current-user"
+      "http://localhost:8000/api/v1/users/current-user",
+      {},
+      {
+        withCredentials: true,
+      }
     );
-    console.log(request.data);
+    console.log("h" + request.data);
     return request.data;
   } catch (error) {
     throw error;
@@ -94,7 +95,7 @@ export const getCurrentUserAction = async () => {
 };
 
 // Function to update account details
-export const updateAccountDetailsAction = async (userData) => {
+export const updateAccountDetailsApi = async (userData) => {
   try {
     const request = await axios.patch(
       "http://localhost:8000/api/v1/users/update-account",
@@ -108,7 +109,7 @@ export const updateAccountDetailsAction = async (userData) => {
 };
 
 // Function to update user avatar
-export const updateUserAvatarAction = async (avatarData) => {
+export const updateUserAvatarApi = async (avatarData) => {
   try {
     const request = await axios.patch(
       "http://localhost:8000/api/v1/users/avatar",
@@ -122,7 +123,7 @@ export const updateUserAvatarAction = async (avatarData) => {
 };
 
 // Function to update user cover image
-export const updateUserCoverImageAction = async (coverImageData) => {
+export const updateUserCoverImageApi = async (coverImageData) => {
   try {
     const request = await axios.patch(
       "http://localhost:8000/api/v1/users/cover-image",
@@ -136,7 +137,7 @@ export const updateUserCoverImageAction = async (coverImageData) => {
 };
 
 // Function to get user channel profile
-export const getUserChannelProfileAction = async (username) => {
+export const getUserChannelProfileApi = async (username) => {
   try {
     const request = await axios.get(
       `http://localhost:8000/api/v1/users/c/${username}`
@@ -149,7 +150,7 @@ export const getUserChannelProfileAction = async (username) => {
 };
 
 // Function to get user watch history
-export const getWatchHistoryAction = async () => {
+export const getWatchHistoryApi = async () => {
   try {
     const request = await axios.get(
       "http://localhost:8000/api/v1/users/history"

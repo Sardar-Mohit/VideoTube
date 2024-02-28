@@ -1,10 +1,8 @@
 import {
   Aside,
   PlaylistCard,
-  ProfileBanner,
-  ProfileBannerPicture,
-  ProfileNavbar,
-} from "@/components";
+  ProfileHeaderWithNavigation,
+} from "@/components/index";
 
 const Playlist = () => {
   return (
@@ -12,11 +10,7 @@ const Playlist = () => {
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
         <Aside />
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-          <ProfileBannerPicture />
-          <div className="px-4 pb-4">
-            <ProfileBanner />
-            <ProfileNavbar />
-
+          <ProfileHeaderWithNavigation>
             <div className="grid gap-4 pt-2 sm:grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))]">
               <PlaylistCard
                 thumbnail="https://images.pexels.com/photos/2519817/pexels-photo-2519817.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -51,7 +45,7 @@ const Playlist = () => {
                 description="Delve into advanced JavaScript concepts and techniques for professional-level programming."
               />
             </div>
-          </div>
+          </ProfileHeaderWithNavigation>
         </section>
       </div>
     </>

@@ -11,11 +11,12 @@ import { userRegistrationAction } from "@/store/actions/authActions.js";
 
 const Register = () => {
   const navigate = useNavigate();
-  const error = useSelector((state) => state.user.error);
+  // const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
   const [button, setButton] = useState(false);
 
   function isImage(url) {
+    console.log(url);
     const imageExtensions = /\.(jpg|jpeg|png|gif)$/i;
     return imageExtensions.test(url);
   }
@@ -51,8 +52,10 @@ const Register = () => {
       .object({
         name: z.string(), // Name of the file
         type: z.string(), // Mime type of the file
-        size: z.number(), // Size of the file in bytes
-        data: z.string(), // Base64 encoded representation of the file data
+        size: z
+          .number()
+          .max(2000000, { message: "Image size must be less than 2 MB" }), // Size limit in bytes (optional)
+        data: z.string(), // Base64 encoded representation of the file data (optional)
       })
       .refine((value) => isImage(value.name), {
         message: "Avatar must be an image file",
@@ -81,21 +84,22 @@ const Register = () => {
   const onSubmit = async (data) => {
     console.log(data);
     setButton(true);
+
     try {
+      zodSchema.parse(data);
+      
       const formData = new FormData();
-      formData.append("username", form.username);
-      formData.append("fullName", form.fullName);
-      formData.append("email", form.email);
-      formData.append("password", form.password);
-      formData.append("avatar", form.avatar);
-      formData.append("coverImage", form.coverImage);
+      formData.append("username", data.username);
+      formData.append("fullName", data.fullName);
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      formData.append("avatar", data.avatar[0]);
+      formData.append("coverImage", data.coverImage[0]);
 
       const response = await dispatch(userRegistrationAction(formData));
 
-      if (response.payload) {
-        if (response.payload.status === 200) {
-          navigate("/landing-page");
-        }
+      if (response.payload && response.payload.status === 200) {
+        navigate("/landing-page");
       }
     } catch (error) {
       console.error("Error registering user:", error);
@@ -117,7 +121,7 @@ const Register = () => {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form
             className="space-y-2"
-            onSubmit={handleSubmit(onSubmit)} // Pass onSubmit directly to onSubmit attribute
+            onSubmit={handleSubmit(onSubmit)}
             encType="multipart/form-data"
           >
             <Input
@@ -174,13 +178,11 @@ const Register = () => {
               required
             />
 
-            {error && (
+            {/* {error && (
               <p className="mt-2 text-sm text-red-500">
-                {"1" + error}
-                {/* Displaying the error message */}
                 {"2" + errors.file && errors.file.message}
               </p>
-            )}
+            )} */}
 
             <div>
               {button == false ? (

@@ -33,6 +33,8 @@ import ProfileBanner from "./profile/ProfileBanner";
 import ProfileBannerPicture from "./profile/ProfileBannerPicture";
 import ProfileEditNavbar from "@/components/navigation/ProfileEditNavbar";
 import ProfileNavbar from "./navigation/ProfileNavbar";
+import ProfileHeaderWithNavigation from "./ProfileHeaderWithNavigation";
+import ProfileEditHeaderWithNavigation from "./ProfileEditHeaderWithNavigation";
 
 // Input
 import Input from "./form/Input";
@@ -45,6 +47,8 @@ import UploadPopUp from "./video-crud/UploadPopUp";
 import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
 
 export {
+  ProfileEditHeaderWithNavigation,
+  ProfileHeaderWithNavigation,
   ProfileNavbar,
   AlertBox,
   FileUpload,

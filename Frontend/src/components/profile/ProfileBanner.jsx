@@ -1,18 +1,22 @@
 import React from "react";
 
-const ProfileBanner = () => {
+const ProfileBanner = ({ user }) => {
   return (
     <div className="flex flex-wrap gap-4 pb-4 pt-6">
       <span className="relative -mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full border-2">
         <img
-          src="https://images.pexels.com/photos/1115816/pexels-photo-1115816.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-          alt="Channel"
-          className="h-full w-full"
+          src={
+            user.avatar
+              ? user.avatar
+              : "https://images.pexels.com/photos/1115816/pexels-photo-1115816.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          }
+          alt="Channel-avatar"
+          className="h-full w-full bg-center object-cover"
         />
       </span>
       <div className="mr-auto inline-block">
-        <h1 className="font-bolg text-xl">React Patterns</h1>
-        <p className="text-sm text-gray-400">@reactpatterns</p>
+        <h1 className="font-bolg text-xl">{user.username}</h1>
+        <p className="text-sm text-gray-400">{user.email}</p>
         <p className="text-sm text-gray-400">
           600k Subscribers&nbsp;·&nbsp;220 Subscribed
         </p>

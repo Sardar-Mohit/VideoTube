@@ -20,7 +20,6 @@ const Login = () => {
       .string()
       .min(2, { message: "Username must be at least 2 characters long" })
       .max(20, { message: "Username cannot exceed 20 characters" }),
-
     password: z.string().min(2).max(50),
   });
 

@@ -1,9 +1,7 @@
 import {
   Aside,
-  ProfileBanner,
-  ProfileBannerPicture,
   TweetCard,
-  ProfileNavbar,
+  ProfileHeaderWithNavigation,
 } from "@/components";
 
 const Tweet = () => {
@@ -12,10 +10,7 @@ const Tweet = () => {
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
         <Aside />
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-          <ProfileBannerPicture />
-          <div className="px-4 pb-4">
-            <ProfileBanner />
-            <ProfileNavbar />
+          <ProfileHeaderWithNavigation>
             <div className="mt-2 border pb-2">
               <textarea
                 className="mb-2 h-10 w-full resize-none border-none bg-transparent px-3 pt-2 outline-none"
@@ -109,7 +104,7 @@ const Tweet = () => {
                 dislikeCount="87"
               />
             </div>
-          </div>
+          </ProfileHeaderWithNavigation>
         </section>
       </div>
     </>

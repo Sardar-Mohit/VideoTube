@@ -1,11 +1,31 @@
+import { videoToPlay } from "@/api/videoApi";
 import {
   CommentCard,
   VideoAside,
   VideoPlaying,
   VideoSuggestion,
 } from "@/components";
+import Time from "@/hooks/Time";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const IndividualPage = () => {
+  const [videos, setVideos] = useState([]);
+  const location = useLocation();
+  const { id } = location.state;
+  console.log("ID:", id);
+
+  useEffect(() => {
+    const fetchVideo = async () => {
+      const videoResponse = await videoToPlay(id);
+      const videoArray = videoResponse.statusCode; // Accessing the 'statusCode' property
+      console.log(videos);
+      setVideos(videoArray);
+    };
+
+    fetchVideo();
+  }, []);
+
   return (
     <>
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
@@ -14,14 +34,19 @@ const IndividualPage = () => {
           <div className="flex w-full flex-wrap gap-4 p-4 lg:flex-nowrap">
             <div className="col-span-12 w-full">
               <VideoPlaying
-                views="2m"
-                title="Sockets.IO: Learn in depth from start to end."
-                time="4 hours ago"
-                altText="sockets.io"
-                author="Mohit Kumar"
+                id={videos._id}
+                views={videos.views}
+                title={videos.title}
+                time={Time(videos.createdAt)}
+                altText={videos.title}
+                authorName={"no username available"}
                 subscribersCount="600k"
-                videoURL="https://res.cloudinary.com/dfw5nnic5/video/upload/v1695117968/Sample_1280x720_mp4_b4db0s.mp4"
-                imageUrl="https://images.pexels.com/photos/18148932/pexels-photo-18148932/free-photo-of-woman-reading-book-on-a-bench.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                videoURL={videos.videoFile}
+                avatarUrl={
+                  "https://images.pexels.com/photos/18148932/pexels-photo-18148932/free-photo-of-woman-reading-book-on-a-bench.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                }
+                description={videos.description}
+                duration={videos.duration}
               />
               <button className="peer w-full rounded-lg border p-4 text-left duration-200 hover:bg-white/5 focus:bg-white/5 sm:hidden">
                 <h6 className="font-semibold">573 Comments...</h6>
@@ -53,60 +78,6 @@ const IndividualPage = () => {
                   username="mikerod"
                   comment="Render props have always been a bit tricky for me. Can't wait to see how this series breaks it down. Thanks for sharing!"
                 />
-
-                <CommentCard
-                  imgSrc="https://images.pexels.com/photos/18096595/pexels-photo-18096595/free-photo-of-music-on-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  altText="emilyt"
-                  name="Emily Turner"
-                  timeAgo="1 hour ago"
-                  username="emilyt"
-                  comment="Higher-order components have been a mystery to me for far too long. Looking forward to demystifying them with this series. Thanks!"
-                />
-
-                <CommentCard
-                  imgSrc="https://images.pexels.com/photos/18094275/pexels-photo-18094275.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  altText="davidc"
-                  name="David Chen"
-                  timeAgo="3 hours ago"
-                  username="davidc"
-                  comment="Compound components are a game-changer for UI development. Can't wait to learn more about them. Great work on this series!"
-                />
-
-                <CommentCard
-                  imgSrc="https://images.pexels.com/photos/13847596/pexels-photo-13847596.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  altText="alex_p"
-                  name="Alex Parker"
-                  timeAgo="12 hours ago"
-                  username="alex_p"
-                  comment="Controlled vs. uncontrolled components - finally! This topic has always confused me. Thanks for breaking it down!"
-                />
-
-                <CommentCard
-                  imgSrc="https://images.pexels.com/photos/7775637/pexels-photo-7775637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  altText="jessicalee"
-                  name="Jessica Lee"
-                  timeAgo="5 hours ago"
-                  username="jessicalee"
-                  comment="This series is a goldmine for React developers! Compound components are something I've been eager to master. Thanks for this!"
-                />
-
-                <CommentCard
-                  imgSrc="https://images.pexels.com/photos/3532545/pexels-photo-3532545.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  altText="ryanjax"
-                  name="Ryan Jackson"
-                  timeAgo="Just now"
-                  username="ryanjax"
-                  comment="This is exactly what I needed to take my React skills to the next level. Looking forward to diving into the render props section!"
-                />
-
-                <CommentCard
-                  imgSrc="https://images.pexels.com/photos/3532552/pexels-photo-3532552.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  altText="lauraw"
-                  name="Laura Williams"
-                  timeAgo="1 minute ago"
-                  username="lauraw"
-                  comment="This series looks amazing! I'm especially excited to learn more about controlled vs. uncontrolled components. Thanks for sharing!"
-                />
               </div>
             </div>
 
@@ -127,51 +98,6 @@ const IndividualPage = () => {
                 author="Express Learner"
                 views="11.5k Views · 5 hours ago"
                 duration="22:18"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/1739849/pexels-photo-1739849.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Building a RESTful API with Node.js and Express"
-                title="Building a RESTful API with Node.js and Express"
-                author="API Builder"
-                views="14.5k Views · 7 hours ago"
-                duration="24:33"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/1739854/pexels-photo-1739854.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Introduction to React Native"
-                title="Introduction to React Native"
-                author="React Native Dev"
-                views="10.9k Views · 8 hours ago"
-                duration="19:58"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/1144256/pexels-photo-1144256.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Creating Custom Hooks in React"
-                title="Creating Custom Hooks in React"
-                author="Hook Master"
-                views="9.3k Views · 9 hours ago"
-                duration="16:37"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/1144260/pexels-photo-1144260.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Building Scalable Web Applications with Django"
-                title="Building Scalable Web Applications with Django"
-                author="Django Master"
-                views="18.9M Views · 12 hours ago"
-                duration="32:18"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/1144276/pexels-photo-1144276.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Creating Interactive UIs with React and D3"
-                title="Creating Interactive UIs with React and D3"
-                author="ReactD3"
-                views="20.1k Views · 14 hours ago"
-                duration="29:30"
               />
 
               <VideoSuggestion

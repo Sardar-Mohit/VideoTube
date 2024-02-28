@@ -17,6 +17,15 @@ class ApiError extends Error {
       Error.captureStackTrace(this, this.constructor);
     }
   }
+
+  // Method to send error response to the frontend
+  sendErrorResponse(res) {
+    res.status(this.statusCode).json({
+      success: false,
+      message: this.message,
+      errors: this.errors,
+    });
+  }
 }
 
-export {ApiError}
+export { ApiError };

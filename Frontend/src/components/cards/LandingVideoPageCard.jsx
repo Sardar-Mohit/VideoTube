@@ -8,14 +8,23 @@ const LandingVideoPageCard = ({
   thumbnail,
   authorImg,
   authorName,
+  id,
 }) => {
   const navigate = useNavigate();
+
+  const redirectToIndividualPage = () => {
+    navigate("/individual-page", { state: { id } });
+  };
   return (
     <>
-      <div className="w-full cursor-pointer" onClick={() => navigate("/individual-page")}>
+      <div className="w-full cursor-pointer" onClick={redirectToIndividualPage}>
         <div className="relative mb-2 w-full pt-[56%]">
           <div className="absolute inset-0">
-            <img src={thumbnail} alt={title} className="h-full w-full" />
+            <img
+              src={thumbnail}
+              alt={title}
+              className="h-full w-full object-cover bg-center"
+            />
           </div>
           <span className="absolute bottom-1 right-1 inline-block rounded bg-black px-1.5 text-sm">
             {duration}

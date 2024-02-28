@@ -1,16 +1,32 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { loginUserApi, registerUserApi, changePasswordApi } from "@/api/authApi";
-
+import {
+  loginUserApi,
+  registerUserApi,
+  changePasswordApi,
+  getCurrentUserApi,
+  logoutUserApi,
+} from "@/api/authApi";
 
 const setCookie = (name, value, days) => {
   const date = new Date();
   date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
   const expires = "expires=" + date.toUTCString();
   // Add HttpOnly and SameSite attributes
-  const cookieOptions = { expires: expires, path: '/', HttpOnly: true, SameSite: 'strict' };
-  document.cookie = name + "=" + value + ";" + Object.keys(cookieOptions).map(key => `${key}=${cookieOptions[key]}`).join(';');
+  const cookieOptions = {
+    expires: expires,
+    path: "/",
+    HttpOnly: true,
+    SameSite: "strict",
+  };
+  document.cookie =
+    name +
+    "=" +
+    value +
+    ";" +
+    Object.keys(cookieOptions)
+      .map((key) => `${key}=${cookieOptions[key]}`)
+      .join(";");
 };
-
 
 export const userRegistrationAction = createAsyncThunk(
   "user/registerUser",
@@ -18,9 +34,9 @@ export const userRegistrationAction = createAsyncThunk(
     try {
       const response = await registerUserApi(userData);
 
-      console.log("user login success")
+      console.log("user login success" + response);
 
-      setCookie("user", JSON.stringify(response), 7); 
+      setCookie("user", JSON.stringify(response), 7);
 
       return response;
     } catch (error) {
@@ -45,7 +61,7 @@ export const loginUserAction = createAsyncThunk(
     try {
       const response = await loginUserApi(userCredentials);
       setCookie("accessToken", response.accessToken, 7);
-      
+
       return response;
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -65,12 +81,45 @@ export const changePasswordAction = createAsyncThunk(
     try {
       const response = await changePasswordApi(userData);
       console.log(response);
-      console.log("action");
-      // localStorage.setItem("user", JSON.stringify(response));
       return response;
     } catch (error) {
       if (error.response && error.response.status === 400) {
         return rejectWithValue("Invalid old password");
+      }
+    }
+  }
+);
+
+export const currentUserAction = createAsyncThunk(
+  "user/currentUser",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await getCurrentUserApi(userData);
+      console.log("action " + response);
+      return response;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        return rejectWithValue("User not found");
+      }
+    }
+  }
+);
+
+export const logoutUserAction = createAsyncThunk(
+  "user/logotUser",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await logoutUserApi(userData);
+      const date = new Date();
+      document.cookie = `accessToken=; expires=${date}; path=/;`;
+
+      // Clear the refresh token cookie
+      document.cookie = `refreshToken=; expires=${date}; path=/;`;
+      console.log("action" + response);
+      return response;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        return rejectWithValue("User not found");
       }
     }
   }

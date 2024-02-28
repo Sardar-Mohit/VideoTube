@@ -181,7 +181,7 @@ const logoutUser = asyncHandler(async (req, res) => {
       req.user._id,
       {
         $unset: {
-          refreshToken: 1, // this removes the field from document
+          refreshToken: 1, // this removes the refreshToken field from document
         },
       },
       {
@@ -200,7 +200,7 @@ const logoutUser = asyncHandler(async (req, res) => {
       .clearCookie("refreshToken", options)
       .json(new ApiResponse(200, {}, "User logged Out"));
   } catch (error) {
-    return res.status(error.status || 400).json({ message: error.message });
+    return res.status(error.status || 404).json({ message: error.message });
   }
 });
 
@@ -264,33 +264,38 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 });
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {
-  // get the old password and new password
-  // decode the user old password
-  // check if the old password and entered old password is same if yes
-  // replace the old password with the new one
-  // save the password
-  const { oldPassword, newPassword } = req.body;
-  const user = await User.findById(req.user?._id);
-  console.log("oldpassword " + oldPassword);
-  console.log("newpassword " + newPassword);
+  try {
+    // get the old password and new password
+    // decode the user old password
+    // check if the old password and entered old password is same if yes
+    // replace the old password with the new one
+    // save the password
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findById(req.user?._id);
+    console.log("oldpassword " + oldPassword);
+    console.log("newpassword " + newPassword);
 
-  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
-  if (!isPasswordCorrect) {
-    return res.status(400).json({ message: "Invalid old password" });
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+    if (!isPasswordCorrect) {
+      throw new ApiError(400, "Invalid old password");
+    }
+
+    user.password = newPassword;
+    await user.save({ validateBeforeSave: false });
+
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { user, newPassword, oldPassword },
+          "Password changed successfully"
+        )
+      );
+  } catch (error) {
+    console.log(error.message)
+    return res.status(error.status || 400).json({ message: error.message });
   }
-
-  user.password = newPassword;
-  await user.save({ validateBeforeSave: false });
-
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        { user, newPassword, oldPassword },
-        "Password changed successfully"
-      )
-    );
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {

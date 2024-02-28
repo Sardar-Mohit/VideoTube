@@ -1,17 +1,17 @@
-import { Aside, ProfileBanner, ProfileBannerPicture,ProfileEditNavbar } from "@/components/index";
+import { Aside, ProfileEditHeaderWithNavigation } from "@/components/index";
+import { useEffect } from "react";
 
-const EditPersonalInfoPage = () => {
+const EditPersonalInfoPage = ({ user }) => {
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   return (
     <>
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
         <Aside />
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-          <ProfileBannerPicture />
-          <div className="px-4 pb-4">
-            <ProfileBanner />
-            <ProfileEditNavbar />
-            
+          <ProfileEditHeaderWithNavigation>
             <div className="flex flex-wrap justify-center gap-y-4 py-4">
               <div className="w-full sm:w-1/2 lg:w-1/3">
                 <h5 className="font-semibold">Personal Info</h5>
@@ -83,13 +83,13 @@ const EditPersonalInfoPage = () => {
                       Cancel
                     </button>
                     <button className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
-                      Save changes
+                      Update changes
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </ProfileEditHeaderWithNavigation>
         </section>
       </div>
     </>

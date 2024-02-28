@@ -6,7 +6,12 @@ const NavbarOne = () => {
   return (
     <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
       <nav className="mx-auto flex max-w-7xl items-center py-2">
-        <Logo onClick={() => navigate("/landing-page")} />
+        <div
+          className="cursor-pointer"
+          onClick={() => navigate("/landing-page")}
+        >
+          <Logo />
+        </div>
         <div className="relative mx-auto hidden w-full max-w-md overflow-hidden sm:block">
           <input
             className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
@@ -132,7 +137,7 @@ const NavbarOne = () => {
             </button>
           </div>
           <ul className="my-4 flex w-full flex-wrap gap-2 px-4 sm:hidden">
-            <li className="w-full">
+            <li className="w-full" onClick={() => navigate("/liked-videos")}>
               <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black">
                 <span className="inline-block w-full max-w-[20px] group-hover:mr-4 lg:mr-4">
                   <svg
@@ -153,7 +158,7 @@ const NavbarOne = () => {
                 <span>Liked Videos</span>
               </button>
             </li>
-            <li className="w-full">
+            <li className="w-full" onClick={() => navigate("/profile")}>
               <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black">
                 <span className="inline-block w-full max-w-[20px] group-hover:mr-4 lg:mr-4">
                   <svg

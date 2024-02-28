@@ -1,10 +1,4 @@
-import {
-  Aside,
-  ProfileBannerPicture,
-  ProfileBanner,
-  ProfileNavbar,
-  VideoCard,
-} from "@/components";
+import { Aside, VideoCard, ProfileHeaderWithNavigation } from "@/components";
 
 const Profile = () => {
   return (
@@ -12,11 +6,7 @@ const Profile = () => {
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
         <Aside />
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-          <ProfileBannerPicture />
-          <div className="px-4 pb-4">
-            <ProfileBanner />
-            <ProfileNavbar />
-
+          <ProfileHeaderWithNavigation>
             <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 pt-2">
               <VideoCard
                 duration="22:18"
@@ -96,7 +86,7 @@ const Profile = () => {
                 thumbnail="https://images.pexels.com/photos/1115808/pexels-photo-1115808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
               />
             </div>
-          </div>
+          </ProfileHeaderWithNavigation>
         </section>
       </div>
     </>

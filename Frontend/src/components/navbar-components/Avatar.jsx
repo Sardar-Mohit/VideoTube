@@ -8,10 +8,28 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
-import { AlertBox } from "../index";
+import { logoutUserAction } from "@/store/actions/authActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const Avatar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  let userObj = null;
+
+  async function logout() {
+    try {
+      await dispatch(logoutUserAction());
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
+  }
+
+  if (user && user.statusCode) {
+    userObj = user.statusCode.user;
+    console.log("helloa");
+    console.log(userObj);
+  }
 
   return (
     <>
@@ -23,13 +41,13 @@ const Avatar = () => {
           >
             <div className="flex w-full gap-4 text-left sm:items-center">
               <img
-                src="https://images.pexels.com/photos/1115816/pexels-photo-1115816.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt="React-Patterns"
-                className="h-16 w-16 shrink-0 rounded-full sm:h-12 sm:w-12"
+                src={userObj ? userObj.avatar : ""}
+                className="h-16 w-16 shrink-0 rounded-full sm:h-12 sm:w-12 object-cover bg-center"
+                alt={userObj ? userObj.username : "User"}
               />
               <div className="w-full pt-2 sm:hidden">
-                <h6 className="font-semibold">React Patterns</h6>
-                <p className="text-sm text-gray-300">@reactpatterns</p>
+                <h6 className="font-semibold">{userObj.username}</h6>
+                <p className="text-sm text-gray-300">{userObj.email}</p>
               </div>
             </div>
           </div>
@@ -37,7 +55,9 @@ const Avatar = () => {
 
         <DropdownMenuContent className=" w-40 sm:w-56">
           <DropdownMenuGroup>
-            <DropdownMenuLabel className="font-bold">My Account</DropdownMenuLabel>
+            <DropdownMenuLabel className="font-bold">
+              My Account
+            </DropdownMenuLabel>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
@@ -77,8 +97,12 @@ const Avatar = () => {
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <AlertBox triggerpoint="Log out" />
+            <DropdownMenuItem
+              className="cursor-pointer font-[500]"
+              onClick={logout}
+            >
+              Log out
+              {/* <AlertBox triggerpoint="Log out" /> */}
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
