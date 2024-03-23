@@ -5,6 +5,7 @@ import {
   ProfileHeaderWithNavigation,
   UploadVideoPopUp,
 } from "@/components";
+import Time from "@/hooks/Time";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -13,7 +14,6 @@ const Profile = () => {
   const [uploadVideo, setUploadVideo] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const userId = user.statusCode.user ? user.statusCode.user._id : null;
-
   useEffect(() => {
     fetchVideo();
   }, []);
@@ -26,7 +26,11 @@ const Profile = () => {
     if (userId) {
       const request = await getUserVideos(userId);
       const response = request.statusCode;
-      setVideos(response);
+      setVideos(response.videos); // Update the state variable with the fetched videos
+  
+      console.log("videos");
+      console.log(userId);
+      console.log(response.videos); // Log the array of videos directly
     }
   };
 
@@ -37,8 +41,8 @@ const Profile = () => {
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
           <ProfileHeaderWithNavigation>
             <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 pt-2">
-              {videos && videos.videos && videos.videos.length > 0 ? (
-                videos?.map((video) => (
+              {videos && videos.length > 0 ? (
+                videos.map((video) => (
                   <VideoCard
                     key={video._id}
                     id={video._id}
@@ -99,7 +103,7 @@ const Profile = () => {
                     </button>
                   </div>
                 </div>
-              )}{" "}
+              )}
             </div>
           </ProfileHeaderWithNavigation>
         </section>
