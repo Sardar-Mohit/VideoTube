@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 const LandingVideoPageCard = ({
+  id,
   duration,
   title,
   views,
@@ -8,7 +9,6 @@ const LandingVideoPageCard = ({
   thumbnail,
   authorImg,
   authorName,
-  id,
 }) => {
   const navigate = useNavigate();
 

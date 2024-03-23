@@ -5,6 +5,7 @@ import {
   changePasswordApi,
   getCurrentUserApi,
   logoutUserApi,
+  updateAccountDetailsApi,
 } from "@/api/authApi";
 
 const setCookie = (name, value, days) => {
@@ -60,8 +61,9 @@ export const loginUserAction = createAsyncThunk(
   async (userCredentials, { rejectWithValue }) => {
     try {
       const response = await loginUserApi(userCredentials);
-      setCookie("accessToken", response.accessToken, 7);
-
+      console.log("cookie");
+      setCookie("user", JSON.stringify(response.statusCode.accessToken), 7);
+      console.log(document.cookie);
       return response;
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -85,6 +87,21 @@ export const changePasswordAction = createAsyncThunk(
     } catch (error) {
       if (error.response && error.response.status === 400) {
         return rejectWithValue("Invalid old password");
+      }
+    }
+  }
+);
+
+export const changeUserDetailsAction = createAsyncThunk(
+  "user/changeUserDetails",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await updateAccountDetailsApi(userData);
+      console.log(response);
+      return response;
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        return rejectWithValue("Invalid user credentials");
       }
     }
   }

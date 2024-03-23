@@ -42,7 +42,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
 
   if ([title, description].some((field) => field?.trim() === "")) {
-    throw new ApiError(200, "Title and Description is required");
+    throw new ApiError(401, "Title and Description is required");
   }
 
   // Get video file

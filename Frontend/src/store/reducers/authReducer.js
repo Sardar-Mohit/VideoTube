@@ -4,6 +4,7 @@ import {
   loginUserAction,
   changePasswordAction,
   currentUserAction,
+  changeUserDetailsAction,
   logoutUserAction,
 } from "../actions/authActions";
 
@@ -93,6 +94,22 @@ const authSlice = createSlice({
         state.user = initialState.user;
         state.error =
           action.payload || "Error occurred while fetching user details";
+        state.loading = false;
+      })
+      .addCase(changeUserDetailsAction.pending, (state) => {
+        state.user = initialState.user;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(changeUserDetailsAction.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(changeUserDetailsAction.rejected, (state, action) => {
+        state.user = initialState.user;
+        state.error =
+          action.payload || "Error occurred while updating user details";
         state.loading = false;
       });
   },

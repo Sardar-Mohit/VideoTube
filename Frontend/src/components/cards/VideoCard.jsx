@@ -1,21 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const VideoCard = ({
-  duration,
-  title,
-  views,
-  whenVideoWasUploaded,
-  thumbnail,
-}) => {
+const VideoCard = ({ duration, title, views, time, thumbnail, id }) => {
   const navigate = useNavigate();
+
+  const redirectToIndividualPage = () => {
+    navigate("/individual-page", { state: { id } });
+  };
+
   return (
-    <div
-      className="w-full cursor-pointer"
-      onClick={() => {
-        navigate("/individual-page");
-      }}
-    >
+    <div className="w-full cursor-pointer" onClick={redirectToIndividualPage}>
       <div className="relative mb-2 w-full pt-[56%]">
         <div className="absolute inset-0">
           <img src={thumbnail} alt={title} className="h-full w-full" />
@@ -26,7 +20,7 @@ const VideoCard = ({
       </div>
       <h6 className="mb-1 font-semibold">{title}</h6>
       <p className="flex text-sm text-gray-200">
-        {views} Views · {whenVideoWasUploaded}
+        {views} Views · {time}
       </p>
     </div>
   );

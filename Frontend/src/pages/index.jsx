@@ -9,8 +9,8 @@ import LandingPage from "./landing-pages/LandingPage";
 import IndividualPage from "./landing-pages/IndividualPage";
 
 // Playlist
-import Playlist from "./playlist/Playlist";
-import OpenedPlaylist from "./playlist/OpenedPlaylist";
+import Playlist from "./profile-pages/Playlist";
+import OpenedPlaylist from "./profile-pages/OpenedPlaylist";
 
 // Support
 import PrivacyPolicy from "./support/PrivacyPolicy";

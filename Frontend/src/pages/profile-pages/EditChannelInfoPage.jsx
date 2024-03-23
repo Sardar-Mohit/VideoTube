@@ -1,8 +1,5 @@
 import {
   Aside,
-  ProfileBanner,
-  ProfileBannerPicture,
-  ProfileEditNavbar,
   ProfileEditHeaderWithNavigation,
 } from "@/components";
 

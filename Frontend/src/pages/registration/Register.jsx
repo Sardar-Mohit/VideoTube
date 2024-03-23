@@ -11,7 +11,7 @@ import { userRegistrationAction } from "@/store/actions/authActions.js";
 
 const Register = () => {
   const navigate = useNavigate();
-  // const error = useSelector((state) => state.user.error);
+  const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
   const [button, setButton] = useState(false);
 

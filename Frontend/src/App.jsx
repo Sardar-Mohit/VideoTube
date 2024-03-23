@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Footer, NavbarOne, NavbarTwo, UploadPopUp } from "./components";
+import { Footer, NavbarOne, NavbarTwo, UploadVideoPopUp } from "./components";
 import {
   Subscribed,
   Tweet,
@@ -31,6 +31,8 @@ function App() {
   const user = useSelector((state) => state.auth.user);
   useEffect(() => {
     setIsLoggedIn(!!user);
+    console.log("user");
+    console.log(user);
   }, [user]);
 
   return (
@@ -39,48 +41,27 @@ function App() {
         {isLoggedIn ? <NavbarOne user={user} /> : <NavbarTwo />}
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/landing-page" element={<LandingPage user={user} />} />
-          <Route path="/dashboard" element={<Dashboard user={user} />} />
-          <Route path="/register" element={<Register user={user} />} />
-          <Route
-            path="/liked-videos"
-            element={<LikedVideosPage user={user} />}
-          />
-          <Route path="/history" element={<WatchHistoryPage user={user} />} />
-          <Route path="/subscribed" element={<Subscribed user={user} />} />
-          <Route path="/tweet" element={<Tweet user={user} />} />
-          <Route
-            path="/privacy-policy"
-            element={<PrivacyPolicy user={user} />}
-          />
-          <Route
-            path="/terms-and-condition"
-            element={<TermsAndCondition user={user} />}
-          />
-          <Route
-            path="/individual-page"
-            element={<IndividualPage user={user} />}
-          />
-          <Route path="/profile" element={<Profile user={user} />} />
-          <Route path="/playlist" element={<Playlist user={user} />} />
-          <Route path="/video-listing" element={<VideoListing user={user} />} />
-          <Route
-            path="/opened-playlist"
-            element={<OpenedPlaylist user={user} />}
-          />
-          <Route path="/upload-popup" element={<UploadPopUp user={user} />} />
+          <Route path="/landing-page" element={<LandingPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/liked-videos" element={<LikedVideosPage />} />
+          <Route path="/history" element={<WatchHistoryPage />} />
+          <Route path="/subscribed" element={<Subscribed />} />
+          <Route path="/tweet" element={<Tweet />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-condition" element={<TermsAndCondition />} />
+          <Route path="/individual-page" element={<IndividualPage />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/playlist" element={<Playlist />} />
+          <Route path="/video-listing" element={<VideoListing />} />
+          <Route path="/opened-playlist" element={<OpenedPlaylist />} />
+          <Route path="/upload-video-popup" element={<UploadVideoPopUp />} />
           <Route
             path="/edit-personal-info"
-            element={<EditPersonalInfoPage user={user} />}
+            element={<EditPersonalInfoPage />}
           />
-          <Route
-            path="/edit-channel-info"
-            element={<EditChannelInfoPage user={user} />}
-          />
-          <Route
-            path="/change-password"
-            element={<ChangePasswordPage user={user} />}
-          />
+          <Route path="/edit-channel-info" element={<EditChannelInfoPage />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
         </Routes>
         <Footer />
       </div>

@@ -1,10 +1,55 @@
 import { Aside, ProfileEditHeaderWithNavigation } from "@/components/index";
-import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { changeUserDetailsAction } from "@/store/actions/authActions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { z } from "zod";
 
-const EditPersonalInfoPage = ({ user }) => {
-  useEffect(() => {
-    console.log(user);
-  }, []);
+const EditPersonalInfoPage = () => {
+  const [button, setButton] = useState(false);
+  let userData = useSelector((state) => state.auth.user);
+  let user = userData && userData.statusCode && userData.statusCode.user;
+  let dispatch = useDispatch();
+
+  const zodSchema = z.object({
+    username: z
+      .string()
+      .min(2, { message: "Username must be at least 2 characters long" })
+      .max(20, { message: "Username cannot exceed 20 characters" }),
+
+    fullName: z
+      .string()
+      .min(2, { message: "Fullname must be at least 2 characters long" })
+      .max(40, { message: "Fullname cannot exceed 40 characters" }),
+
+    email: z
+      .string()
+      .min(2)
+      .max(50, { message: "Email cannot exceed 50 characters" })
+      .email({ message: "Invalid email format" }),
+  });
+
+  const { register, handleSubmit } = useForm({
+    resolver: zodResolver(zodSchema),
+  });
+
+  const onSubmit = async (data) => {
+    console.log("data");
+    console.log(data);
+    setButton(true);
+
+    try {
+      const response = await dispatch(changeUserDetailsAction(data));
+      console.log(response);
+    } catch (error) {
+      console.error("Error registering user:", error);
+    } finally {
+      setButton(false);
+    }
+  };
 
   return (
     <>
@@ -15,11 +60,12 @@ const EditPersonalInfoPage = ({ user }) => {
             <div className="flex flex-wrap justify-center gap-y-4 py-4">
               <div className="w-full sm:w-1/2 lg:w-1/3">
                 <h5 className="font-semibold">Personal Info</h5>
-                <p className="text-gray-300">
-                  Update your photo and personal details.
-                </p>
+                <p className="text-gray-300">Update your personal details.</p>
               </div>
-              <div className="w-full sm:w-1/2 lg:w-2/3">
+              <form
+                className="w-full sm:w-1/2 lg:w-2/3"
+                onSubmit={handleSubmit(onSubmit)}
+              >
                 <div className="rounded-lg border">
                   <div className="flex flex-wrap gap-y-4 p-4">
                     <div className="w-full lg:w-1/2 lg:pr-2">
@@ -31,7 +77,8 @@ const EditPersonalInfoPage = ({ user }) => {
                         className="w-full rounded-lg border bg-transparent px-2 py-1.5"
                         id="username"
                         placeholder="Enter your username"
-                        defaultValue="React"
+                        defaultValue={user && user?.username}
+                        {...register("username")}
                       />
                     </div>
                     <div className="w-full lg:w-1/2 lg:pl-2">
@@ -43,7 +90,8 @@ const EditPersonalInfoPage = ({ user }) => {
                         className="w-full rounded-lg border bg-transparent px-2 py-1.5"
                         id="fullName"
                         placeholder="Enter your Fullname"
-                        defaultValue="Patterns"
+                        defaultValue={user && user?.fullName}
+                        {...register("fullName")}
                       />
                     </div>
                     <div className="w-full">
@@ -72,7 +120,8 @@ const EditPersonalInfoPage = ({ user }) => {
                           className="w-full rounded-lg border bg-transparent py-1.5 pl-10 pr-2"
                           id="email"
                           placeholder="Enter email address"
-                          defaultValue="patternsreact@gmail.com"
+                          defaultValue={user && user?.email}
+                          {...register("email")}
                         />
                       </div>
                     </div>
@@ -82,12 +131,22 @@ const EditPersonalInfoPage = ({ user }) => {
                     <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">
                       Cancel
                     </button>
-                    <button className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
-                      Update changes
-                    </button>
+
+                    <div>
+                      {button === false ? (
+                        <button className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
+                          Update changes
+                        </button>
+                      ) : (
+                        <Button disabled size="xlg">
+                          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                          Please wait
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
           </ProfileEditHeaderWithNavigation>
         </section>

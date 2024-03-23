@@ -43,7 +43,7 @@ import FileUpload from "./form/FileUpload";
 // Others
 import DeleteVideoModel from "./video-crud/DeleteVideoModel";
 import Footer from "./Footer";
-import UploadPopUp from "./video-crud/UploadPopUp";
+import UploadVideoPopUp from "./video-crud/UploadVideoPopUp";
 import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
 
 export {
@@ -73,7 +73,7 @@ export {
   ProfileBannerPicture,
   TweetCard,
   UploadingVideoLoading,
-  UploadPopUp,
+  UploadVideoPopUp,
   VideoAside,
   VideoCard,
   VideoListingForSearch,
