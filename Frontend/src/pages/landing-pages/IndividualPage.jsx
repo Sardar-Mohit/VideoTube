@@ -12,17 +12,18 @@ import { useLocation } from "react-router-dom";
 const IndividualPage = () => {
   const [videos, setVideos] = useState([]);
   const location = useLocation();
-  const { id } = location.state;
-  console.log("ID:", id);
+
+  const fetchVideo = async () => {
+    console.log(location.state);
+    const { id } = location.state;
+    console.log("ID:", id);
+    const videoResponse = await videoToPlay(id);
+    const videoArray = videoResponse.statusCode;
+    console.log(videos);
+    setVideos(videoArray);
+  };
 
   useEffect(() => {
-    const fetchVideo = async () => {
-      const videoResponse = await videoToPlay(id);
-      const videoArray = videoResponse.statusCode; // Accessing the 'statusCode' property
-      console.log(videos);
-      setVideos(videoArray);
-    };
-
     fetchVideo();
   }, []);
 
@@ -39,6 +40,7 @@ const IndividualPage = () => {
                 title={videos.title}
                 time={Time(videos.createdAt)}
                 altText={videos.title}
+                thumbnailImage={videos.thumbnail}
                 authorName={"no username available"}
                 subscribersCount="600k"
                 videoURL={videos.videoFile}

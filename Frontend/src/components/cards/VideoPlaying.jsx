@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 
 const VideoPlaying = ({
@@ -13,29 +12,44 @@ const VideoPlaying = ({
   description = "",
   time = "",
 }) => {
-  const navigate = useNavigate();
-  const [likes, setLikes] = useState(3050);
-  const [dislikes, setDislikes] = useState(350);
+  const [likes, setLikes] = useState({ like: 3500, dislike: 3150 });
 
-  const handleLikeClick = () => {
-    setLikes((prevLikes) => prevLikes + 1);
+  const handleLikeClick = (e) => {
+    const updatedLikes = {
+      ...likes,
+      [e.target.name]: likes[e.target.name] + 1,
+    };
+    setLikes(updatedLikes);
   };
 
-  const handledisLikeClick = () => {
-    setDislikes((prevDislikes) => prevDislikes + 1);
-  };
   return (
     <>
-      <div
-        className="relative mb-4 w-full pt-[56%] cursor-pointer"
-        onClick={() => navigate("/individual-page")}
-      >
+      <div className="relative mb-4 w-full pt-[56%] cursor-pointer">
         <div className="absolute inset-0">
           <ReactPlayer
             url={videoURL}
-            controls={true}
+            controls={true} // Hide default contxrols
+            playing={true}
             width="100%"
+            light={true}
             height="100%"
+            muted={false}
+            loop={false} // Assuming you have a separate loop state
+            playbackRate={1}
+            // light={true}
+            config={{
+              youtube: {
+                playerVars: {
+                  showinfo: 0, // Hide YouTube info
+                  controls: 1, // Hide YouTube controls
+                  modestbranding: 1, // Hide YouTube logo
+                  rel: 0, // Disable related videos
+                  autoplay: 0, // Autoplay disabled by default
+                },
+              },
+            }}
+            fallback={null}
+            onError={(error) => console.error("Error occurred:", error)}
           />
         </div>
       </div>
@@ -54,8 +68,9 @@ const VideoPlaying = ({
                 <button
                   className="group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
                   onClick={handleLikeClick}
-                  data-like={likes}
-                  data-like-alt={likes + 1}
+                  data-like={likes.like}
+                  data-like-alt={likes.like + 1}
+                  name="like"
                 >
                   <span className="inline-block w-5 group-focus/btn:text-[#ae7aff]">
                     <svg
@@ -76,9 +91,10 @@ const VideoPlaying = ({
                 </button>
                 <button
                   className="group/btn flex items-center gap-x-2 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
-                  onClick={handledisLikeClick}
-                  data-like={dislikes}
-                  data-like-alt={dislikes + 1}
+                  onClick={handleLikeClick}
+                  data-like={likes.dislike}
+                  data-like-alt={likes.dislike + 1}
+                  name="dislike"
                 >
                   <span className="inline-block w-5 group-focus/btn:text-[#ae7aff]">
                     <svg

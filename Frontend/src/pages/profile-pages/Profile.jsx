@@ -11,9 +11,10 @@ import { useSelector } from "react-redux";
 
 const Profile = () => {
   const [videos, setVideos] = useState([]);
-  const [uploadVideo, setUploadVideo] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const userId = user.statusCode.user ? user.statusCode.user._id : null;
+  const [uploadVideo, setUploadVideo] = useState(false);
+
   useEffect(() => {
     fetchVideo();
   }, []);
@@ -26,11 +27,11 @@ const Profile = () => {
     if (userId) {
       const request = await getUserVideos(userId);
       const response = request.statusCode;
-      setVideos(response.videos); // Update the state variable with the fetched videos
-  
+      setVideos(response.videos);
+
       console.log("videos");
       console.log(userId);
-      console.log(response.videos); // Log the array of videos directly
+      console.log(response.videos);
     }
   };
 
@@ -107,7 +108,7 @@ const Profile = () => {
             </div>
           </ProfileHeaderWithNavigation>
         </section>
-        {uploadVideo && <UploadVideoPopUp />}
+        {uploadVideo && <UploadVideoPopUp close={handleUploadVideoToggle} />}
       </div>
     </>
   );

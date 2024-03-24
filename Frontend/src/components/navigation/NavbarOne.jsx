@@ -1,7 +1,20 @@
-import { Avatar, Logo } from "../index.jsx";
+import { Avatar, Logo, UploadVideoPopUp } from "../index.jsx";
 import { useNavigate } from "react-router-dom";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useState } from "react";
+
 const NavbarOne = () => {
   const navigate = useNavigate();
+  const [uploadVideo, setUploadVideo] = useState(false);
+
+  const handleUploadVideoToggle = () => {
+    setUploadVideo(!uploadVideo);
+  };
 
   return (
     <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
@@ -236,11 +249,41 @@ const NavbarOne = () => {
               </button>
             </li>
           </ul>
-          <div className="cursor-pointer">
+          <div className="cursor-pointer flex gap-4 items-center">
+            <div tooltip="hello" className="text-white" onClick={handleUploadVideoToggle}>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height={24}
+                      width={24}
+                      style={{
+                        pointerEvents: "none",
+                        display: "inherit",
+                        color: "white",
+                      }}
+                      viewBox="0 0 24 24"
+                      focusable="false"
+                    >
+                      <path
+                        d="M14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2zm3-7H3v12h14v-6.39l4 1.83V8.56l-4 1.83V6m1-1v3.83L22 7v8l-4-1.83V19H2V5h16z"
+                        fill="white"
+                      ></path>
+                    </svg>
+                  </TooltipTrigger>
+                  <TooltipContent className="mt-2">
+                    <p className="text-sm">Create</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+
             <Avatar />
           </div>
         </div>
       </nav>
+      {uploadVideo && <UploadVideoPopUp close={handleUploadVideoToggle} />}
     </header>
   );
 };

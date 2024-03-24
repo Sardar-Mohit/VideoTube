@@ -46,8 +46,12 @@ const Avatar = () => {
                 alt={userObj ? userObj.username : "User"}
               />
               <div className="w-full pt-2 sm:hidden">
-                <h6 className="font-semibold">{userObj.username}</h6>
-                <p className="text-sm text-gray-300">{userObj.email}</p>
+                <h6 className="font-semibold">
+                  {userObj ? userObj.username : "User"}
+                </h6>
+                <p className="text-sm text-gray-300">
+                  {userObj ? userObj.email : "User"}
+                </p>
               </div>
             </div>
           </div>
