@@ -35,6 +35,39 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
   }
 });
 
+const toggleVideoDislike = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
+  const user = req.user;
+
+  // User unliking a video
+  let undisliked = await Like.findOneAndDelete({
+    dislikedBy: user._id,
+    video: videoId,
+  });
+
+  if (undisliked) {
+    res
+      .status(200)
+      .json(
+        new ApiResponse(200, { undisliked }, "Video undisliked successfully")
+      );
+  } else {
+    // User liking a video
+    let dislike = await Like.create({
+      video: videoId,
+      dislikedBy: user?._id,
+    });
+
+    if (dislike) {
+      res
+        .status(200)
+        .json(new ApiResponse(200, { dislike }, "Video disliked successfully"));
+    } else {
+      throw new ApiError(403, "You don't have permission to like this video");
+    }
+  }
+});
+
 const toggleCommentLike = asyncHandler(async (req, res) => {
   const { commentId } = req.params;
 
@@ -121,4 +154,10 @@ const getLikedVideos = asyncHandler(async (req, res) => {
     );
 });
 
-export { toggleCommentLike, toggleTweetLike, toggleVideoLike, getLikedVideos };
+export {
+  toggleCommentLike,
+  toggleTweetLike,
+  toggleVideoDislike,
+  toggleVideoLike,
+  getLikedVideos,
+};

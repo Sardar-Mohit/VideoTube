@@ -47,7 +47,7 @@ const UploadVideoPopUp = ({ close }) => {
       <form
         onSubmit={submitForm}
         className="bg-gray-800 rounded-lg w-full max-w-lg p-8"
-        enctype="multipart/form-data"
+        encType="multipart/form-data"
       >
         <div className="text-xl font-semibold text-white mb-4 flex items-center justify-between">
           <h2>Upload Video</h2>

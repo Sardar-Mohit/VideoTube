@@ -10,10 +10,11 @@ const LandingPage = () => {
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const videosResponse = await allVideos();
-      const videosArray = videosResponse.statusCode; // Accessing the 'statusCode' property
-      console.log(videos)
-      setVideos(videosArray);
+      const request = await allVideos();
+      const response = request.statusCode; // Accessing the 'statusCode' property
+      const allVideos = response.reverse();
+      console.log(videos);
+      setVideos(allVideos);
     };
 
     fetchVideos();

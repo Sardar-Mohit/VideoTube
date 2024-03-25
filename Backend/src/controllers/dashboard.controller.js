@@ -43,6 +43,9 @@ const getChannelStats = asyncHandler(async (req, res) => {
       $unwind: "$videoLikes", // Unwind the array of likes
     },
     {
+      $match: { "videoLikes.likedBy": { $exists: true } }, // Filter only the liked documents
+    },
+    {
       $group: {
         _id: null, // Group all documents
         totalLikes: { $sum: 1 }, // Count the total likes for all videos
@@ -86,45 +89,23 @@ const getChannelVideos = asyncHandler(async (req, res) => {
     throw new ApiError(200, "User not found while getting videos");
   }
 
-  // const videos = await Video.aggregate([
-  //   {
-  //     $match: {
-  //       username: user?.username.toLowerCase(),
-  //     },
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "videos",
-  //       localField: "_id",
-  //       foreignField: "owner",
-  //       as: "userVideos",
-  //     },
-  //   },
-  //   {
-  //     $addFields: {
-  //       videoCount: {
-  //         $size: "$userVideos",
-  //       },
-  //       videos: "$userVideos",
-  //     },
-  //   },
-  //   {
-  //     $project: {
-  //       fullName: 1,
-  //       username: 1,
-  //       userVideos: 1,
-  //       videoCount: 1,
-  //       avatar: 1,
-  //       coverImage: 1,
-  //       email: 1,
-  //     },
-  //   },
-  // ]);
-
   const videos = await Video.aggregate([
     {
       $match: {
         owner: user._id,
+      },
+    },
+    {
+      $lookup: {
+        from: "likes",
+        localField: "_id",
+        foreignField: "video",
+        as: "videosReactions",
+      },
+    },
+    {
+      $addFields: {
+        reactions: { $size: "$videosReactions" },
       },
     },
   ]);
