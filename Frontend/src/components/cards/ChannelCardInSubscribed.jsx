@@ -1,5 +1,10 @@
-
-function ChannelCardInSubscribed({ name, subscribers, imageSrc, alt }) {
+function ChannelCardInSubscribed({
+  name,
+  subscriberCount,
+  subscribers,
+  imageSrc,
+  alt,
+}) {
   return (
     <div className="flex w-full justify-between">
       <div className="flex items-center gap-x-2">
@@ -12,7 +17,9 @@ function ChannelCardInSubscribed({ name, subscribers, imageSrc, alt }) {
         </div>
         <div className="block">
           <h6 className="font-semibold">{name}</h6>
-          <p className="text-sm text-gray-300">{subscribers}&nbsp;Subscribers</p>
+          <p className="text-sm text-gray-300">
+            {subscribers}&nbsp;{subscriberCount} Subscribers
+          </p>
         </div>
       </div>
       <div className="block">

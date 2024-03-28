@@ -15,10 +15,6 @@ const Profile = () => {
   const userId = user.statusCode.user ? user.statusCode.user._id : null;
   const [uploadVideo, setUploadVideo] = useState(false);
 
-  useEffect(() => {
-    fetchVideo();
-  }, []);
-
   const handleUploadVideoToggle = () => {
     setUploadVideo(!uploadVideo);
   };
@@ -34,6 +30,10 @@ const Profile = () => {
       console.log(response.videos);
     }
   };
+  
+  useEffect(() => {
+    fetchVideo();
+  }, []);
 
   return (
     <>

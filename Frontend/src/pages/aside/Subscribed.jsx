@@ -1,117 +1,29 @@
+import { getSubscribedChannelsApi } from "@/api/subscriptionApi";
 import {
   Aside,
   ChannelCardInSubscribed,
   ProfileHeaderWithNavigation,
 } from "@/components";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Subscribed = () => {
-  const channels = [
-    {
-      name: "Code Master",
-      subscribers: "20K",
-      imageSrc:
-        "https://images.pexels.com/photos/3532545/pexels-photo-3532545.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "Code Master",
-    },
-    {
-      name: "React Ninja",
-      subscribers: "40K",
-      imageSrc:
-        "https://images.pexels.com/photos/3532552/pexels-photo-3532552.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "React Ninja",
-    },
-    {
-      name: "Async Masters",
-      subscribers: "60K",
-      imageSrc:
-        "https://images.pexels.com/photos/3532549/pexels-photo-3532549.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "Async Masters",
-    },
-    {
-      name: "Code Crafters",
-      subscribers: "80K",
-      imageSrc:
-        "https://images.pexels.com/photos/2522659/pexels-photo-2522659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "Code Crafters",
-    },
-    {
-      name: "Tailwind Pro",
-      subscribers: "100K",
-      imageSrc:
-        "https://images.pexels.com/photos/2519823/pexels-photo-2519823.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "Tailwind Pro",
-    },
-    {
-      name: "Express Learner",
-      subscribers: "120K",
-      imageSrc:
-        "https://images.pexels.com/photos/2519812/pexels-photo-2519812.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "Express Learner",
-    },
-    {
-      name: "Redux Master",
-      subscribers: "140K",
-      imageSrc:
-        "https://images.pexels.com/photos/18264716/pexels-photo-18264716/free-photo-of-man-people-laptop-internet.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "Redux Master",
-    },
-    {
-      name: "API Builder",
-      subscribers: "160K",
-      imageSrc:
-        "https://images.pexels.com/photos/1739942/pexels-photo-1739942.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "API Builder",
-    },
-    {
-      name: "React Native Dev",
-      subscribers: "180K",
-      imageSrc:
-        "https://images.pexels.com/photos/1739856/pexels-photo-1739856.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "React Native Dev",
-    },
-    {
-      name: "Hook Master",
-      subscribers: "200K",
-      imageSrc:
-        "https://images.pexels.com/photos/1144257/pexels-photo-1144257.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "Hook Master",
-    },
-    {
-      name: "CSS Wizard",
-      subscribers: "220K",
-      imageSrc:
-        "https://images.pexels.com/photos/1144261/pexels-photo-1144261.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "CSS Wizard",
-    },
-    {
-      name: "Pythonista",
-      subscribers: "240K",
-      imageSrc:
-        "https://images.pexels.com/photos/1144268/pexels-photo-1144268.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "Pythonista",
-    },
-    {
-      name: "Django Master",
-      subscribers: "260K",
-      imageSrc:
-        "https://images.pexels.com/photos/1144269/pexels-photo-1144269.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "Django Master",
-    },
-    {
-      name: "ML Geek",
-      subscribers: "280K",
-      imageSrc:
-        "https://images.pexels.com/photos/1144275/pexels-photo-1144275.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "ML Geek",
-    },
-    {
-      name: "ReactD3",
-      subscribers: "300K",
-      imageSrc:
-        "https://images.pexels.com/photos/1144277/pexels-photo-1144277.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "ReactD3",
-    },
-  ];
+  const [channels, setChannels] = useState([]);
+  const user = useSelector((state) => state.auth.user);
+
+  const getSubscribedChannels = async () => {
+    const request = await getSubscribedChannelsApi(user.statusCode.user._id);
+    const response = request.statusCode.subscribedChannelsList;
+    console.log("response");
+    console.log(response);
+    setChannels(response);
+    console.log("channels");
+    console.log(channels);
+  };
+
+  useEffect(() => {
+    getSubscribedChannels();
+  }, []);
 
   return (
     <>
@@ -149,15 +61,56 @@ const Subscribed = () => {
             </div>
 
             <div className="flex flex-col gap-y-4 py-4">
-              {channels.map((channel, index) => (
-                <ChannelCardInSubscribed
-                  key={index}
-                  name={channel.name}
-                  subscribers={channel.subscribers}
-                  imageSrc={channel.imageSrc}
-                  alt={channel.alt}
-                />
-              ))}
+              {channels && channels.length > 0 ? (
+                channels?.map((channel) => (
+//                     {
+//     "_id": "65d3c132908e8fa498a6c0e3",
+//     "username": "axaa",
+//     "avatar": "http://res.cloudinary.com/dwy21sdub/image/upload/v1708376365/jqulhfwimy3qbkrqmegt.jpg",
+//     "subscriberCount": 0
+// }
+                  <ChannelCardInSubscribed
+                    key={channel._id}
+                    name={channel.username}
+                    imageSrc={channel.avatar}
+                    subscriberCount={channel.subscriberCount}
+                    alt={channel.username}
+                  />
+                ))
+              ) : (
+                <div className="flex justify-center p-4">
+                  <div className="w-full max-w-sm text-center">
+                    <p className="mb-3 w-full">
+                      <span className="inline-flex rounded-full bg-[#E4D3FF] p-2 text-[#AE7AFF]">
+                        <span className="inline-block w-6">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            aria-hidden="true"
+                            className="w-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                    </p>
+                    <h5 className="mb-2 font-semibold">
+                      No channels subscribered
+                    </h5>
+                    <p>
+                      This channel has yet to <strong>subscribe</strong> a new
+                      channel.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </ProfileHeaderWithNavigation>
         </section>

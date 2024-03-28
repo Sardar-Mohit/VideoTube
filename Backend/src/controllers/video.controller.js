@@ -6,7 +6,6 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-
 const getAllVideos = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query;
 
@@ -37,7 +36,6 @@ const getAllVideos = asyncHandler(async (req, res) => {
 });
 
 const publishAVideo = asyncHandler(async (req, res) => {
-
   // Get title and description
   const { title, description } = req.body;
 
@@ -129,6 +127,28 @@ const getVideoById = asyncHandler(async (req, res) => {
     _id: videoId,
   });
 
+  let user = await User.aggregate([
+    {
+      $match: {
+        _id: video.owner,
+      },
+    },
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "_id",
+        foreignField: "channel",
+        as: "subscriberCount",
+      },
+    },
+    {
+      $addFields: {
+        subscriberCount: { $size: "$subscriberCount" },
+        videos: [video],
+      },
+    },
+  ]);
+
   if (!video) {
     throw new ApiError(404, "video not found");
   }
@@ -136,7 +156,7 @@ const getVideoById = asyncHandler(async (req, res) => {
   // Return res
   return res
     .status(200)
-    .json(new ApiResponse(200, video, "Video Found Successfully"));
+    .json(new ApiResponse(200, {user }, "Video Found Successfully"));
 });
 
 const updateVideo = asyncHandler(async (req, res) => {

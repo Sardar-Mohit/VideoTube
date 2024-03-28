@@ -15,6 +15,7 @@ const LandingVideoPageCard = ({
   const redirectToIndividualPage = () => {
     navigate("/individual-page", { state: { id } });
   };
+  
   return (
     <>
       <div className="w-full cursor-pointer" onClick={redirectToIndividualPage}>

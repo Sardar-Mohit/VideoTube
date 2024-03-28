@@ -15,6 +15,8 @@ export const videoToPlay = async (videoId) => {
     const request = await axios.get(
       `http://localhost:8000/api/v1/videos/${videoId}`
     );
+    console.log("request")
+    console.log(request)
     return request.data;
   } catch (error) {
     throw error;

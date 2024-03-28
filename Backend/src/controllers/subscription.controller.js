@@ -74,9 +74,42 @@ const getChannelSubscribers = asyncHandler(async (req, res) => {
 const getSubscribedChannels = asyncHandler(async (req, res) => {
   const { channelId } = req.params;
 
-  let subscribedChannelsList = await Subscription.find({
-    subscriber: channelId,
-  });
+  const subscribedChannelsList = await User.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(channelId), // Convert channelId to ObjectId if needed
+      },
+    },
+    {
+      $lookup: {
+        from: "subscription",
+        localField: "_id",
+        foreignField: "subscriber",
+        as: "subscribedTo",
+      },
+    },
+    {
+      $lookup: {
+        from: "subscription",
+        localField: "_id",
+        foreignField: "channel",
+        as: "subscribers",
+      },
+    },
+    {
+      $addFields: {
+        subscriberCount: { $size: "$subscribers" },
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        username: 1,
+        avatar: 1,
+        subscriberCount: 1,
+      },
+    },
+  ]);
 
   if (subscribedChannelsList.length === 0) {
     return res

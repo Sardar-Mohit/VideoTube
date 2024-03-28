@@ -7,16 +7,15 @@ import Time from "@/hooks/Time";
 
 const LandingPage = () => {
   const [videos, setVideos] = useState([]);
+  const fetchVideos = async () => {
+    const request = await allVideos();
+    const response = request.statusCode; // Accessing the 'statusCode' property
+    const allVideosData = response.reverse();
+    console.log(videos);
+    setVideos(allVideosData);
+  };
 
   useEffect(() => {
-    const fetchVideos = async () => {
-      const request = await allVideos();
-      const response = request.statusCode; // Accessing the 'statusCode' property
-      const allVideos = response.reverse();
-      console.log(videos);
-      setVideos(allVideos);
-    };
-
     fetchVideos();
   }, []);
 
