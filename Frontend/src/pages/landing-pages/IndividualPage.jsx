@@ -13,7 +13,7 @@ const IndividualPage = () => {
   const location = useLocation();
 
   const fetchVideo = async () => {
-    const { id } = location.state;
+    const  id  = location.state;
     const videoResponse = await videoToPlay(id);
     const videoArray = videoResponse.statusCode.user[0];
     setVideo(videoArray);

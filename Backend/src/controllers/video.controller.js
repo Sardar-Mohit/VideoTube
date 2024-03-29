@@ -25,7 +25,8 @@ const getAllVideos = asyncHandler(async (req, res) => {
   let videos = await Video.find(combinedQuery)
     .sort(sortOptions)
     .skip((page - 1) * limit)
-    .limit(Number(limit));
+    .limit(Number(limit))
+    .populate("owner", "_id username email avatar"); // Populate owner details
 
   if (!videos) {
     throw new ApiError(404, "Error while fetching the videos");
@@ -143,15 +144,15 @@ const getVideoById = asyncHandler(async (req, res) => {
     },
   ]);
 
- // Check if user is subscribed to the channel
- let isSubscribed = await Subscription.aggregate([
-  {
-    $match: {
-      subscriber: new mongoose.Types.ObjectId(req.user._id),
-      channel: new mongoose.Types.ObjectId(video.owner),
+  // Check if user is subscribed to the channel
+  let isSubscribed = await Subscription.aggregate([
+    {
+      $match: {
+        subscriber: new mongoose.Types.ObjectId(req.user._id),
+        channel: new mongoose.Types.ObjectId(video.owner),
+      },
     },
-  },
-]);
+  ]);
 
   // Get user
   let user = await User.aggregate([

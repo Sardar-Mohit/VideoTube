@@ -25,7 +25,25 @@ const createPlaylist = asyncHandler(async (req, res) => {
 const getUserPlaylists = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
-  let userPlaylists = await Playlist.findOne({ owner: userId });
+  let userPlaylists = await Playlist.aggregate([
+    {
+      $match: { owner: new mongoose.Types.ObjectId(userId) },
+    },
+    {
+      $lookup: {
+        from: "videos", // Assuming the name of the videos collection is "videos"
+        localField: "videos",
+        foreignField: "_id",
+        as: "videoDetails",
+      },
+    },
+    {
+      $addFields: {
+        totalViews: { $sum: "$videoDetails.views" },
+      },
+    },
+  ]);
+
   if (!userPlaylists) {
     throw new ApiError(404, "User playlist not found");
   }
@@ -40,25 +58,71 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
 const getPlaylistById = asyncHandler(async (req, res) => {
   const { playlistId } = req.params;
 
-  let getPlaylists = await Playlist.findById({ _id: playlistId });
-  if (!getPlaylists) {
+  let getPlaylistData = await Playlist.aggregate([
+    {
+      $match: { _id: new mongoose.Types.ObjectId(playlistId) },
+    },
+    {
+      $lookup: {
+        from: "videos",
+        localField: "videos",
+        foreignField: "_id",
+        as: "videoDetails",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "ownerData",
+      },
+    },
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "owner",
+        foreignField: "channel",
+        as: "subscribersCount",
+      },
+    },
+    {
+      $addFields: {
+        totalViews: { $sum: "$videoDetails.views" },
+        subscribersCount: { $sum: "$subscribersCount" },
+        ownerData: {
+          $map: {
+            input: "$ownerData",
+            as: "ownerData",
+            in: {
+              name: "$$ownerData.username",
+              avatar: "$$ownerData.avatar",
+            },
+          },
+        },
+      },
+    },
+  ]);
+
+  if (!getPlaylistData) {
     throw new ApiError(404, "Playlist not found");
   }
 
   res
     .status(200)
     .json(
-      new ApiResponse(200, { getPlaylists }, "playlist fetched successfully")
+      new ApiResponse(200, { getPlaylistData }, "playlist fetched successfully")
     );
 });
 
 const addVideoToPlaylist = asyncHandler(async (req, res) => {
-  const { playlistId, videoId } = req.params;
+  const { videoId, playlistId } = req.params;
 
   // Get playlist
   let playlist = await Playlist.findById({
-    _id: playlistId,
+    _id: new mongoose.Types.ObjectId(playlistId),
   });
+
   if (!playlist) {
     throw new ApiError(404, "Playlist not found");
   }

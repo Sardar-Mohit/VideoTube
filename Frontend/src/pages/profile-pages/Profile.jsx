@@ -37,7 +37,7 @@ const Profile = () => {
         <Aside />
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
           <ProfileHeaderWithNavigation>
-            <div className="grid grid-cols-[repeat(auto-fit, minmax(300px, 1fr))] gap-4 pt-2">
+            <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 pt-2">
               {videos && videos.length > 0 ? (
                 videos.map((video) => (
                   <VideoCard
@@ -51,7 +51,7 @@ const Profile = () => {
                   />
                 ))
               ) : (
-                <div className="flex justify-center p-4 my-8">
+                <tr className="flex justify-center p-4 my-8">
                   <div className="w-full max-w-sm text-center">
                     <p className="mb-3 w-full">
                       <span className="inline-flex rounded-full bg-[#E4D3FF] p-2 text-[#AE7AFF]">
@@ -99,7 +99,7 @@ const Profile = () => {
                       New video
                     </button>
                   </div>
-                </div>
+                </tr>
               )}
             </div>
           </ProfileHeaderWithNavigation>

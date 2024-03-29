@@ -5,7 +5,7 @@ const VideoCard = ({ duration, title, views, time, thumbnail, id }) => {
   const navigate = useNavigate();
 
   const redirectToIndividualPage = () => {
-    navigate("/individual-page", { state: { id } });
+    navigate("/individual-page", { state: id });
   };
 
   return (

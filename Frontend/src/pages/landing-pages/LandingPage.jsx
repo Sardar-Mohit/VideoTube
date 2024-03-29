@@ -11,6 +11,7 @@ const LandingPage = () => {
     const request = await allVideos();
     const response = request.statusCode; // Accessing the 'statusCode' property
     const allVideosData = response.reverse();
+    console.log("videos");
     console.log(videos);
     setVideos(allVideosData);
   };
