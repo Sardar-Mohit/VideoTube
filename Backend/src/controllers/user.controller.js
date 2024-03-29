@@ -210,7 +210,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(404, "User not found");
   }
-
+  
   return res
     .status(200)
     .json(new ApiResponse(200, { user }, "User fetched successfully"));
@@ -293,7 +293,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
         )
       );
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     return res.status(error.status || 400).json({ message: error.message });
   }
 });

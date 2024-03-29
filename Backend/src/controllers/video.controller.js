@@ -1,10 +1,12 @@
 import mongoose, { isValidObjectId } from "mongoose";
 import { Video } from "../models/video.model.js";
 import { User } from "../models/user.model.js";
+import { Subscription } from "../models/subscription.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { Like } from "../models/like.model.js";
 
 const getAllVideos = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query;
@@ -123,10 +125,35 @@ const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
 
   // Get video
-  let video = await Video.findById({
-    _id: videoId,
+  let video = await Video.findOne({
+    _id: new mongoose.Types.ObjectId(videoId), // Ensure videoId is converted to ObjectId
   });
 
+  // Check if video exists
+  if (!video) {
+    throw new ApiError(404, "Video not found");
+  }
+
+  // Get video reactions
+  let videoReactions = await Like.aggregate([
+    {
+      $match: {
+        video: new mongoose.Types.ObjectId(videoId),
+      },
+    },
+  ]);
+
+ // Check if user is subscribed to the channel
+ let isSubscribed = await Subscription.aggregate([
+  {
+    $match: {
+      subscriber: new mongoose.Types.ObjectId(req.user._id),
+      channel: new mongoose.Types.ObjectId(video.owner),
+    },
+  },
+]);
+
+  // Get user
   let user = await User.aggregate([
     {
       $match: {
@@ -144,19 +171,17 @@ const getVideoById = asyncHandler(async (req, res) => {
     {
       $addFields: {
         subscriberCount: { $size: "$subscriberCount" },
-        videos: [video],
+        videos: [video], // Embedding video within user object
+        videoReactions: [videoReactions], // Embedding video reactions within user object
+        isSubscribed: isSubscribed, // Embedding video reactions within user object
       },
     },
   ]);
-
-  if (!video) {
-    throw new ApiError(404, "video not found");
-  }
-
-  // Return res
+  console.log(user);
+  // Return response
   return res
     .status(200)
-    .json(new ApiResponse(200, {user }, "Video Found Successfully"));
+    .json(new ApiResponse(200, { user }, "Video Found Successfully"));
 });
 
 const updateVideo = asyncHandler(async (req, res) => {

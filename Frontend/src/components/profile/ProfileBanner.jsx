@@ -1,6 +1,48 @@
-import React from "react";
+import {
+  getSubscribersListApi,
+  getSubscribedChannelsApi,
+} from "@/api/subscriptionApi";
+import React, { useEffect, useState } from "react";
 
 const ProfileBanner = ({ user }) => {
+  const [subscribersCount, setSubscribersCount] = useState(0);
+  const [subscribedChannelsCount, setSubscribedChannelsCount] = useState(0);
+
+  useEffect(() => {
+    const fetchSubscribersList = async () => {
+      try {
+        const response = await getSubscribersListApi(user._id);
+        if (
+          response &&
+          response.statusCode &&
+          response.statusCode.subscribersList
+        ) {
+          setSubscribersCount(response.statusCode.subscribersList.length);
+        }
+      } catch (error) {
+        console.error("Error fetching subscribers list:", error);
+      }
+    };
+
+    const fetchSubscribedChannels = async () => {
+      try {
+        const response = await getSubscribedChannelsApi(user._id);
+        if (response && response.statusCode && response.statusCode.subscribedChannelsList) {
+          setSubscribedChannelsCount(
+            response.statusCode.subscribedChannelsList.length
+          );
+        }
+        console.log("response");
+      } catch (error) {
+        console.error("Error fetching subscribed channels:", error);
+      }
+    };
+
+    fetchSubscribersList();
+    fetchSubscribedChannels();
+    console.log(subscribedChannelsCount);
+  }, [user._id]);
+
   return (
     <div className="flex flex-wrap gap-4 pb-4 pt-6">
       <span className="relative -mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full border-2">
@@ -15,10 +57,11 @@ const ProfileBanner = ({ user }) => {
         />
       </span>
       <div className="mr-auto inline-block">
-        <h1 className="font-bolg text-xl">{user.username}</h1>
+        <h1 className="font-bold text-xl">{user.username}</h1>
         <p className="text-sm text-gray-400">{user.email}</p>
         <p className="text-sm text-gray-400">
-          600k Subscribers&nbsp;·&nbsp;220 Subscribed
+          {subscribersCount} Subscribers&nbsp;·&nbsp;
+          {subscribedChannelsCount} Subscribed
         </p>
       </div>
       <div className="inline-block">

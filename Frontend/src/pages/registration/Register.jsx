@@ -11,8 +11,9 @@ import { userRegistrationAction } from "@/store/actions/authActions.js";
 
 const Register = () => {
   const navigate = useNavigate();
-  const error = useSelector((state) => state.user.error);
+  const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
+  console.log(error)
   const [button, setButton] = useState(false);
 
   function isImage(url) {
@@ -178,11 +179,11 @@ const Register = () => {
               required
             />
 
-            {/* {error && (
+            {error && (
               <p className="mt-2 text-sm text-red-500">
                 {"2" + errors.file && errors.file.message}
               </p>
-            )} */}
+            )}
 
             <div>
               {button == false ? (

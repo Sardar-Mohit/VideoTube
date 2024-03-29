@@ -5,23 +5,20 @@ import {
   VideoPlaying,
   VideoSuggestion,
 } from "@/components";
-import Time from "@/hooks/Time";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const IndividualPage = () => {
-  const [videos, setVideos] = useState([]);
+  const [video, setVideo] = useState([]);
   const location = useLocation();
 
   const fetchVideo = async () => {
     const { id } = location.state;
-    console.log("id", id);
     const videoResponse = await videoToPlay(id);
-    const videoArray = videoResponse.statusCode;
-    setVideos(videoArray);
+    const videoArray = videoResponse.statusCode.user[0];
+    setVideo(videoArray);
 
-    console.log("videos");
-    console.log(videos);
+    console.log(videoArray);
   };
 
   useEffect(() => {
@@ -35,25 +32,10 @@ const IndividualPage = () => {
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0">
           <div className="flex w-full flex-wrap gap-4 p-4 lg:flex-nowrap">
             <div className="col-span-12 w-full">
-              {videos.length === 0 ? (
+              {video.length === 0 ? (
                 <div>Video Not Found</div>
               ) : (
-                <VideoPlaying
-                  id={videos._id}
-                  views={videos.views}
-                  title={videos.title}
-                  time={Time(videos.createdAt)}
-                  altText={videos.title}
-                  thumbnailImage={videos.thumbnail}
-                  authorName={"no username available"}
-                  subscribersCount="600k"
-                  videoURL={videos.videoFile}
-                  avatarUrl={
-                    "https://images.pexels.com/photos/18148932/pexels-photo-18148932/free-photo-of-woman-reading-book-on-a-bench.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  }
-                  description={videos.description}
-                  duration={videos.duration}
-                />
+                <VideoPlaying video={video} id={video.videos._id} fetchVideo={fetchVideo}/>
               )}
               <button className="peer w-full rounded-lg border p-4 text-left duration-200 hover:bg-white/5 focus:bg-white/5 sm:hidden">
                 <h6 className="font-semibold">573 Comments...</h6>

@@ -63,12 +63,6 @@ const Subscribed = () => {
             <div className="flex flex-col gap-y-4 py-4">
               {channels && channels.length > 0 ? (
                 channels?.map((channel) => (
-//                     {
-//     "_id": "65d3c132908e8fa498a6c0e3",
-//     "username": "axaa",
-//     "avatar": "http://res.cloudinary.com/dwy21sdub/image/upload/v1708376365/jqulhfwimy3qbkrqmegt.jpg",
-//     "subscriberCount": 0
-// }
                   <ChannelCardInSubscribed
                     key={channel._id}
                     name={channel.username}

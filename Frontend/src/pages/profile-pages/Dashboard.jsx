@@ -327,7 +327,7 @@ const Dashboard = () => {
                     </tr>
                   ))
                 ) : (
-                  <div className=" w-full flex items-center justify-center p-4 my-8">
+                  <tr className=" w-full flex items-center justify-center p-4 my-8">
                     <div className="w-full max-w-sm text-center">
                       <p className="mb-3 w-full">
                         <span className="inline-flex rounded-full bg-[#E4D3FF] p-2 text-[#AE7AFF]">
@@ -375,7 +375,7 @@ const Dashboard = () => {
                         New video
                       </button>
                     </div>
-                  </div>
+                  </tr>
                 )}
               </tbody>
             </table>
