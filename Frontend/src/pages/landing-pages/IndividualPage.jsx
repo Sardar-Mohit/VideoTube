@@ -13,11 +13,10 @@ const IndividualPage = () => {
   const location = useLocation();
 
   const fetchVideo = async () => {
-    const  id  = location.state;
+    const id = location.state;
     const videoResponse = await videoToPlay(id);
     const videoArray = videoResponse.statusCode.user[0];
     setVideo(videoArray);
-
     console.log(videoArray);
   };
 
@@ -35,7 +34,11 @@ const IndividualPage = () => {
               {video.length === 0 ? (
                 <div>Video Not Found</div>
               ) : (
-                <VideoPlaying video={video} id={video.videos._id} fetchVideo={fetchVideo}/>
+                <VideoPlaying
+                  video={video}
+                  id={video.videos._id}
+                  fetchVideo={fetchVideo}
+                />
               )}
               <button className="peer w-full rounded-lg border p-4 text-left duration-200 hover:bg-white/5 focus:bg-white/5 sm:hidden">
                 <h6 className="font-semibold">573 Comments...</h6>

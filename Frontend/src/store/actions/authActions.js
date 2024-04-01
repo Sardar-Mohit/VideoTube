@@ -34,11 +34,8 @@ export const userRegistrationAction = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await registerUserApi(userData);
-
       console.log("user login success" + response);
-
       setCookie("user", JSON.stringify(response), 7);
-
       return response;
     } catch (error) {
       if (error.response && error.response.status === 409) {
@@ -61,15 +58,13 @@ export const loginUserAction = createAsyncThunk(
   async (userCredentials, { rejectWithValue }) => {
     try {
       const response = await loginUserApi(userCredentials);
-      console.log("cookie");
       setCookie("user", JSON.stringify(response.statusCode.accessToken), 7);
-      console.log(document.cookie);
       return response;
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        return rejectWithValue("User not found");
+       if (error.response && error.response.status === 404) {
+        return rejectWithValue("User not found. Please check your credentials.");
       } else if (error.response && error.response.status === 401) {
-        return rejectWithValue("Invalid user credentials");
+        return rejectWithValue("Invalid email or password. Please try again.");
       } else {
         throw error;
       }

@@ -5,29 +5,31 @@ import {
   ProfileHeaderWithNavigation,
 } from "@/components/index";
 import Time from "@/hooks/Time";
+import { getUserPlaylistsAction } from "@/store/actions/playlistActions";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Playlist = () => {
   const [playlist, setPlaylist] = useState([]);
   let userData = useSelector((state) => state.auth.user);
   let user = userData.statusCode.user;
+  let dispatch = useDispatch();
 
   const getPlaylist = async () => {
-    const playlist = await getUserPlaylists(user._id);
-    if (playlist.message === 200) {
-      const playlistData = playlist.statusCode.userPlaylists;
+    try {
+    const response = await dispatch(getUserPlaylistsAction(user._id));
+    if (response.message === 200) {
+      const playlistData = response.data.statusCode.userPlaylists;
       setPlaylist(playlistData.reverse());
     }
-    {
-      console.log(playlist);
+    console.log("playlist2", response);
+    } catch (error) {
+      console.error("Error fetching playlists:", error);
     }
   };
 
   useEffect(() => {
     getPlaylist();
-    console.log("playlist");
-    console.log(playlist);
   }, []);
 
   return (
