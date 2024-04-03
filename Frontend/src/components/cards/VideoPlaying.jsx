@@ -4,13 +4,14 @@ import Time from "@/hooks/Time";
 import { useState } from "react";
 import ReactPlayer from "react-player";
 import { useSelector } from "react-redux";
-const VideoPlaying = ({ video = [], id, fetchVideo }) => {
+const VideoPlaying = ({ video = [], fetchVideo }) => {
   const [like, setLike] = useState(false);
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
   const [dislike, setDislike] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(!!video.isSubscribed[0]);
   const selector = useSelector((state) => state.playist.user);
   const error = useSelector((state) => state.playist.error);
+  const [AddVideoError, setAddVideoError] = useState([]);
   const playlistArray = selector?.statusCode?.userPlaylists;
   const [playlistData, setPlaylistData] = useState({
     name: "",
@@ -18,10 +19,8 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
   });
 
   const reactionsCount = (video, fieldName) => {
-    const reactions = video.filter((reaction) => reaction[fieldName]);
-    console.log("playlistArray");
-    console.log(playlistArray);
-    return reactions.length;
+    const reactions = video?.filter((reaction) => reaction[fieldName]);
+    return reactions?.length;
   };
 
   const handleChange = (e) => {
@@ -39,8 +38,6 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
     } else {
       setSelectedPlaylists(selectedPlaylists.filter((id) => id !== value));
     }
-    console.log("checked,value");
-    console.log(checked, value);
   };
 
   const [likes, setLikes] = useState({
@@ -76,7 +73,7 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
 
   const handleSubscribe = async () => {
     if (!video || !video._id) {
-      return console.log("jj");
+      return flase;
     }
 
     try {
@@ -110,15 +107,19 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
   const addVideoToSelectedPlaylists = async () => {
     try {
       const promises = selectedPlaylists.map((playlistId) => {
-        console.log(video._id, playlistId);
-        return addVideoToPlaylistApi(video._id, playlistId);
+        return addVideoToPlaylistApi(video?.videos[0]?._id, playlistId);
       });
+
       if (promises.length === 0) {
         return false;
       }
+
       await Promise.all(promises);
       console.log("Video added to selected playlists successfully!");
     } catch (error) {
+      if (error.message === "Request failed with status code 400") {
+        setAddVideoError("Video is already in the playlist.");
+      }
       console.error("Error adding video to playlists:", error);
     }
   };
@@ -286,6 +287,11 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
                           </label>
                         </li>
                       ))}
+                    {AddVideoError && (
+                      <p className="mb-1 text-sm text-red-500">
+                        {AddVideoError} {/* Displaying the error message */}
+                      </p>
+                    )}
                     <button
                       type="submit"
                       className="w-full mx-auto mt-0 mb-4 rounded-lg bg-[#ae7aff] px-4 py-2 text-black"

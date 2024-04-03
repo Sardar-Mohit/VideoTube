@@ -172,14 +172,13 @@ const getVideoById = asyncHandler(async (req, res) => {
     {
       $addFields: {
         subscriberCount: { $size: "$subscriberCount" },
-        videos: [video], // Embedding video within user object
-        videoReactions: [videoReactions], // Embedding video reactions within user object
-        isSubscribed: isSubscribed, // Embedding video reactions within user object
+        videos: video,
+        videoReactions: videoReactions,
+        isSubscribed: isSubscribed,
       },
     },
   ]);
-  console.log(user);
-  // Return response
+
   return res
     .status(200)
     .json(new ApiResponse(200, { user }, "Video Found Successfully"));
