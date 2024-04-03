@@ -12,7 +12,6 @@ import VideoCard from "./cards/VideoCard";
 import VideoListingForSearch from "./cards/VideoListForSearch";
 import VideoPlaying from "./cards/VideoPlaying";
 import VideoSuggestion from "./cards/VideoSuggestion";
-import DashboardTableRow from "./cards/DashboardTableRow";
 
 // Edit
 import EditVideoModelPopUp from "./edit/EditVideoModelPopUp";
@@ -45,38 +44,39 @@ import DeleteVideoModel from "./video-crud/DeleteVideoModel";
 import Footer from "./Footer";
 import UploadVideoPopUp from "./video-crud/UploadVideoPopUp";
 import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
+import UpdatePlaylistCard from "./UpdatePlaylistCard";
 
 export {
-  ProfileEditHeaderWithNavigation,
-  ProfileHeaderWithNavigation,
-  ProfileNavbar,
-  AlertBox,
-  FileUpload,
-  ProfileEditNavbar,
-  Avatar,
-  Aside,
-  ChannelCardInSubscribed,
-  CommentCard,
-  DashboardTableRow,
-  DeleteVideoModel,
-  EditVideoModelPopUp,
-  Footer,
-  Input,
-  LandingVideoPageCard,
   Logo,
+  Aside,
+  Input,
+  Avatar,
+  Footer,
   Logout,
+  AlertBox,
   NavbarOne,
-  NavbarTwo,
-  NoVideosAvailable,
-  PlaylistCard,
-  ProfileBanner,
-  ProfileBannerPicture,
   TweetCard,
-  UploadingVideoLoading,
-  UploadVideoPopUp,
-  VideoAside,
+  NavbarTwo,
   VideoCard,
-  VideoListingForSearch,
+  VideoAside,
+  FileUpload,
+  CommentCard,
+  PlaylistCard,
   VideoPlaying,
+  ProfileNavbar,
+  ProfileBanner,
   VideoSuggestion,
+  DeleteVideoModel,
+  UploadVideoPopUp,
+  NoVideosAvailable,
+  ProfileEditNavbar,
+  UpdatePlaylistCard,
+  EditVideoModelPopUp,
+  LandingVideoPageCard,
+  ProfileBannerPicture,
+  VideoListingForSearch,
+  UploadingVideoLoading,
+  ChannelCardInSubscribed,
+  ProfileHeaderWithNavigation,
+  ProfileEditHeaderWithNavigation,
 };

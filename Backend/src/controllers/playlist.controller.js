@@ -128,7 +128,7 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
   }
 
   // Get video
-  let videoToAdd = await Video.findById({ _id: videoId });
+  let videoToAdd = await Video.findById({ _id:  new mongoose.Types.ObjectId(videoId) });
   if (!videoToAdd) {
     throw new ApiError(404, "Video not found to add to playlist");
   }
@@ -219,7 +219,7 @@ const updatePlaylist = asyncHandler(async (req, res) => {
   const { playlistId } = req.params;
   const { name, description } = req.body;
 
-  let PlaylistsToUpdate = await Playlist.findById({ _id: playlistId });
+  let PlaylistsToUpdate = await Playlist.findById({ _id: new mongoose.Types.ObjectId(playlistId) });
   if (!PlaylistsToUpdate) {
     throw new ApiError(404, "Playlist not found to update");
   }

@@ -3,44 +3,49 @@ import {
   getSubscribedChannelsApi,
 } from "@/api/subscriptionApi";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-const ProfileBanner = ({ user }) => {
+const ProfileBanner = () => {
   const [subscribersCount, setSubscribersCount] = useState(0);
   const [subscribedChannelsCount, setSubscribedChannelsCount] = useState(0);
+  const userData = useSelector((state) => state.auth.user);
+  const user = userData.statusCode.user;
+
+  const fetchSubscribersList = async () => {
+    try {
+      const response = await getSubscribersListApi(user._id);
+      if (
+        response &&
+        response.statusCode &&
+        response.statusCode.subscribersList
+      ) {
+        setSubscribersCount(response.statusCode.subscribersList.length);
+      }
+    } catch (error) {
+      console.error("Error fetching subscribers list:", error);
+    }
+  };
+
+  const fetchSubscribedChannels = async () => {
+    try {
+      const response = await getSubscribedChannelsApi(user._id);
+      if (
+        response &&
+        response.statusCode &&
+        response.statusCode.subscribedChannelsList
+      ) {
+        setSubscribedChannelsCount(
+          response.statusCode.subscribedChannelsList.length
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching subscribed channels:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchSubscribersList = async () => {
-      try {
-        const response = await getSubscribersListApi(user._id);
-        if (
-          response &&
-          response.statusCode &&
-          response.statusCode.subscribersList
-        ) {
-          setSubscribersCount(response.statusCode.subscribersList.length);
-        }
-      } catch (error) {
-        console.error("Error fetching subscribers list:", error);
-      }
-    };
-
-    const fetchSubscribedChannels = async () => {
-      try {
-        const response = await getSubscribedChannelsApi(user._id);
-        if (response && response.statusCode && response.statusCode.subscribedChannelsList) {
-          setSubscribedChannelsCount(
-            response.statusCode.subscribedChannelsList.length
-          );
-        }
-        console.log("response");
-      } catch (error) {
-        console.error("Error fetching subscribed channels:", error);
-      }
-    };
-
     fetchSubscribersList();
     fetchSubscribedChannels();
-    console.log(subscribedChannelsCount);
   }, [user._id]);
 
   return (

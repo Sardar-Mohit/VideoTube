@@ -1,4 +1,4 @@
-import { createPlaylist } from "@/api/playlistApi";
+import { addVideoToPlaylistApi, createPlaylistApi } from "@/api/playlistApi";
 import { toggleSubscriptionApi } from "@/api/subscriptionApi";
 import Time from "@/hooks/Time";
 import { useState } from "react";
@@ -6,15 +6,16 @@ import ReactPlayer from "react-player";
 import { useSelector } from "react-redux";
 const VideoPlaying = ({ video = [], id, fetchVideo }) => {
   const [like, setLike] = useState(false);
+  const [selectedPlaylists, setSelectedPlaylists] = useState([]);
   const [dislike, setDislike] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(!!video.isSubscribed[0]);
+  const selector = useSelector((state) => state.playist.user);
+  const error = useSelector((state) => state.playist.error);
+  const playlistArray = selector?.statusCode?.userPlaylists;
   const [playlistData, setPlaylistData] = useState({
     name: "",
     description: "",
   });
-
-  const [isSubscribed, setIsSubscribed] = useState(!!video.isSubscribed[0]);
-  const selector = useSelector((state) => state.playist.user);
-  const playlistArray = selector?.statusCode?.userPlaylists;
 
   const reactionsCount = (video, fieldName) => {
     const reactions = video.filter((reaction) => reaction[fieldName]);
@@ -25,12 +26,21 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name,value)
-    console.log(e.target)
     setPlaylistData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const handleAddPlaylistChange = (e) => {
+    const { checked, value } = e.target;
+    if (checked) {
+      setSelectedPlaylists([...selectedPlaylists, value]);
+    } else {
+      setSelectedPlaylists(selectedPlaylists.filter((id) => id !== value));
+    }
+    console.log("checked,value");
+    console.log(checked, value);
   };
 
   const [likes, setLikes] = useState({
@@ -89,10 +99,27 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
     }
 
     try {
-      const request = await createPlaylist(playlistData);
+      const request = await createPlaylistApi(playlistData);
       console.log(request);
+      fetchVideo();
     } catch (error) {
       console.error("Error creating playlist:", error);
+    }
+  };
+
+  const addVideoToSelectedPlaylists = async () => {
+    try {
+      const promises = selectedPlaylists.map((playlistId) => {
+        console.log(video._id, playlistId);
+        return addVideoToPlaylistApi(video._id, playlistId);
+      });
+      if (promises.length === 0) {
+        return false;
+      }
+      await Promise.all(promises);
+      console.log("Video added to selected playlists successfully!");
+    } catch (error) {
+      console.error("Error adding video to playlists:", error);
     }
   };
 
@@ -224,7 +251,8 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
                     Save to playlist
                   </h3>
                   <ul className="mb-4">
-                    {playlistArray.length > 0 &&
+                    {playlistArray &&
+                      playlistArray.length > 0 &&
                       playlistArray.map((playlist) => (
                         <li className="mb-2 last:mb-0" key={playlist._id}>
                           <label
@@ -235,6 +263,8 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
                               type="checkbox"
                               className="peer hidden"
                               id={playlist._id}
+                              value={playlist._id}
+                              onChange={handleAddPlaylistChange}
                             />
                             <span className="inline-flex h-4 w-4 items-center justify-center rounded-[4px] border border-transparent bg-white text-white group-hover/label:border-[#ae7aff] peer-checked:border-[#ae7aff] peer-checked:text-[#ae7aff]">
                               <svg
@@ -256,6 +286,15 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
                           </label>
                         </li>
                       ))}
+                    <button
+                      type="submit"
+                      className="w-full mx-auto mt-0 mb-4 rounded-lg bg-[#ae7aff] px-4 py-2 text-black"
+                      onClick={() => {
+                        addVideoToSelectedPlaylists();
+                      }}
+                    >
+                      Add new video to playlist
+                    </button>
                   </ul>
                   <form onSubmit={handleSubmit} className="flex flex-col">
                     <label
@@ -280,6 +319,11 @@ const VideoPlaying = ({ video = [], id, fetchVideo }) => {
                       onChange={handleChange}
                       required
                     />
+                    {error && (
+                      <p className="mt-2 text-sm text-red-500">
+                        {error} {/* Displaying the error message */}
+                      </p>
+                    )}
                     <button
                       type="submit"
                       className="w-full mx-auto mt-4 rounded-lg bg-[#ae7aff] px-4 py-2 text-black"

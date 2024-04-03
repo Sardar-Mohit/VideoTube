@@ -1,4 +1,4 @@
-import { getPlaylistById } from "@/api/playlistApi";
+import { getPlaylistByIdApi } from "@/api/playlistApi";
 import { Aside, PlaylistCard, VideoListingForSearch } from "@/components";
 import Time from "@/hooks/Time";
 import { useEffect, useState } from "react";
@@ -12,14 +12,13 @@ const OpenedPlaylist = () => {
   const [ownerData, setOwnerData] = useState([]);
 
   const getPlaylistData = async () => {
-    const request = await getPlaylistById(id);
+    const request = await getPlaylistByIdApi(id);
     const response = request.statusCode.getPlaylistData[0];
     setPlaylistData(response);
     setVideosData(response.videoDetails);
     setOwnerData(response.ownerData[0]);
-    console.log("request");
-    console.log(playlistData.subscribersCount);
-    console.log(response.ownerData[0]);
+    console.log("response");
+    console.log(response);
   };
 
   useEffect(() => {
@@ -33,19 +32,20 @@ const OpenedPlaylist = () => {
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
           <div className="flex flex-wrap gap-x-4 gap-y-10 p-4 xl:flex-nowrap">
             <div className="w-full shrink-0 sm:max-w-md xl:max-w-sm">
-              <PlaylistCard
-                videosLenght={playlistData.videoDetails?.length || 0}
-                createdAgo={Time(playlistData.createdAt)}
-                title={playlistData.name}
-                description={playlistData.description}
-                playlistTotalViews={playlistData.totalViews}
-                thumbnail={
-                  playlistData.videoDetails &&
-                  playlistData.videoDetails?.length > 0
-                    ? videosData[0]?.thumbnail
-                    : ""
-                }
-              />
+              {playlistData && videosData.length > 0 && (
+                <PlaylistCard
+                  key={playlistData._id}
+                  playlistId={playlistData._id}
+                  videosLength={videosData.length || 0}
+                  thumbnail={videosData[0].thumbnail || ""}
+                  playlistTotalViews={playlistData.totalViews || 0}
+                  title={playlistData.name || ""}
+                  description={playlistData.description || ""}
+                  createdAgo={Time(playlistData.createdAt) || ""}
+                  subscribersCount={playlistData?.subscribersCount || 0}
+                />
+              )}
+
               <div className="mt-6 flex items-center gap-x-3">
                 <div className="h-16 w-16 shrink-0">
                   <img
@@ -57,8 +57,7 @@ const OpenedPlaylist = () => {
                 <div className="w-full">
                   <h6 className="font-semibold">{ownerData.name}</h6>
                   <p className="text-sm text-gray-300">
-                    {playlistData?.subscribersCount}{" "}
-                    Subscribers
+                    {playlistData?.subscribersCount} Subscribers
                   </p>
                 </div>
               </div>
@@ -68,7 +67,9 @@ const OpenedPlaylist = () => {
                 videosData.map((elem) => (
                   <VideoListingForSearch
                     key={elem._id}
-                    id={elem._id}
+                    playlistId={playlistData._id}
+                    videoId={elem._id}
+                    deleteButton={true}
                     views={elem.views}
                     time={Time(elem.createdAt)}
                     title={elem.title}

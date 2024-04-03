@@ -12,7 +12,6 @@ import { useSelector } from "react-redux";
 const Profile = () => {
   const [videos, setVideos] = useState([]);
   const user = useSelector((state) => state.auth.user);
-  const userId = user.statusCode.user ? user.statusCode.user._id : null;
   const [uploadVideo, setUploadVideo] = useState(false);
 
   const handleUploadVideoToggle = () => {
@@ -20,6 +19,9 @@ const Profile = () => {
   };
 
   const fetchVideo = async () => {
+    console.log("ssss")
+    console.log(user)
+    const userId = user.statusCode.user ? user.statusCode.user._id : null;
     if (userId) {
       const request = await getUserVideos(userId);
       const response = request.statusCode;
@@ -51,7 +53,7 @@ const Profile = () => {
                   />
                 ))
               ) : (
-                <tr className="flex justify-center p-4 my-8">
+                <div className="flex justify-center p-4 my-8">
                   <div className="w-full max-w-sm text-center">
                     <p className="mb-3 w-full">
                       <span className="inline-flex rounded-full bg-[#E4D3FF] p-2 text-[#AE7AFF]">
@@ -99,7 +101,7 @@ const Profile = () => {
                       New video
                     </button>
                   </div>
-                </tr>
+                </div>
               )}
             </div>
           </ProfileHeaderWithNavigation>

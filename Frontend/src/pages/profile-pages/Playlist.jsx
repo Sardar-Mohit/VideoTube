@@ -1,4 +1,3 @@
-import { getUserPlaylists } from "@/api/playlistApi";
 import {
   Aside,
   PlaylistCard,
@@ -12,17 +11,20 @@ import { useDispatch, useSelector } from "react-redux";
 const Playlist = () => {
   const [playlist, setPlaylist] = useState([]);
   let userData = useSelector((state) => state.auth.user);
-  let user = userData.statusCode.user;
+  let user = userData?.statusCode?.user;
   let dispatch = useDispatch();
 
   const getPlaylist = async () => {
     try {
-    const response = await dispatch(getUserPlaylistsAction(user._id));
-    if (response.message === 200) {
-      const playlistData = response.data.statusCode.userPlaylists;
-      setPlaylist(playlistData.reverse());
-    }
-    console.log("playlist2", response);
+      const request = await dispatch(getUserPlaylistsAction(user._id));
+      if (request.payload.message === 200) {
+        const playlistData = request?.payload?.statusCode?.userPlaylists;
+        const response = playlistData.filter(
+          (playlistItems) => playlistItems.videos.length > 0
+        );
+        setPlaylist(response);
+        console.log("playlist2", playlistData);
+      }
     } catch (error) {
       console.error("Error fetching playlists:", error);
     }
@@ -45,14 +47,14 @@ const Playlist = () => {
                     <>
                       <PlaylistCard
                         key={playlistData._id}
-                        id={playlistData._id}
-                        thumbnail={playlistData.videoDetails[0].thumbnail}
-                        playlistTotalViews={playlistData.totalViews}
-                        videosLenght={playlistData.videos.length}
-                        createdAgo={Time(playlistData.createdAt)}
-                        title={playlistData.name}
-                        description={playlistData.description}
-                        subscribersCount={playlistData.subscribersCount}
+                        playlistId={playlistData._id}
+                        thumbnail={playlistData.videoDetails[0].thumbnail || ""}
+                        playlistTotalViews={playlistData.totalViews || 0}
+                        videosLength={playlistData.videoDetails.length || 0}
+                        createdAgo={Time(playlistData.createdAt) || ""}
+                        title={playlistData.name || ""}
+                        description={playlistData.description || ""}
+                        subscribersCount={playlistData.subscribersCount || 0}
                       />
                     </>
                   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Logo } from "@/components/index";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { loginUserAction } from "@/store/actions/authActions";
 const Login = () => {
   const navigate = useNavigate();
   const error = useSelector((state) => state.auth.error);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const [button, setButton] = useState(false);
 
@@ -31,6 +32,16 @@ const Login = () => {
     resolver: zodResolver(zodSchema),
   });
 
+  useEffect(() => {
+    console.log("2222")
+    console.log(user)
+    if (user) {
+
+
+      navigate("/landing-page");
+    }
+  }, [user, navigate]);
+
   const onSubmit = async (data, e) => {
     e.preventDefault();
     setButton(true);
@@ -38,7 +49,7 @@ const Login = () => {
     try {
       const response = await dispatch(loginUserAction(data));
       console.log(response);
-      
+
       if (response.payload) {
         if (response.payload.message === 200) {
           navigate("/landing-page");

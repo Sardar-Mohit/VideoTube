@@ -10,31 +10,18 @@ import {
 
 const setCookie = (name, value, days) => {
   const date = new Date();
-  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
   const expires = "expires=" + date.toUTCString();
-  // Add HttpOnly and SameSite attributes
-  const cookieOptions = {
-    expires: expires,
-    path: "/",
-    HttpOnly: true,
-    SameSite: "strict",
-  };
-  document.cookie =
-    name +
-    "=" +
-    value +
-    ";" +
-    Object.keys(cookieOptions)
-      .map((key) => `${key}=${cookieOptions[key]}`)
-      .join(";");
+  document.cookie = name + "=" + value + ";" + expires + ";path=/";
 };
+
 
 export const userRegistrationAction = createAsyncThunk(
   "user/registerUser",
   async (userData, { rejectWithValue }) => {
     try {
       const response = await registerUserApi(userData);
-      console.log("user login success" + response);
+      console.log("user registeration success" + response);
       setCookie("user", JSON.stringify(response), 7);
       return response;
     } catch (error) {
@@ -59,6 +46,7 @@ export const loginUserAction = createAsyncThunk(
     try {
       const response = await loginUserApi(userCredentials);
       setCookie("user", JSON.stringify(response.statusCode.accessToken), 7);
+      console.log(document.cookie)
       return response;
     } catch (error) {
        if (error.response && error.response.status === 404) {
@@ -102,13 +90,15 @@ export const changeUserDetailsAction = createAsyncThunk(
   }
 );
 
-export const currentUserAction = createAsyncThunk(
+export const 
+currentUserAction = createAsyncThunk(
   "user/currentUser",
   async (userData, { rejectWithValue }) => {
     try {
       const response = await getCurrentUserApi(userData);
-      console.log("action " + response);
-      return response;
+      console.log("response5555");
+      console.log(response.data);
+      return response.data;
     } catch (error) {
       if (error.response && error.response.status === 404) {
         return rejectWithValue("User not found");

@@ -23,16 +23,22 @@ import {
   PrivacyPolicy,
   TermsAndCondition,
 } from "./pages";
+import { currentUserAction } from "./store/actions/authActions";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [j, setj] = useState([]);
 
   // Fetch authentication state from Redux store
   const user = useSelector((state) => state.auth.user);
+  async function hello() {
+    const hello = await currentUserAction();
+    setj(hello)
+  }
   useEffect(() => {
     setIsLoggedIn(!!user);
-    console.log("user");
-    console.log(user);
+    console.log("usessr");
+    console.log(j);
   }, [user]);
 
   return (
@@ -41,15 +47,13 @@ function App() {
         {isLoggedIn ? <NavbarOne user={user} /> : <NavbarTwo />}
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/landing-page" element={<LandingPage />} />
+          <Route path="/tweet" element={<Tweet />} />
+          <Route path="/history" element={<WatchHistoryPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/register" element={<Register />} />
           <Route path="/liked-videos" element={<LikedVideosPage />} />
-          <Route path="/history" element={<WatchHistoryPage />} />
+          <Route path="/landing-page" element={<LandingPage />} />
           <Route path="/subscribed" element={<Subscribed />} />
-          <Route path="/tweet" element={<Tweet />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-and-condition" element={<TermsAndCondition />} />
           <Route path="/individual-page" element={<IndividualPage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/playlist" element={<Playlist />} />
@@ -62,6 +66,8 @@ function App() {
           />
           <Route path="/edit-channel-info" element={<EditChannelInfoPage />} />
           <Route path="/change-password" element={<ChangePasswordPage />} />
+          <Route path="/terms-and-condition" element={<TermsAndCondition />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         </Routes>
         <Footer />
       </div>
