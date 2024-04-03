@@ -7,6 +7,7 @@ import {
 } from "@/components";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { ReactionsCount } from "@/hooks/ReactionsCount";
 
 const IndividualPage = () => {
   const [video, setVideo] = useState([]);
@@ -38,6 +39,8 @@ const IndividualPage = () => {
                   video={video}
                   id={video.videos._id}
                   fetchVideo={fetchVideo}
+                  likesCount={ReactionsCount(video.videoReactions, "likedBy")}
+                  dislikesCount={ReactionsCount(video.videoReactions, "dislikedBy")}
                 />
               )}
               <button className="peer w-full rounded-lg border p-4 text-left duration-200 hover:bg-white/5 focus:bg-white/5 sm:hidden">

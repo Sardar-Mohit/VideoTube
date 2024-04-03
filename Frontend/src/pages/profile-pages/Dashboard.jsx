@@ -4,6 +4,7 @@ import { UploadVideoPopUp } from "@/components";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getChannelStats, getChannelVideos } from "@/api/dashboardApi";
+import { ReactionsCount } from "@/hooks/ReactionsCount";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,6 +41,7 @@ const Dashboard = () => {
   const fetchVideo = async () => {
     const request = await getChannelVideos();
     const response = request.statusCode;
+    console.log(response)
     setVideos(response);
   };
 
@@ -54,13 +56,6 @@ const Dashboard = () => {
     });
     console.log("stats");
     console.log(stats);
-  };
-
-  const reactionsCount = (video, fieldName) => {
-    const reactions = video.videosReactions.filter(
-      (reaction) => reaction[fieldName]
-    );
-    return reactions.length;
   };
 
   const deleteVideoFunc = async (videoId) => {
@@ -244,10 +239,10 @@ const Dashboard = () => {
                       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
                         <div className="flex justify-center gap-4">
                           <span className="inline-block rounded-xl bg-green-200 px-1.5 py-0.5 text-green-700">
-                            {reactionsCount(video, "likedBy")} likes
+                            {ReactionsCount(video.videosReactions, "likedBy")} likes
                           </span>
                           <span className="inline-block rounded-xl bg-red-200 px-1.5 py-0.5 text-red-700">
-                            {reactionsCount(video, "dislikedBy")} dislikes
+                            {ReactionsCount(video.videosReactions, "dislikedBy")} dislikes
                           </span>
                         </div>
                       </td>

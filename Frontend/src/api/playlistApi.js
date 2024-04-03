@@ -1,18 +1,6 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
-export const createPlaylistApi = async (playlistData) => {
-  try {
-    const request = await axios.post(
-      `http://localhost:8000/api/v1/playlist`,
-      playlistData
-    );
-    return request.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
 export const getPlaylistByIdApi = async (playlistId) => {
   try {
     const request = await axios.get(
@@ -35,10 +23,11 @@ export const getUserPlaylistsApi = async (userId) => {
   }
 };
 
-export const deletePlaylistApi = async (playlistId) => {
+export const createPlaylistApi = async (playlistData) => {
   try {
-    const request = await axios.delete(
-      `http://localhost:8000/api/v1/playlist/${playlistId}`
+    const request = await axios.post(
+      `http://localhost:8000/api/v1/playlist`,
+      playlistData
     );
     return request.data;
   } catch (error) {
@@ -46,10 +35,12 @@ export const deletePlaylistApi = async (playlistId) => {
   }
 };
 
-export const removeVideoFromPlaylistApi = async (videoId, playlistId) => {
+export const addVideoToPlaylistApi = async (videoId, playlistId) => {
   try {
     const request = await axios.patch(
-      `http://localhost:8000/api/v1/playlist/remove/${videoId}/${playlistId}`
+      `http://localhost:8000/api/v1/playlist/add/${videoId}/${playlistId}`,
+      {},
+      { withCredentials: true }
     );
     return request.data;
   } catch (error) {
@@ -69,12 +60,21 @@ export const updatePlaylistApi = async (playlistId, playlistData) => {
   }
 };
 
-
-
-export const addVideoToPlaylistApi = async (videoId, playlistId) => {
+export const removeVideoFromPlaylistApi = async (videoId, playlistId) => {
   try {
     const request = await axios.patch(
-      `http://localhost:8000/api/v1/playlist/add/${videoId}/${playlistId}`,{},{withCredentials:true}
+      `http://localhost:8000/api/v1/playlist/remove/${videoId}/${playlistId}`
+    );
+    return request.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deletePlaylistApi = async (playlistId) => {
+  try {
+    const request = await axios.delete(
+      `http://localhost:8000/api/v1/playlist/${playlistId}`
     );
     return request.data;
   } catch (error) {

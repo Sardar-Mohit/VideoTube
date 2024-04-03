@@ -45,6 +45,7 @@ import Footer from "./Footer";
 import UploadVideoPopUp from "./video-crud/UploadVideoPopUp";
 import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
 import UpdatePlaylistCard from "./UpdatePlaylistCard";
+import UpdateTweetCard from "./updateTweetCard";
 
 export {
   Logo,
@@ -66,6 +67,7 @@ export {
   ProfileNavbar,
   ProfileBanner,
   VideoSuggestion,
+  UpdateTweetCard,
   DeleteVideoModel,
   UploadVideoPopUp,
   NoVideosAvailable,
