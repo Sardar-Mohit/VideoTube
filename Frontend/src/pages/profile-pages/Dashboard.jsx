@@ -41,7 +41,7 @@ const Dashboard = () => {
   const fetchVideo = async () => {
     const request = await getChannelVideos();
     const response = request.statusCode;
-    console.log(response)
+    console.log(response);
     setVideos(response);
   };
 
@@ -203,19 +203,28 @@ const Dashboard = () => {
                             htmlFor="vid-pub-1"
                             className="relative inline-block w-12 cursor-pointer overflow-hidden"
                           >
-                            <input
-                              type="checkbox"
-                              id="vid-pub-1"
-                              className="peer sr-only"
-                              defaultChecked={video.isPublished ? true : false}
-                            />
+                            {video.isPublished ? (
+                              <input
+                                type="checkbox"
+                                id="vid-pub-1"
+                                className="peer sr-only"
+                                defaultChecked={true}
+                              />
+                            ) : (
+                              <input
+                                type="checkbox"
+                                id="vid-pub-1"
+                                className="peer sr-only"
+                                defaultChecked={false}
+                              />
+                            )}
                             <span className="inline-block h-6 w-full rounded-2xl bg-gray-200 duration-200 after:absolute after:bottom-1 after:left-1 after:top-1 after:h-4 after:w-4 after:rounded-full after:bg-black after:duration-200 peer-checked:bg-[#ae7aff] peer-checked:after:left-7" />
                           </label>
                         </div>
                       </td>
                       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
                         <div className="flex justify-center">
-                          {!video.isPublished ? (
+                          {video.isPublished ? (
                             <span className="inline-block rounded-2xl border px-1.5 py-0.5 border-green-600 text-green-600">
                               Published
                             </span>
@@ -227,9 +236,9 @@ const Dashboard = () => {
                         </div>
                       </td>
                       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center jus gap-4">
                           <img
-                            className="h-10 w-10 rounded-full bg-center bg-cover"
+                            className="h-10 w-10 rounded-full bg-center object-cover"
                             src={video.thumbnail}
                             alt={video.title}
                           />
@@ -239,14 +248,19 @@ const Dashboard = () => {
                       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
                         <div className="flex justify-center gap-4">
                           <span className="inline-block rounded-xl bg-green-200 px-1.5 py-0.5 text-green-700">
-                            {ReactionsCount(video.videosReactions, "likedBy")} likes
+                            {ReactionsCount(video.videosReactions, "likedBy")}{" "}
+                            likes
                           </span>
                           <span className="inline-block rounded-xl bg-red-200 px-1.5 py-0.5 text-red-700">
-                            {ReactionsCount(video.videosReactions, "dislikedBy")} dislikes
+                            {ReactionsCount(
+                              video.videosReactions,
+                              "dislikedBy"
+                            )}{" "}
+                            dislikes
                           </span>
                         </div>
                       </td>
-                      <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none items-center justify-center h-16 flex">
+                      <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none relative left-[4.5%]">
                         {FormatDate(video.createdAt)}
                       </td>
                       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">

@@ -11,11 +11,11 @@ const FileUpload = ({
     <div className="col-span-full">
       <label
         htmlFor={name}
-        className="text-sm font-medium leading-6 text-gray-900 items-start flex"
+        className="text-sm font-medium leading-6 text-white items-start flex"
       >
         {label}
       </label>
-      <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+      <div className="mt-2 flex justify-center rounded-lg border border-dashed border-slate-400 px-6 py-10">
         <div className="text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-300"
@@ -32,7 +32,7 @@ const FileUpload = ({
           <div className="mt-4 flex text-sm leading-6 text-gray-600">
             <label
               htmlFor={name}
-              className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+              className="px-[2px] relative cursor-pointer rounded-md bg-white font-semibold text-gray-800 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
             >
               <span>Upload a file</span>
               <input
@@ -43,9 +43,9 @@ const FileUpload = ({
                 {...register(name)}
               />
             </label>
-            <p className="pl-1">or drag and drop</p>
+            <p className="text-white pl-1">or drag and drop</p>
           </div>
-          <p className="text-xs leading-5 text-gray-600">
+          <p className="text-xs leading-5 text-white">
             PNG, JPG, GIF up to 10MB
           </p>
           {errors[name] && (

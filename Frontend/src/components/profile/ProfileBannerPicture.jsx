@@ -11,7 +11,7 @@ const ProfileBannerPicture = ({ banner }) => {
               : "https://images.pexels.com/photos/1092424/pexels-photo-1092424.jpeg?auto=compress"
           }
           alt="cover-photo"
-          className="w-full bg-center object-cover"
+          className="w-full h-full bg-center object-cover bg-no-repeat"
         />
       </div>
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">

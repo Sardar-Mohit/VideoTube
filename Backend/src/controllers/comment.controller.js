@@ -8,17 +8,37 @@ import { User } from "../models/user.model.js";
 
 const getVideoComments = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 30 } = req.query;
 
-  let video = await Video.findById({ _id: videoId });
+  let video = await Video.findById(videoId);
   if (!video) {
     throw new ApiError(404, "Video Not found to get all comment");
   }
 
-  let comments = await Comment.find({ video: videoId });
-  if (!comments) {
-    throw new ApiError(404, "This Video Does not have any comments");
-  }
+  let comments = await Comment.aggregate([
+    { $match: { video: new mongoose.Types.ObjectId(videoId) } },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "userDetails",
+      },
+    },
+    {
+      $project: {
+        "userDetails.email": 0,
+        "userDetails.coverImage": 0,
+        "userDetails.watchHistory": 0,
+        "userDetails.password": 0,
+        "userDetails.refreshToken": 0,
+        "userDetails.videos": 0,
+      },
+    },
+    {
+      $sort: { createdAt: -1 },
+    },
+  ]);
 
   res
     .status(200)

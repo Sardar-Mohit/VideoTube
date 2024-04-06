@@ -12,7 +12,7 @@ function ChannelCardInSubscribed({
           <img
             src={imageSrc}
             alt={alt}
-            className="h-full w-full rounded-full"
+            className="h-full w-full rounded-full object-cover bg-center"
           />
         </div>
         <div className="block">

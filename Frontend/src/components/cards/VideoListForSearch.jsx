@@ -14,16 +14,16 @@ import {
 } from "@/components/ui/alert-dialog";
 
 function VideoListingForSearch({
-  videoId,
   time,
   title,
-  playlistId,
   views,
   owner,
   altText,
+  videoId,
   ownerImg,
   duration,
   thumbnail,
+  playlistId,
   description,
   deleteButton = false,
 }) {
@@ -61,7 +61,7 @@ function VideoListingForSearch({
           <img
             src={ownerImg}
             alt={owner}
-            className="h-full w-full rounded-full"
+            className="h-full w-full object-cover bg-center rounded-full"
           />
         </div>
         <div className="w-full">
@@ -74,7 +74,7 @@ function VideoListingForSearch({
               <img
                 src={ownerImg}
                 alt={owner}
-                className="h-full w-full rounded-full"
+                className="h-full w-full rounded-full object-cover bg-center"
               />
             </div>
             <p className="text-sm text-gray-200">{owner}</p>

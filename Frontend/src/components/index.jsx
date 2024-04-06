@@ -45,7 +45,7 @@ import Footer from "./Footer";
 import UploadVideoPopUp from "./video-crud/UploadVideoPopUp";
 import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
 import UpdatePlaylistCard from "./UpdatePlaylistCard";
-import UpdateTweetCard from "./updateTweetCard";
+import UpdateTweetCard from "./UpdateTweetCard";
 
 export {
   Logo,

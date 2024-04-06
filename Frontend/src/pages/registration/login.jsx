@@ -36,8 +36,6 @@ const Login = () => {
     console.log("2222")
     console.log(user)
     if (user) {
-
-
       navigate("/landing-page");
     }
   }, [user, navigate]);
@@ -75,7 +73,7 @@ const Login = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
             <Input
               label={"Username :"}
               name={"username"}
@@ -93,11 +91,13 @@ const Login = () => {
               errors={errors}
               required
             />
+
             {error && (
               <p className="mt-2 text-sm text-red-500">
                 {error} {/* Displaying the error message */}
               </p>
             )}
+            
             <div>
               {button == false ? (
                 <button

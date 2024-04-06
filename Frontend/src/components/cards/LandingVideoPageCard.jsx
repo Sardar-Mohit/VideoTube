@@ -24,7 +24,7 @@ const LandingVideoPageCard = ({
             <img
               src={thumbnail}
               alt={title}
-              className="h-full w-full object-cover bg-center"
+              className="h-full w-full object-contain bg-center"
             />
           </div>
           <span className="absolute bottom-1 right-1 inline-block rounded bg-black px-1.5 text-sm">
@@ -36,7 +36,7 @@ const LandingVideoPageCard = ({
             <img
               src={authorImg}
               alt={authorName}
-              className="h-full w-full rounded-full"
+              className="h-full w-full rounded-full object-cover bg-center"
             />
           </div>
           <div className="w-full">

@@ -40,12 +40,12 @@ const TweetCard = ({
   };
 
   return (
-    <div className="flex gap-3 border border-gray-700 py-4 last:border-b-transparent">
+    <div className="flex gap-3 border-b border-gray-700 py-4 last:border-b-transparent">
       <div className="h-14 w-14 shrink-0">
         <img
           src={userProfilePicture}
           alt={username}
-          className="h-full w-full rounded-full"
+          className="h-full w-full rounded-full object-cover bg-center"
         />
       </div>
       <div className="w-full">
@@ -100,7 +100,7 @@ const TweetCard = ({
           </button>
         </div>
       </div>
-      <div className="flex gap-x-4">
+      <div className="flex items-baseline gap-x-2 mr-4">
         <AlertDialog className="new-york">
           <AlertDialogTrigger>
             <button className="h-5 w-5 hover:text-[#ae7aff]">

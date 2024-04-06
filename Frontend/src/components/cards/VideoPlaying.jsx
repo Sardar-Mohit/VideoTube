@@ -102,17 +102,6 @@ const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
             muted={false}
             loop={false}
             playbackRate={1}
-            config={{
-              youtube: {
-                playerVars: {
-                  showinfo: 0, // Hide YouTube info
-                  controls: 1, // Hide YouTube controls
-                  modestbranding: 1, // Hide YouTube logo
-                  rel: 0, // Disable related videos
-                  autoplay: 0, // Autoplay disabled by default
-                },
-              },
-            }}
             fallback={null}
             onError={(error) => console.error("Error occurred:", error)}
           />
@@ -300,7 +289,7 @@ const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
               <img
                 src={video.avatar}
                 alt={video.videos[0].title}
-                className="h-full w-full rounded-full bg-center bg-cover"
+                className="h-full w-full rounded-full object-center object-cover"
               />
             </div>
             <div className="block">

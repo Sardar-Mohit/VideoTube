@@ -21,7 +21,7 @@ const UpdateTweetCard = ({ close, tweetId, content, getUserTweets }) => {
         return false;
       }
 
-      if (formData.content.value === "") {
+      if (formData.content.trim() === "") {
         setError("Content cannot be empty.");
         return false;
       }

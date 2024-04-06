@@ -23,22 +23,13 @@ import {
   PrivacyPolicy,
   TermsAndCondition,
 } from "./pages";
-import { currentUserAction } from "./store/actions/authActions";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [j, setj] = useState([]);
-
-  // Fetch authentication state from Redux store
   const user = useSelector((state) => state.auth.user);
-  async function hello() {
-    const hello = await currentUserAction();
-    setj(hello)
-  }
+
   useEffect(() => {
     setIsLoggedIn(!!user);
-    console.log("usessr");
-    console.log(j);
   }, [user]);
 
   return (

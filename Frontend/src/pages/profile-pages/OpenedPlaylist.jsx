@@ -50,7 +50,7 @@ const OpenedPlaylist = () => {
                 <div className="h-16 w-16 shrink-0">
                   <img
                     alt={ownerData.name}
-                    className="h-full w-full rounded-full"
+                    className="h-full w-full rounded-full object-cover bg-center"
                     src={ownerData.avatar}
                   />
                 </div>

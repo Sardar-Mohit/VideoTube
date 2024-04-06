@@ -8,14 +8,27 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { logoutUserAction } from "@/store/actions/authActions";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 
 const Avatar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   let userObj = null;
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false); // State to manage dialog visibility
 
   async function logout() {
     try {
@@ -31,9 +44,23 @@ const Avatar = () => {
     console.log(userObj);
   }
 
+  const handleLogoutTriggerClick = (event) => {
+    event.preventDefault(); // Prevent dropdown closure on trigger click
+    setIsLogoutDialogOpen(true);
+  };
+
+  const handleLogoutConfirmation = async () => {
+    await logout(); // Ensure asynchronous completion
+    setIsLogoutDialogOpen(false);
+  };
+
+  const handleLogoutCancel = () => {
+    setIsLogoutDialogOpen(false);
+  };
+
   return (
     <>
-      <DropdownMenu className="bg-white">
+      <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div
             className="mb-8 mt-auto px-4 sm:mb-0 sm:mt-0 sm:px-0"
@@ -56,15 +83,14 @@ const Avatar = () => {
             </div>
           </div>
         </DropdownMenuTrigger>
-
-        <DropdownMenuContent className=" w-40 sm:w-56">
+        <DropdownMenuContent className="bg-black text-white w-40 sm:w-56">
           <DropdownMenuGroup>
             <DropdownMenuLabel className="font-bold">
               My Account
             </DropdownMenuLabel>
           </DropdownMenuGroup>
 
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="bg-slate-400" />
 
           <DropdownMenuGroup>
             <DropdownMenuItem
@@ -81,7 +107,7 @@ const Avatar = () => {
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="bg-slate-400 h-[0.5px]" />
 
           <DropdownMenuGroup>
             <DropdownMenuItem
@@ -98,15 +124,45 @@ const Avatar = () => {
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="bg-slate-400" />
 
           <DropdownMenuGroup>
-            <DropdownMenuItem
-              className="cursor-pointer font-[500]"
-              onClick={logout}
-            >
-              Log out
-              {/* <AlertBox triggerpoint="Log out" /> */}
+            <DropdownMenuItem className="cursor-pointer font-[500]">
+              <AlertDialog
+                open={isLogoutDialogOpen}
+                onClose={handleLogoutCancel}
+              >
+                {" "}
+                {/* Manage dialog visibility with state */}
+                <AlertDialogTrigger
+                  className=" hover:text-red-500 focus:text-red-600 font-[500]"
+                  onClick={handleLogoutTriggerClick}
+                >
+                  Log out
+                </AlertDialogTrigger>
+                <AlertDialogContent className="text-white bg-black">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will logout your
+                      account.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel onClick={handleLogoutCancel}>
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      className="hover:text-red-400 focus:text-red-500"
+                      onClick={handleLogoutConfirmation}
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
