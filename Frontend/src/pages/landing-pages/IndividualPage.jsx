@@ -71,8 +71,8 @@ const IndividualPage = () => {
                 <div>Video Not Found</div>
               ) : (
                 <VideoPlaying
-                  video={video}
-                  id={video.videos._id}
+                  owner={video}
+                  videoId={video.videos[0]._id}
                   fetchVideo={fetchVideo}
                   likesCount={ReactionsCount(video.videoReactions, "likedBy")}
                   dislikesCount={ReactionsCount(
@@ -124,6 +124,7 @@ const IndividualPage = () => {
                       altText={comment?.userDetails[0]?.username}
                       fullName={comment?.userDetails[0]?.fullName}
                       username={comment?.userDetails[0]?.username}
+                      likeCount={comment?.commentReactions.length}
                     />
                   ))
                 )}

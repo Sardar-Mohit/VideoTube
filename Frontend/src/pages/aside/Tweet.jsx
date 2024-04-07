@@ -1,6 +1,5 @@
 import { createTweetApi, getTweetsByUserIdApi } from "@/api/tweetsApi";
 import { Aside, TweetCard, ProfileHeaderWithNavigation } from "@/components";
-import { ReactionsCount } from "@/hooks/ReactionsCount";
 import Time from "@/hooks/Time";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -12,12 +11,16 @@ const Tweet = () => {
   const userId = user?.statusCode?.user?._id;
 
   const getUserTweets = async () => {
-    console.log("useraaa");
-    console.log(userId);
-    const request = await getTweetsByUserIdApi(userId);
-    const response = request?.statusCode?.tweets;
-    console.log(response);
-    setUserTweets(response.reverse());
+    console.log("userId")
+    console.log(userId)
+    try {
+      const request = await getTweetsByUserIdApi(userId);
+      const response = request?.statusCode.tweets;
+      response.length > 0 && setUserTweets(response.reverse());
+      console.log(response);
+    } catch (error) {
+      console.error("Error fetching tweets:", error);
+    }
   };
 
   const createTweet = async (event) => {
@@ -54,7 +57,10 @@ const Tweet = () => {
                   required
                 />
                 <div className="flex items-center justify-end gap-x-3 px-3">
-                  <button type="button" className="inline-block h-5 w-5 hover:text-[#ae7aff]">
+                  <button
+                    type="button"
+                    className="inline-block h-5 w-5 hover:text-[#ae7aff]"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -70,7 +76,10 @@ const Tweet = () => {
                       />
                     </svg>
                   </button>
-                  <button type="button" className="inline-block h-5 w-5 hover:text-[#ae7aff]">
+                  <button
+                    type="button"
+                    className="inline-block h-5 w-5 hover:text-[#ae7aff]"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -101,16 +110,12 @@ const Tweet = () => {
                   <TweetCard
                     key={tweet._id}
                     tweetId={tweet._id}
-                    userProfilePicture={tweet.ownerDetails.avatar}
-                    username={tweet.ownerDetails.username}
-                    whenTweetWasUploaded={Time(tweet.createdAt)}
                     content={tweet.content}
                     getUserTweets={getUserTweets}
-                    likeCount={ReactionsCount(tweet.likesDetails, "likedBy")}
-                    dislikeCount={ReactionsCount(
-                      tweet.likesDetails,
-                      "dislikedBy"
-                    )}
+                    username={tweet.ownerDetails.username}
+                    whenTweetWasUploaded={Time(tweet.createdAt)}
+                    userProfilePicture={tweet.ownerDetails.avatar}
+                    likeCount={tweet.likesDetails.length}
                   />
                 ))}
             </div>

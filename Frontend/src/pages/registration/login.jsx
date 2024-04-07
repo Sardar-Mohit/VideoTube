@@ -67,7 +67,7 @@ const Login = () => {
           <div className="w-full items-center justify-center flex">
             <Logo biggerDeviceWidth={28} width={28} />
           </div>
-          <h2 className="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-white">
             Sign in to your account
           </h2>
         </div>

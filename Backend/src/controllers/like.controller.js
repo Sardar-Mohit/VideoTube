@@ -134,14 +134,31 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
 const getLikedVideos = asyncHandler(async (req, res) => {
   let user = req.user;
 
-  let likedVideos = await Like.find({
-    video: { $exists: true },
-    likedBy: user._id,
-  });
-
-  if (likedVideos.length == 0) {
-    throw new ApiError(404, "User have no liked video");
-  }
+  let likedVideos = await Like.aggregate([
+    {
+      $match: { video: { $exists: true }, likedBy: user._id },
+    },
+    {
+      $lookup: {
+        from: "videos", // Assuming videos are stored in a "videos" collection
+        localField: "video",
+        foreignField: "_id",
+        as: "videoData",
+      },
+    },
+    { $unwind: "$videoData" },
+    {
+      $lookup: {
+        from: "users",
+        localField: "videoData.owner", // Correct field for referencing owner in the video document
+        foreignField: "_id",
+        as: "videoData.ownerData",
+      },
+    },
+    {
+      $unwind: "$videoData.ownerData", // Optional, if you want to flatten the owner data
+    },
+  ]);
 
   res
     .status(200)

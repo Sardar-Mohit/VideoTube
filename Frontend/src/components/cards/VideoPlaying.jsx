@@ -4,14 +4,15 @@ import ReactPlayer from "react-player";
 import { useSelector } from "react-redux";
 import { toggleSubscriptionApi } from "@/api/subscriptionApi";
 import { addVideoToPlaylistApi, createPlaylistApi } from "@/api/playlistApi";
+import { toggleVideoDislikeApi, toggleVideoLikeApi } from "@/api/likeApi";
 
-const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
+const VideoPlaying = ({ owner, videoId, likesCount, dislikesCount, fetchVideo }) => {
   const selector = useSelector((state) => state.playist.user);
   const error = useSelector((state) => state.playist.error);
   const playlistArray = selector?.statusCode?.userPlaylists;
 
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
-  const [isSubscribed, setIsSubscribed] = useState(!!video.isSubscribed[0]);
+  const [isSubscribed, setIsSubscribed] = useState(!!owner.isSubscribed[0]);
   const [AddVideoError, setAddVideoError] = useState([]);
   const [playlistData, setPlaylistData] = useState({
     name: "",
@@ -21,7 +22,7 @@ const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
   const addVideoToSelectedPlaylists = async () => {
     try {
       const promises = selectedPlaylists.map((playlistId) => {
-        return addVideoToPlaylistApi(video?.videos[0]?._id, playlistId);
+        return addVideoToPlaylistApi(owner?.videos[0]?._id, playlistId);
       });
 
       if (promises.length === 0) {
@@ -48,12 +49,12 @@ const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
   };
 
   const handleSubscribe = async () => {
-    if (!video || !video._id) {
-      return flase;
+    if (!owner || !owner._id) {
+      return false;
     }
 
     try {
-      const response = await toggleSubscriptionApi(video._id);
+      const response = await toggleSubscriptionApi(owner._id);
       console.log(response);
 
       setIsSubscribed((prevState) => !prevState);
@@ -88,12 +89,46 @@ const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
     }));
   };
 
+  const handleLike = async () => {
+    if (!owner || !videoId) {
+      console.log("like");
+      console.log(owner);
+      console.log(videoId);
+      return false;
+    }
+  
+    try {
+      const response = await toggleVideoLikeApi(videoId);
+      console.log("Like", response); // Ensure response is logged
+      fetchVideo(); // Fetch updated video data after liking
+    } catch (error) {
+      console.error("Error liking video:", error);
+    }
+  };
+  
+
+  const handleDislike = async () => {
+    if (!owner || !videoId) {
+      console.log("dislike");
+      return false;
+    }
+
+    try {
+      const response = await toggleVideoDislikeApi(videoId);
+      console.log("dislike");
+      console.log(response);
+      fetchVideo();
+    } catch (error) {
+      console.error("Error liking video:", error);
+    }
+  };
+
   return (
     <>
       <div className="relative mb-4 w-full pt-[56%] cursor-pointer">
         <div className="absolute inset-0">
           <ReactPlayer
-            url={video.videos[0].videoFile}
+            url={owner.videos[0].videoFile}
             controls={true}
             playing={true}
             width="100%"
@@ -111,9 +146,9 @@ const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
       <div className="group mb-4 w-full rounded-lg border p-4 duration-200 hover:bg-white/5 focus:bg-white/5">
         <div className="flex flex-wrap gap-y-2">
           <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
-            <h1 className="text-lg font-bold">{video.videos[0].title}</h1>
+            <h1 className="text-lg font-bold">{owner.videos[0].title}</h1>
             <p className="flex text-sm text-gray-200">
-              {video.videos[0].views} Views · {Time(video.videos[0].createdAt)}
+              {owner.videos[0].views} Views · {Time(owner.videos[0].createdAt)}
             </p>
           </div>
           <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
@@ -121,6 +156,7 @@ const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
               <div className="flex overflow-hidden rounded-lg border">
                 <button
                   name="like"
+                  onClick={handleLike}
                   className="text-white group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
                   data-like={likesCount}
                   data-like-alt={Number(likesCount) + 1}
@@ -146,6 +182,7 @@ const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
                   className={
                     "group/btn flex items-center gap-x-2 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
                   }
+                  onClick={handleDislike}
                   data-like={dislikesCount}
                   data-like-alt={Number(dislikesCount) + 1}
                 >
@@ -287,15 +324,15 @@ const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
           <div className="flex items-center gap-x-4">
             <div className="mt-2 h-12 w-12 shrink-0">
               <img
-                src={video.avatar}
-                alt={video.videos[0].title}
+                src={owner.avatar}
+                alt={owner.videos[0].title}
                 className="h-full w-full rounded-full object-center object-cover"
               />
             </div>
             <div className="block">
-              <p className="text-gray-200 font-bold">{video.username}</p>
+              <p className="text-gray-200 font-bold">{owner.username}</p>
               <p className="text-sm text-gray-400">
-                {video.subscriberCount} subscribers
+                {owner.subscriberCount} subscribers
               </p>
             </div>
           </div>
@@ -326,7 +363,7 @@ const VideoPlaying = ({ video, likesCount, dislikesCount, fetchVideo }) => {
         </div>
         <hr className="my-4 border-white" />
         <div className="h-5 overflow-y-scroll group-focus:h-auto">
-          <p className="text-sm">{video.videos[0].description}</p>
+          <p className="text-sm">{owner.videos[0].description}</p>
         </div>
       </div>
     </>

@@ -43,13 +43,13 @@ function VideoListingForSearch({
 
   return (
     <div
-      className="w-full border max-w-3xl gap-x-4 md:flex cursor-pointer"
+      className="w-full max-w-3xl gap-x-4 md:flex cursor-pointer"
       onClick={() => navigate("/individual-page", { state: videoId })}
     >
       <div className="relative mb-2 w-full md:mb-0 md:w-5/12">
         <div className="w-full pt-[56%]">
           <div className="absolute inset-0">
-            <img src={thumbnail} alt={altText} className="h-full w-full" />
+            <img src={thumbnail} alt={altText} className="h-full w-full bg-center object-contain" />
           </div>
           <span className="absolute bottom-1 right-1 inline-block rounded bg-black px-1.5 text-sm">
             {duration}
