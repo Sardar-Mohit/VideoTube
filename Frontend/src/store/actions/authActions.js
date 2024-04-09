@@ -46,7 +46,6 @@ export const loginUserAction = createAsyncThunk(
     try {
       const response = await loginUserApi(userCredentials);
       setCookie("user", JSON.stringify(response.statusCode.accessToken), 7);
-      console.log(document.cookie)
       return response;
     } catch (error) {
        if (error.response && error.response.status === 404) {
@@ -117,7 +116,7 @@ export const logoutUserAction = createAsyncThunk(
 
       // Clear the refresh token cookie
       document.cookie = `refreshToken=; expires=${date}; path=/;`;
-      console.log("action" + response);
+      console.log(response);
       return response;
     } catch (error) {
       if (error.response && error.response.status === 404) {

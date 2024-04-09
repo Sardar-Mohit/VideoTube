@@ -65,21 +65,6 @@ const authSlice = createSlice({
         state.error = action.payload || "Error occured while logging out";
         state.loading = false;
       })
-      .addCase(changePasswordAction.pending, (state) => {
-        state.user = initialState.user;
-        state.error = null;
-        state.loading = true;
-      })
-      .addCase(changePasswordAction.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.error = null;
-        state.loading = false;
-      })
-      .addCase(changePasswordAction.rejected, (state, action) => {
-        state.user = initialState.user;
-        state.error = action.payload || "Error occured while changing password";
-        state.loading = false;
-      })
       .addCase(currentUserAction.pending, (state) => {
         state.user = initialState.user;
         state.error = null;
@@ -93,7 +78,22 @@ const authSlice = createSlice({
       .addCase(currentUserAction.rejected, (state, action) => {
         state.user = initialState.user;
         state.error =
-          action.payload || "Error occurred while fetching user details";
+        action.payload || "Error occurred while fetching user details";
+        state.loading = false;
+      })
+      .addCase(changePasswordAction.pending, (state) => {
+        state.user = initialState.user;
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(changePasswordAction.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(changePasswordAction.rejected, (state, action) => {
+        state.user = initialState.user;
+        state.error = action.payload || "Error occured while changing password";
         state.loading = false;
       })
       .addCase(changeUserDetailsAction.pending, (state) => {

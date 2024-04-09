@@ -1,6 +1,11 @@
 import React from "react";
 
 const ProfileBannerPicture = ({ banner }) => {
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    // You can handle the file upload logic here
+    console.log("Selected file:", file);
+  };
   return (
     <div className="relative min-h-[150px] w-full pt-[16.28%]">
       <div className="absolute inset-0 overflow-hidden">
@@ -15,7 +20,12 @@ const ProfileBannerPicture = ({ banner }) => {
         />
       </div>
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <input type="file" id="cover-image" className="hidden" />
+        <input
+          type="file"
+          id="cover-image"
+          className="hidden"
+          onChange={handleFileChange}
+        />
         <label
           htmlFor="cover-image"
           className="inline-block h-10 w-10 cursor-pointer rounded-lg bg-white/60 p-1 text-[#ae7aff] hover:bg-white"
