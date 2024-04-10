@@ -17,7 +17,7 @@ function VideoListingForSearch({
   time,
   title,
   views,
-  owner,
+  ownerUsername,
   altText,
   videoId,
   ownerImg,
@@ -60,7 +60,7 @@ function VideoListingForSearch({
         <div className="h-10 w-10 shrink-0 md:hidden">
           <img
             src={ownerImg}
-            alt={owner}
+            alt={ownerUsername}
             className="h-full w-full object-cover bg-center rounded-full"
           />
         </div>
@@ -69,15 +69,15 @@ function VideoListingForSearch({
           <p className="flex text-sm text-gray-200 sm:mt-1">
             {views} Views · {time}
           </p>
-          <div className="flex items-center gap-x-4">
+          <div className="flex items-center gap-x-2">
             <div className="mt-2 hidden h-10 w-10 shrink-0 md:block">
               <img
                 src={ownerImg}
-                alt={owner}
+                alt={ownerUsername}
                 className="h-full w-full rounded-full object-cover bg-center"
               />
             </div>
-            <p className="text-sm text-gray-200">{owner}</p>
+            <p className="text-sm text-gray-200">{ownerUsername}</p>
           </div>
           <p className="mt-2 hidden text-sm md:block">{description}</p>
         </div>

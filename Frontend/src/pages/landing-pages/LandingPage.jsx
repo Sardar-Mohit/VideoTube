@@ -4,15 +4,17 @@ import { useEffect, useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { allVideos } from "@/api/videoApi";
 import Time from "@/hooks/Time";
+import VideoSkeletonCard from "@/components/Skeleton/VideoSkeletonCard";
 
 const LandingPage = () => {
   const [videos, setVideos] = useState([]);
+
   const fetchVideos = async () => {
     const request = await allVideos();
-    const response = request.statusCode; // Accessing the 'statusCode' property
+    const response = request.statusCode;
     const allVideosData = response.reverse();
     console.log("videos");
-    console.log(videos);
+    console.log(allVideosData);
     setVideos(allVideosData);
   };
 
@@ -47,6 +49,7 @@ const LandingPage = () => {
                 authorImg={video.owner.avatar}
               />
             ))}
+           
           </div>
         </section>
       </div>

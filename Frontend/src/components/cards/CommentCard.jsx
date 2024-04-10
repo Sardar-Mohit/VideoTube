@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { deleteCommentApi } from "@/api/commentsApi";
-import UpdateCommentCard from "../updateCommentCard";
+import UpdateCommentCard from "../UpdateCommentCard";
 import { toggleCommentLikeApi } from "@/api/likeApi";
 
 const CommentCard = ({

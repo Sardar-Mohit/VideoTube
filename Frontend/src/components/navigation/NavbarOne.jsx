@@ -7,13 +7,36 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useState } from "react";
+import { allSearchVideos } from "@/api/videoApi.js";
 
 const NavbarOne = () => {
   const navigate = useNavigate();
   const [uploadVideo, setUploadVideo] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const handleSearch = async (query) => {
+    console.log(query);
+    const request = await allSearchVideos(query);
+
+    console.log("videos");
+    console.log(request);
+
+    if (request.message === 200) {
+      navigate("/video-listing", { state: { result: request } });
+    } 
+  };
+
+  const handleChange = (e) => {
+    setQuery(e.target.value);
+  };
 
   const handleUploadVideoToggle = () => {
     setUploadVideo(!uploadVideo);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    handleSearch(query);
   };
 
   return (
@@ -26,15 +49,18 @@ const NavbarOne = () => {
           <Logo />
         </div>
         <div className="relative mx-auto hidden w-full max-w-md overflow-hidden sm:block">
-          <input
-            className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
-            placeholder="Search"
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                navigate("/video-listing");
-              }
-            }}
-          />
+          <form onSubmit={handleSubmit}>
+            <input
+              className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
+              placeholder="Search"
+              value={query}
+              onChange={handleChange}
+              // Removed onKeyDown handler, it's unnecessary for submitting the form on Enter
+            />
+            <button type="submit" style={{ display: "none" }}>
+              Search
+            </button>
+          </form>
           <span className="absolute left-2.5 top-1/2 inline-block -translate-y-1/2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -250,7 +276,7 @@ const NavbarOne = () => {
             </li>
           </ul>
           <div className="cursor-pointer flex gap-4 items-center">
-            <div tooltip="hello" className="text-white" onClick={handleUploadVideoToggle}>
+            <div className="text-white" onClick={handleUploadVideoToggle}>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>

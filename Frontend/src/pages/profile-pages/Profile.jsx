@@ -19,13 +19,15 @@ const Profile = () => {
   };
 
   const fetchVideo = async () => {
-    console.log("ssss")
-    console.log(user)
+    console.log("ssss");
+    console.log(user);
     const userId = user.statusCode.user ? user.statusCode.user._id : null;
+
     if (userId) {
       const request = await getUserVideos(userId);
       const response = request.statusCode;
       setVideos(response.videos);
+      response.videos.length === 0 && setVideos(null);
     }
   };
 
@@ -40,7 +42,8 @@ const Profile = () => {
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
           <ProfileHeaderWithNavigation>
             <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 pt-2">
-              {videos && videos.length > 0 ? (
+              {videos &&
+                videos.length > 0 &&
                 videos.map((video) => (
                   <VideoCard
                     key={video._id}
@@ -51,8 +54,9 @@ const Profile = () => {
                     time={Time(video.createdAt)}
                     thumbnail={video.thumbnail}
                   />
-                ))
-              ) : (
+                ))}
+
+              {videos === null && (
                 <div className="flex justify-center p-4 my-8">
                   <div className="w-full max-w-sm text-center">
                     <p className="mb-3 w-full">

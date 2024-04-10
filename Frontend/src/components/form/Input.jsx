@@ -5,6 +5,7 @@ const Input = ({
   placeholder = "",
   register,
   errors,
+  defaultVal,
   required = false,
 }) => {
   return (
@@ -22,6 +23,7 @@ const Input = ({
           type={type}
           placeholder={placeholder}
           autoComplete="off"
+          value={defaultVal}
           required={required ? true : false}
           {...register(name)}
           className={`mt-1 rounded-[5px] text-black px-2 py-[7px] border ring-slate-500 border-slate-500 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm ${

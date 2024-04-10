@@ -10,13 +10,24 @@ export const allVideos = async () => {
   }
 };
 
+export const allSearchVideos = async (query) => {
+  try {
+    const response = await axios.get("http://localhost:8000/api/v1/videos", {
+      params: { query },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const videoToPlay = async (videoId) => {
   try {
     const request = await axios.get(
       `http://localhost:8000/api/v1/videos/${videoId}`
     );
-    console.log("request")
-    console.log(request)
+    console.log("request");
+    console.log(request);
     return request.data;
   } catch (error) {
     throw error;

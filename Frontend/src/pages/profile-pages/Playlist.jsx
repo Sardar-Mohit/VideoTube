@@ -19,11 +19,14 @@ const Playlist = () => {
       const request = await dispatch(getUserPlaylistsAction(user._id));
       if (request.payload.message === 200) {
         const playlistData = request?.payload?.statusCode?.userPlaylists;
+
         const response = playlistData.filter(
           (playlistItems) => playlistItems.videos.length > 0
         );
         setPlaylist(response);
-        console.log("playlist2", playlistData);
+
+        response.length === 0 && setPlaylist(null);
+        console.log("playlist", response);
       }
     } catch (error) {
       console.error("Error fetching playlists:", error);
@@ -41,7 +44,8 @@ const Playlist = () => {
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
           <ProfileHeaderWithNavigation>
             <div className="grid gap-4 pt-2 sm:grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))]">
-              {playlist.length > 0 ? (
+              {playlist &&
+                playlist.length > 0 &&
                 playlist.map((playlistData) => {
                   return (
                     <>
@@ -58,8 +62,8 @@ const Playlist = () => {
                       />
                     </>
                   );
-                })
-              ) : (
+                })}
+              {playlist === null && (
                 <div className="flex justify-center p-4 my-16">
                   <div className="w-full max-w-sm text-center">
                     <p className="mb-3 w-full">

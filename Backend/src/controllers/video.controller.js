@@ -12,7 +12,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query;
 
   // searchQuery and search by userQuery
-  const searchQuery = query ? { $text: { $search: query } } : {};
+  const searchQuery = query ? { title: { $regex: query, $options: "i" } } : {};
   const userQuery = userId ? { userId: userId } : {};
 
   // searchQuery and search by userQuery combined
@@ -26,7 +26,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
     .sort(sortOptions)
     .skip((page - 1) * limit)
     .limit(Number(limit))
-    .populate("owner", "_id username email avatar"); // Populate owner details
+    .populate("owner", "_id username email avatar");
 
   if (!videos) {
     throw new ApiError(404, "Error while fetching the videos");

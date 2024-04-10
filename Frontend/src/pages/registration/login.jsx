@@ -80,8 +80,9 @@ const Login = () => {
               type={"text"}
               register={register}
               errors={errors}
+              defaultVal="axaa"
               required
-            />
+              />
 
             <Input
               label={"Password :"}
@@ -89,6 +90,7 @@ const Login = () => {
               type={"password"}
               register={register}
               errors={errors}
+              defaultVal="Abc123"
               required
             />
 
