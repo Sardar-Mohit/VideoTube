@@ -2,7 +2,7 @@ import React from "react";
 
 const NoVideosAvailable = ({ title = "", description = "" }) => {
   return (
-    <section className="w-full h-4/6 pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
+    <section className="w-full h-full items-center flex justify-center sm:ml-[70px] sm:pb-0 lg:ml-0">
       <div className="flex h-full items-center justify-center">
         <div className="w-full max-w-sm text-center">
           <p className="mb-3 w-full">

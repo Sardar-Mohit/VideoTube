@@ -46,6 +46,7 @@ import UploadVideoPopUp from "./video-crud/UploadVideoPopUp";
 import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
 import UpdatePlaylistCard from "./UpdatePlaylistCard";
 import UpdateTweetCard from "./UpdateTweetCard";
+import UserProfileCard from "./UserProfileCard";
 
 export {
   Logo,
@@ -68,8 +69,9 @@ export {
   ProfileBanner,
   VideoSuggestion,
   UpdateTweetCard,
-  DeleteVideoModel,
+  UserProfileCard,
   UploadVideoPopUp,
+  DeleteVideoModel,
   NoVideosAvailable,
   ProfileEditNavbar,
   UpdatePlaylistCard,

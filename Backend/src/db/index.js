@@ -2,8 +2,6 @@ import mongoose from "mongoose";
 import { DB_NAME } from "../constants.js";
 
 async function connectDB() {
-    console.log(DB_NAME)
-    console.dir(process.env.MONGODB_URI, { depth: null });
   try {
     // CONNECTING DATABASE
     let connectionInstance = await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`);

@@ -11,19 +11,19 @@ const VideoSkeletonCard = () => {
       <div className="w-full cursor-pointer">
         <div className="relative mb-2 w-full pt-[56%]">
           <div className="absolute inset-0">
-            <Skeleton className="h-full w-full object-contain bg-center rounded-xl" />
+            <Skeleton className="h-full w-full rounded-xl" />
           </div>
         </div>
         <div className="flex gap-x-2">
           <div className="h-10 w-10 shrink-0">
-            <Skeleton className="h-full w-full rounded-full object-cover bg-center" />
+            <Skeleton className="h-full w-full rounded-full" />
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-1">
             <h6 className="mb-1 font-semibold">
-              <Skeleton className="h-5 w-5/6 rounded-xl" />
+              <Skeleton className="h-6 w-5/6 rounded-xl" />
             </h6>
             <div className="flex text-sm text-gray-200">
-              <Skeleton className="h-5 w-3/6 rounded-xl" />
+              <Skeleton className="h-6 w-3/6 rounded-xl" />
             </div>
           </div>
         </div>

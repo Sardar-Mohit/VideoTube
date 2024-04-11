@@ -15,10 +15,9 @@ const Subscribed = () => {
     const request = await getSubscribedChannelsApi(user.statusCode.user._id);
     const response = request.statusCode.subscribedChannelsList;
     console.log("response");
-    console.log(response);
+    console.log(response.length);
     setChannels(response);
-    console.log("channels");
-    console.log(channels);
+    response.length === 0 && setChannels(null);
   };
 
   useEffect(() => {
@@ -61,7 +60,8 @@ const Subscribed = () => {
             </div>
 
             <div className="flex flex-col gap-y-4 py-4">
-              {channels && channels.length > 0 ? (
+              {channels &&
+                channels.length > 0 &&
                 channels?.map((channel) => (
                   <ChannelCardInSubscribed
                     key={channel._id}
@@ -70,8 +70,9 @@ const Subscribed = () => {
                     subscriberCount={channel.subscriberCount}
                     alt={channel.username}
                   />
-                ))
-              ) : (
+                ))}
+
+              {channels === null && (
                 <div className="flex justify-center p-4">
                   <div className="w-full max-w-sm text-center">
                     <p className="mb-3 w-full">

@@ -17,10 +17,10 @@ const ProfileVideoSkeletonCard = () => {
         </div>
         <div className="w-full">
           <h6 className="mb-1 font-semibold">
-            <Skeleton className="h-5 w-5/6 rounded-xl" />
+            <Skeleton className="h-4 w-5/6 rounded-xl" />
           </h6>
           <div className="flex text-sm text-gray-200">
-            <Skeleton className="h-5 w-3/6 rounded-xl" />
+            <Skeleton className="h-4 w-3/6 rounded-xl" />
           </div>
         </div>
       </div>
