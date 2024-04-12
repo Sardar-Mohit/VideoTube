@@ -22,8 +22,8 @@ const NavbarOne = () => {
     console.log(request);
 
     if (request.message === 200) {
-      navigate("/video-listing", { state: { result: request } });
-    } 
+      navigate("/video-listing", { state: { result: request, query: query } });
+    }
   };
 
   const handleChange = (e) => {
@@ -35,7 +35,7 @@ const NavbarOne = () => {
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
     handleSearch(query);
   };
 
