@@ -5,6 +5,7 @@ import {
   Aside,
   NoVideosAvailable,
   VideoListingForSearch,
+  TableCellWithButton,
 } from "@/components/index";
 import {
   AlertDialog,
@@ -32,54 +33,67 @@ const VideoListing = () => {
     sortBy: null,
   });
 
-  const handleSearch = async () => {
+  const handleSearch = async (params) => {
+    const { page, limit, sortBy, sortType, duration, uploadDate } = params;
+
+    console.log("params");
+    console.log(params);
 
     const request = await allSearchVideos({
-      page: 1, // Example page number
-      limit: 10, // Example limit
-      query: query, // Example search query
-      sortBy: -1, // Example sorting parameter
+      page: page || 1,
+      limit: limit || 10,
+      query: query || "",
+      sortBy: sortBy || "createdAt",
+      sortType: "desc",
+      duration: duration || "",
+      uploadDate: uploadDate || "",
     });
 
     console.log("videos");
     console.log(request);
-
     if (request.message === 200) {
-      navigate("/video-listing", { state: { result: request, query: query } });
+      navigate("/video-listing", {
+        state: { result: request, query: query },
+      });
+    } else {
+      console.error("Failed to fetch videos:", request.message);
     }
   };
 
   const handleCellClick = (column, value) => {
-    setSelectedCells((prevSelectedCells) => ({
-      ...prevSelectedCells,
-      [column]: value,
-    }));
-    console.log(value);
-    console.log(selectedCells);
-    handleSearch();
+    setSelectedCells((prevSelectedCells) => {
+      const updatedCells = {
+        ...prevSelectedCells,
+        [column]: value,
+      };
+      console.log(value);
+      console.log(updatedCells);
+      handleSearch(updatedCells);
+      return updatedCells;
+    });
+  };
+
+  const handleClear = (column, event) => {
+    event.stopPropagation();
+    setSelectedCells((prevSelectedCells) => {
+      const updatedCells = {
+        ...prevSelectedCells,
+        [column]: "",
+      };
+      console.log(column);
+      console.log(updatedCells);
+      handleSearch(updatedCells);
+      return updatedCells;
+    });
   };
 
   useEffect(() => {
     if (result) {
-      setVideos(result?.statusCode);
+      setVideos(result?.statusCode || []);
       console.log("result");
       console.log(result);
     }
-  }, [result]);
-
-  if (videos.length === 0) {
-    return (
-      <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
-        <Aside />
-        <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-          <NoVideosAvailable
-            title="No Search Results Found"
-            description="No videos found matching your search. Try refining your keywords or filters. Explore other categories for more options!"
-          />
-        </section>
-      </div>
-    );
-  }
+  }, [result, setVideos]);
 
   return (
     <>
@@ -153,179 +167,151 @@ const VideoListing = () => {
                 </thead>
                 <tbody>
                   <tr className="border-b border-gray-300 dark:border-gray-700">
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.uploadDate === "Last hour" &&
-                        "bg-gray-200"
-                      }`}
+                    <TableCellWithButton
+                      value="Last hour"
+                      selectedValue={selectedCells.uploadDate}
                       onClick={() => handleCellClick("uploadDate", "Last hour")}
-                    >
-                      Last hour
-                    </td>
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.type === "Video" && "bg-gray-200"
-                      }`}
+                      onClear={(event) => handleClear("uploadDate", event)}
+                    />
+                    <TableCellWithButton
+                      value="Video"
+                      selectedValue={selectedCells.type}
                       onClick={() => handleCellClick("type", "Video")}
-                    >
-                      Video
-                    </td>
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.duration === "Under 4 minutes" &&
-                        "bg-gray-200"
-                      }`}
+                      onClear={(event) => handleClear("type", event)}
+                    />
+                    <TableCellWithButton
+                      value="Under 4 minutes"
+                      selectedValue={selectedCells.duration}
                       onClick={() =>
                         handleCellClick("duration", "Under 4 minutes")
                       }
-                    >
-                      Under 4 minutes
-                    </td>
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.sortBy === "Newest" && "bg-gray-200"
-                      }`}
+                      onClear={(event) => handleClear("duration", event)}
+                    />
+                    <TableCellWithButton
+                      value="Newest"
+                      selectedValue={selectedCells.sortBy}
                       onClick={() => handleCellClick("sortBy", "Newest")}
-                    >
-                      Newest
-                    </td>
+                      onClear={(event) => handleClear("sortBy", event)}
+                    />
                   </tr>
                   <tr className="border-b border-gray-300 dark:border-gray-700">
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.uploadDate === "Today" && "bg-gray-200"
-                      }`}
+                    <TableCellWithButton
+                      value="Today"
+                      selectedValue={selectedCells.uploadDate}
                       onClick={() => handleCellClick("uploadDate", "Today")}
-                    >
-                      Today
-                    </td>
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.type === "Channel" && "bg-gray-200"
-                      }`}
+                      onClear={(event) => handleClear("uploadDate", event)}
+                    />
+                    <TableCellWithButton
+                      value="Channel"
+                      selectedValue={selectedCells.type}
                       onClick={() => handleCellClick("type", "Channel")}
-                    >
-                      Channel
-                    </td>
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.duration === "4–20 minutes" &&
-                        "bg-gray-200"
-                      }`}
+                      onClear={(event) => handleClear("type", event)}
+                    />
+                    <TableCellWithButton
+                      value="4–20 minutes"
+                      selectedValue={selectedCells.duration}
                       onClick={() =>
                         handleCellClick("duration", "4–20 minutes")
                       }
-                    >
-                      4–20 minutes
-                    </td>
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.sortBy === "Oldest" && "bg-gray-200"
-                      }`}
+                      onClear={(event) => handleClear("duration", event)}
+                    />
+                    <TableCellWithButton
+                      value="Oldest"
+                      selectedValue={selectedCells.sortBy}
                       onClick={() => handleCellClick("sortBy", "Oldest")}
-                    >
-                      Oldest
-                    </td>
+                      onClear={(event) => handleClear("sortBy", event)}
+                    />
                   </tr>
                   <tr className="border-b border-gray-300 dark:border-gray-700">
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.uploadDate === "This week" &&
-                        "bg-gray-200"
-                      }`}
+                    <TableCellWithButton
+                      value="This week"
+                      selectedValue={selectedCells.uploadDate}
                       onClick={() => handleCellClick("uploadDate", "This week")}
-                    >
-                      This week
-                    </td>
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.type === "Playlist" && "bg-gray-200"
-                      }`}
+                      onClear={(event) => handleClear("uploadDate", event)}
+                    />
+                    <TableCellWithButton
+                      value="Playlist"
+                      selectedValue={selectedCells.type}
                       onClick={() => handleCellClick("type", "Playlist")}
-                    >
-                      Playlist
-                    </td>
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.duration === "Over 20 minutes" &&
-                        "bg-gray-200"
-                      }`}
+                      onClear={(event) => handleClear("type", event)}
+                    />
+                    <TableCellWithButton
+                      value="Over 20 minutes"
+                      selectedValue={selectedCells.duration}
                       onClick={() =>
                         handleCellClick("duration", "Over 20 minutes")
                       }
-                    >
-                      Over 20 minutes
-                    </td>
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.sortBy === "View count" && "bg-gray-200"
-                      }`}
+                      onClear={(event) => handleClear("duration", event)}
+                    />
+                    <TableCellWithButton
+                      value="View count"
+                      selectedValue={selectedCells.sortBy}
                       onClick={() => handleCellClick("sortBy", "View count")}
-                    >
-                      View count
-                    </td>
+                      onClear={(event) => handleClear("sortBy", event)}
+                    />
                   </tr>
                   <tr className="border-b border-gray-300 dark:border-gray-700">
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.uploadDate === "This month" &&
-                        "bg-gray-200"
-                      }`}
+                    <TableCellWithButton
+                      value="This month"
+                      selectedValue={selectedCells.uploadDate}
                       onClick={() =>
                         handleCellClick("uploadDate", "This month")
                       }
-                    >
-                      This month
-                    </td>
-                    <td className=" px-[0.125rem] py-4"></td>
-                    <td className=" px-[0.125rem] py-4"></td>
-                    <td
-                      className={`cursor-pointer px-[0.125rem] py-4 ${
-                        selectedCells.sortBy === "Rating" && "bg-gray-200"
-                      }`}
+                      onClear={(event) => handleClear("uploadDate", event)}
+                    />
+                    <td className="px-[0.125rem] py-4"></td>
+                    <td className="px-[0.125rem] py-4"></td>
+                    <TableCellWithButton
+                      value="Rating"
+                      selectedValue={selectedCells.sortBy}
                       onClick={() => handleCellClick("sortBy", "Rating")}
-                    >
-                      Rating
-                    </td>
+                      onClear={(event) => handleClear("sortBy", event)}
+                    />
                   </tr>
                   <tr>
-                    <td
-                      className={`cursor-pointer  px-[0.125rem] py-4 ${
-                        selectedCells.uploadDate === "This year" &&
-                        "bg-gray-200"
-                      }`}
-                      onClick={() => handleCellClick("This year")}
-                    >
-                      This year
-                    </td>
-                    <td className=" px-[0.125rem] py-4"></td>
-                    <td className=" px-[0.125rem] py-4"></td>
-                    <td className=" px-[0.125rem] py-4"></td>
+                    <TableCellWithButton
+                      value="This year"
+                      selectedValue={selectedCells.uploadDate}
+                      onClick={() => handleCellClick("uploadDate", "This year")}
+                      onClear={(event) => handleClear("uploadDate", event)}
+                    />
+                    <td className="px-[0.125rem] py-4"></td>
+                    <td className="px-[0.125rem] py-4"></td>
+                    <td className="px-[0.125rem] py-4"></td>
                   </tr>
                 </tbody>
               </table>
             </AlertDialogContent>
           </AlertDialog>
 
-          <div className="flex flex-col gap-4 p-4">
-            {videos?.length > 0 &&
-              videos.map((elem) => (
-                <VideoListingForSearch
-                  key={elem._id}
-                  videoId={elem._id}
-                  views={elem.views}
-                  time={Time(elem.createdAt)}
-                  title={elem.title}
-                  duration={elem.duration}
-                  description={elem.description}
-                  altText={elem.title}
-                  thumbnail={elem.thumbnail}
-                  videoUrl={elem.videoFile}
-                  ownerUsername={elem.owner.username}
-                  ownerImg={elem.owner.avatar}
-                />
-              ))}
-          </div>
+          {videos.length > 0 && (
+            <div className="flex flex-col gap-4 p-4">
+              {videos?.length > 0 &&
+                videos.map((elem) => (
+                  <VideoListingForSearch
+                    key={elem._id}
+                    videoId={elem._id}
+                    views={elem.views}
+                    time={Time(elem.createdAt)}
+                    title={elem.title}
+                    duration={elem.duration}
+                    description={elem.description}
+                    altText={elem.title}
+                    thumbnail={elem.thumbnail}
+                    videoUrl={elem.videoFile}
+                    ownerUsername={elem.ownerDetails.username}
+                    ownerImg={elem.ownerDetails.avatar}
+                  />
+                ))}
+            </div>
+          )}
+
+          {videos.length === 0 && (
+            <NoVideosAvailable
+              title="No Search Results Found"
+              description="No videos found matching your search. Try refining your keywords or filters. Explore other categories for more options!"
+            />
+          )}
         </section>
       </div>
     </>

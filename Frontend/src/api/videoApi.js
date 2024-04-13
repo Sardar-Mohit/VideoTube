@@ -10,17 +10,34 @@ export const allVideos = async () => {
   }
 };
 
-export const allSearchVideos = async ({ page, limit, query, sortBy, sortType, userId }) => {
+export const allSearchVideos = async ({
+  page,
+  limit,
+  query,
+  sortBy,
+  sortType,
+  userId,
+  duration,
+  uploadDate,
+}) => {
   try {
     const response = await axios.get("http://localhost:8000/api/v1/videos", {
-      params: { page: page, limit: limit, query: query, sortBy: sortBy, sortType: sortType, userId: userId },
+      params: {
+        page: page,
+        limit: limit,
+        query: query,
+        sortBy: sortBy,
+        sortType: sortType,
+        userId: userId,
+        duration: duration,
+        uploadDate: uploadDate,
+      },
     });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
 
 export const videoToPlay = async (videoId) => {
   try {

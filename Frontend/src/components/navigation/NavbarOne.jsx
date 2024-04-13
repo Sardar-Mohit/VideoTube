@@ -16,7 +16,15 @@ const NavbarOne = () => {
 
   const handleSearch = async (query) => {
     console.log(query);
-    const request = await allSearchVideos(query);
+    const request = await allSearchVideos({
+      page: 1,
+      limit: 10,
+      query: query || "",
+      sortBy: "createdAt",
+      sortType: "desc",
+      duration: "",
+      uploadDate: "",
+    });
 
     console.log("videos");
     console.log(request);

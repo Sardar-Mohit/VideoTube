@@ -9,30 +9,160 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { Like } from "../models/like.model.js";
 
 const getAllVideos = asyncHandler(async (req, res) => {
-  const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query;
+  const {
+    page = 1,
+    limit = 10,
+    query,
+    sortBy,
+    sortType = "desc",
+    userId,
+    duration,
+    uploadDate,
+  } = req.query;
 
-  // searchQuery and search by userQuery
-  const searchQuery = query ? { title: { $regex: query, $options: "i" } } : {};
-  const userQuery = userId ? { userId: userId } : {};
+  // Construct the base query
+  const baseQuery = {};
 
-  // searchQuery and search by userQuery combined
-  const combinedQuery = { ...searchQuery, ...userQuery };
-
-  // sorting query
-  const sortOptions = sortBy ? { [sortBy]: sortType === "desc" ? -1 : 1 } : {};
-
-  // Find video based on the queries
-  let videos = await Video.find(combinedQuery)
-    .sort(sortOptions)
-    .skip((page - 1) * limit)
-    .limit(Number(limit))
-    .populate("owner", "_id username email avatar");
-
-  if (!videos) {
-    throw new ApiError(404, "Error while fetching the videos");
+  // Apply search query if provided
+  if (query) {
+    baseQuery.title = { $regex: query, $options: "i" };
   }
 
-  // Return res
+  // Apply user ID query if provided
+  if (userId) {
+    baseQuery.owner = userId;
+  }
+
+  // Apply duration filter if provided
+  let durationQuery = {};
+  if (duration) {
+    if (duration === "Under 4 minutes") {
+      durationQuery.duration = { $lt: 240 };
+    } else if (duration === "4–20 minutes") {
+      durationQuery.duration = { $gte: 240, $lt: 1200 };
+    } else if (duration === "Over 20 minutes") {
+      durationQuery.duration = { $gte: 1200 };
+    }
+  }
+
+  // Apply upload date filter if provided
+  let uploadDateQuery = {};
+  if (uploadDate) {
+    const today = new Date();
+    if (uploadDate === "Last hour") {
+      uploadDateQuery.createdAt = { $gte: new Date(today - 3600000) };
+    } else if (uploadDate === "Today") {
+      uploadDateQuery.createdAt = {
+        $gte: new Date(today.setHours(0, 0, 0, 0)),
+      };
+    } else if (uploadDate === "This week") {
+      const firstDayOfWeek = new Date(
+        today.setDate(today.getDate() - today.getDay())
+      );
+      uploadDateQuery.createdAt = { $gte: firstDayOfWeek };
+    } else if (uploadDate === "This month") {
+      const firstDayOfMonth = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+      );
+      uploadDateQuery.createdAt = { $gte: firstDayOfMonth };
+    } else if (uploadDate === "This year") {
+      const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
+      uploadDateQuery.createdAt = { $gte: firstDayOfYear };
+    }
+  }
+
+  let sortByQuery = {};
+  if (sortBy) {
+    if (sortBy === "Newest") {
+      sortByQuery.createdAt = -1; // Sort by newest first
+    } else if (sortBy === "Oldest") {
+      sortByQuery.createdAt = 1; // Sort by oldest first
+    } else if (sortBy === "View count") {
+      sortByQuery.views = -1; // Sort by views in descending order
+    } else if (sortBy === "Rating") {
+      sortByQuery.totalLikes = -1; // Sort by total likes in descending order
+    }
+  }
+
+  // Combine all queries
+  const combinedQuery = {
+    ...baseQuery,
+    ...durationQuery,
+    ...uploadDateQuery,
+  };
+
+  console.log("combinedQuery");
+  console.log(combinedQuery);
+
+  // Define sortOptions including sortByQuery
+  const sortOptions = {
+    ...sortByQuery,
+    [sortBy]: sortType === "desc" ? -1 : 1,
+  };
+
+  // Find videos based on the combined query
+  let videos = await Video.aggregate([
+    {
+      $match: combinedQuery,
+    },
+    {
+      $lookup: {
+        from: "likes",
+        localField: "_id",
+        foreignField: "video",
+        as: "likesDetails",
+      },
+    },
+    {
+      $addFields: {
+        totalLikes: { $size: "$likesDetails" },
+      },
+    },
+    {
+      $sort: sortOptions, // Use sortOptions here
+    },
+    {
+      $skip: (page - 1) * limit,
+    },
+    {
+      $limit: Number(limit),
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "ownerDetails",
+      },
+    },
+    {
+      $addFields: {
+        ownerDetails: { $arrayElemAt: ["$ownerDetails", 0] },
+      },
+    },
+    {
+      $project: {
+        likesDetails: 0,
+        __v: 0,
+        owner: 0,
+        "ownerDetails.videos": 0,
+        "ownerDetails.coverImage": 0,
+        "ownerDetails.watchHistory": 0,
+        "ownerDetails.password": 0,
+        "ownerDetails.createdAt": 0,
+        "ownerDetails.updatedAt": 0,
+        "ownerDetails._id": 0,
+        "ownerDetails.email": 0,
+        "ownerDetails.fullName": 0,
+        "ownerDetails.__v": 0,
+        "ownerDetails.refreshToken": 0,
+      },
+    },
+  ]);
+
+  // Return response
   return res
     .status(200)
     .json(new ApiResponse(200, videos, "Videos fetched successfully"));
