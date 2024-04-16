@@ -5,7 +5,7 @@ import {
   ProfileHeaderWithNavigation,
   UploadVideoPopUp,
 } from "@/components";
-import Time from "@/hooks/Time";
+import useTimeHook from "@/hooks/useTimeHook";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -48,10 +48,10 @@ const Profile = () => {
                   <VideoCard
                     key={video._id}
                     id={video._id}
-                    duration={video.duration}
+                    videoDuration={video.duration}
                     title={video.title}
                     views={video.views}
-                    time={Time(video.createdAt)}
+                    time={useTimeHook(video.createdAt)}
                     thumbnail={video.thumbnail}
                   />
                 ))}

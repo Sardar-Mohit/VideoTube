@@ -15,7 +15,7 @@ import LandingVideoPageCard from "./cards/LandingVideoPageCard";
 import ChannelCardInSubscribed from "./cards/ChannelCardInSubscribed";
 
 // Edit
-import EditVideoModelPopUp from "./edit/EditVideoModelPopUp";
+import EditVideoModelPopUp from "./update/EditVideoModelPopUp";
 
 // Empty page
 import NoVideosAvailable from "./empty-page/NoVideosAvailable";
@@ -30,11 +30,11 @@ import AlertBox from "./navbar-components/AlertBox";
 
 // Profile
 import ProfileBanner from "./profile/ProfileBanner";
-import ProfileNavbar from "./navigation/ProfileNavbar";
+import ProfileNavbar from "./navbar-components/ProfileNavbar";
 import ProfileBannerPicture from "./profile/ProfileBannerPicture";
-import ProfileHeaderWithNavigation from "./ProfileHeaderWithNavigation";
-import ProfileEditNavbar from "@/components/navigation/ProfileEditNavbar";
-import ProfileEditHeaderWithNavigation from "./ProfileEditHeaderWithNavigation";
+import ProfileHeaderWithNavigation from "./navigation/ProfileHeaderWithNavigation";
+import ProfileEditNavbar from "@/components/navbar-components/ProfileEditNavbar";
+import ProfileEditHeaderWithNavigation from "./navigation/ProfileEditHeaderWithNavigation";
 
 // Input
 import Input from "./form/Input";
@@ -43,14 +43,16 @@ import FileUpload from "./form/FileUpload";
 // Others
 import Footer from "./Footer";
 import UserProfileCard from "./UserProfileCard";
-import UpdateTweetCard from "./UpdateTweetCard";
-import UpdatePlaylistCard from "./UpdatePlaylistCard";
+import UpdateTweetCard from "./update/UpdateTweetCard";
+import UpdatePlaylistCard from "./update/UpdatePlaylistCard";
 import DeleteVideoModel from "./video-crud/DeleteVideoModel";
 import UploadVideoPopUp from "./video-crud/UploadVideoPopUp";
 import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
+import UpdateCommentCard from "./update/UpdateCommentCard";
+import SettingDropdown from "./navbar-components/SettingDropdown";
 
 export {
-  TableCellWithButton,
+  SettingDropdown,
   Logo,
   Aside,
   Input,
@@ -75,9 +77,11 @@ export {
   UploadVideoPopUp,
   DeleteVideoModel,
   NoVideosAvailable,
+  UpdateCommentCard,
   ProfileEditNavbar,
   UpdatePlaylistCard,
   EditVideoModelPopUp,
+  TableCellWithButton,
   LandingVideoPageCard,
   ProfileBannerPicture,
   VideoListingForSearch,

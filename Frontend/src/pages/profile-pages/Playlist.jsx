@@ -3,7 +3,7 @@ import {
   PlaylistCard,
   ProfileHeaderWithNavigation,
 } from "@/components/index";
-import Time from "@/hooks/Time";
+import useTimeHook from "@/hooks/useTimeHook";
 import { getUserPlaylistsAction } from "@/store/actions/playlistActions";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -55,7 +55,7 @@ const Playlist = () => {
                         thumbnail={playlistData.videoDetails[0].thumbnail || ""}
                         playlistTotalViews={playlistData.totalViews || 0}
                         videosLength={playlistData.videoDetails.length || 0}
-                        createdAgo={Time(playlistData.createdAt) || ""}
+                        createdAgo={useTimeHook(playlistData.createdAt) || ""}
                         title={playlistData.name || ""}
                         description={playlistData.description || ""}
                         subscribersCount={playlistData.subscribersCount || 0}

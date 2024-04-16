@@ -1,8 +1,7 @@
 import { videoToPlay } from "@/api/videoApi";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { ReactionsCount } from "@/hooks/ReactionsCount";
-import Time from "@/hooks/Time";
+import { useReactionsCountHook } from "@/hooks/useReactionsCountHook";
 import {
   addCommentToVideoApi,
   getCommentsByVideoIdApi,
@@ -13,6 +12,7 @@ import {
   VideoPlaying,
   VideoSuggestion,
 } from "@/components";
+import useTimeHook from "@/hooks/useTimeHook";
 
 const IndividualPage = () => {
   const [video, setVideo] = useState([]);
@@ -74,8 +74,8 @@ const IndividualPage = () => {
                   owner={video}
                   videoId={video.videos[0]._id}
                   fetchVideo={fetchVideo}
-                  likesCount={ReactionsCount(video.videoReactions, "likedBy")}
-                  dislikesCount={ReactionsCount(
+                  likesCount={useReactionsCountHook(video.videoReactions, "likedBy")}
+                  dislikesCount={useReactionsCountHook(
                     video.videoReactions,
                     "dislikedBy"
                   )}
@@ -118,7 +118,7 @@ const IndividualPage = () => {
                       commentId={comment._id}
                       ownerId={comment.owner}
                       fetchVideoComments={fetchVideoComments}
-                      timeAgo={Time(comment.createdAt)}
+                      timeAgo={useTimeHook(comment.createdAt)}
                       comment={comment.content}
                       imgSrc={comment?.userDetails[0]?.avatar}
                       altText={comment?.userDetails[0]?.username}

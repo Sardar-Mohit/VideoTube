@@ -1,43 +1,43 @@
 import { useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { Button } from "./ui/button";
-import { updateCommentApi } from "@/api/commentsApi";
+import { updatePlaylistApi } from "@/api/playlistApi";
+import { Button } from "../ui/button";
 
-const UpdateCommentCard = ({
+const UpdatePlaylistCard = ({
   close,
-  commentId,
-  comment,
-  fetchVideoComments,
+  name,
+  description,
+  playlistId,
 }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [commentData, setCommentData] = useState({
-    content: comment || "",
+  const [formData, setFormData] = useState({
+    name: name || "",
+    description: description || "",
   });
 
   const submitForm = async (event) => {
     event.preventDefault();
     setLoading(true);
-    console.log(commentData);
+    console.log(formData);
 
     try {
-      if (commentData.content === comment) {
-        setError("You should change comment to update comment.");
+      if (formData.name === name || formData.description === description) {
+        setError("You should change name or description to update playlist.");
         return false;
       }
 
-      if (commentData.content.trim() === "") {
-        setError("Comment cannot be empty.");
+      if (formData.name.trim() === "" || formData.description.trim() === "") {
+        setError("Name and description cannot be empty.");
         return false;
       }
 
-      const request = await updateCommentApi(commentId, commentData);
+      const request = await updatePlaylistApi(playlistId, formData);
       console.log(request);
-      fetchVideoComments();
       close();
     } catch (error) {
       if (error.response === 500) {
-        setError("Something went wrong while updating comment details.");
+        setError("Something went wrong while updating playlist details.");
       }
       throw error;
     } finally {
@@ -47,7 +47,7 @@ const UpdateCommentCard = ({
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setCommentData((prevData) => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -58,9 +58,10 @@ const UpdateCommentCard = ({
       <form
         onSubmit={submitForm}
         className="bg-gray-800 rounded-lg w-full max-w-lg p-8"
+        encType="multipart/form-data"
       >
         <div className="text-xl font-semibold text-white mb-4 flex items-center justify-between">
-          <h2>Update Comment</h2>
+          <h2>Update Playlist</h2>
           <h2 className="cursor-pointer text-red-600" onClick={close}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -84,15 +85,28 @@ const UpdateCommentCard = ({
           </h2>
         </div>
         <div className="mb-4">
+          <label htmlFor="name" className="block text-white mb-1">
+            Name:
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            className="w-full bg-gray-700 rounded px-3 py-2 text-white"
+            onChange={handleChange}
+            defaultValue={name}
+          />
+        </div>
+        <div className="mb-4">
           <label htmlFor="desc" className="block text-white mb-1">
-            Comment:
+            Description:
           </label>
           <textarea
             id="desc"
-            name="content"
+            name="description"
             className="w-full bg-gray-700 rounded px-3 py-2 text-white"
             onChange={handleChange}
-            defaultValue={comment}
+            defaultValue={description}
           ></textarea>
         </div>
         {error && (
@@ -105,7 +119,7 @@ const UpdateCommentCard = ({
             type="submit"
             className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition duration-300"
           >
-            Update Comment
+            Update Playlist
           </button>
         ) : (
           <Button disabled size="xlg">
@@ -118,4 +132,4 @@ const UpdateCommentCard = ({
   );
 };
 
-export default UpdateCommentCard;
+export default UpdatePlaylistCard;

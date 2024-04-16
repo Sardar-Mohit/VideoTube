@@ -1,12 +1,18 @@
-import Time from "@/hooks/Time";
-import { useState } from "react";
 import ReactPlayer from "react-player";
+import useTimeHook from "@/hooks/useTimeHook";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toggleSubscriptionApi } from "@/api/subscriptionApi";
 import { addVideoToPlaylistApi, createPlaylistApi } from "@/api/playlistApi";
 import { toggleVideoDislikeApi, toggleVideoLikeApi } from "@/api/likeApi";
 
-const VideoPlaying = ({ owner, videoId, likesCount, dislikesCount, fetchVideo }) => {
+const VideoPlaying = ({
+  owner,
+  videoId,
+  likesCount,
+  dislikesCount,
+  fetchVideo,
+}) => {
   const selector = useSelector((state) => state.playist.user);
   const error = useSelector((state) => state.playist.error);
   const playlistArray = selector?.statusCode?.userPlaylists;
@@ -96,7 +102,7 @@ const VideoPlaying = ({ owner, videoId, likesCount, dislikesCount, fetchVideo })
       console.log(videoId);
       return false;
     }
-  
+
     try {
       const response = await toggleVideoLikeApi(videoId);
       console.log("Like", response); // Ensure response is logged
@@ -105,7 +111,6 @@ const VideoPlaying = ({ owner, videoId, likesCount, dislikesCount, fetchVideo })
       console.error("Error liking video:", error);
     }
   };
-  
 
   const handleDislike = async () => {
     if (!owner || !videoId) {
@@ -131,8 +136,9 @@ const VideoPlaying = ({ owner, videoId, likesCount, dislikesCount, fetchVideo })
             url={owner.videos[0].videoFile}
             controls={true}
             playing={true}
+            autoPlay={true}
             width="100%"
-            light={true}
+            light={false}
             height="100%"
             muted={false}
             loop={false}
@@ -148,7 +154,8 @@ const VideoPlaying = ({ owner, videoId, likesCount, dislikesCount, fetchVideo })
           <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
             <h1 className="text-lg font-bold">{owner.videos[0].title}</h1>
             <p className="flex text-sm text-gray-200">
-              {owner.videos[0].views} Views · {Time(owner.videos[0].createdAt)}
+              {owner.videos[0].views} Views ·{" "}
+              {useTimeHook(owner.videos[0].createdAt)}
             </p>
           </div>
           <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">

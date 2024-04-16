@@ -1,8 +1,8 @@
+import useTimeHook from "@/hooks/useTimeHook";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { createTweetApi, getTweetsByUserIdApi } from "@/api/tweetsApi";
 import { Aside, TweetCard, ProfileHeaderWithNavigation } from "@/components";
-import Time from "@/hooks/Time";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 const Tweet = () => {
   const [tweetContent, setTweetContent] = useState("");
@@ -113,7 +113,7 @@ const Tweet = () => {
                     content={tweet.content}
                     getUserTweets={getUserTweets}
                     username={tweet.ownerDetails.username}
-                    whenTweetWasUploaded={Time(tweet.createdAt)}
+                    whenTweetWasUploaded={useTimeHook(tweet.createdAt)}
                     userProfilePicture={tweet.ownerDetails.avatar}
                     likeCount={tweet.likesDetails.length}
                   />

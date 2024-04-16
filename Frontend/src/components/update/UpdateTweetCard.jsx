@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { updateTweetApi } from "@/api/tweetsApi";
 
 const UpdateTweetCard = ({ close, tweetId, content, getUserTweets }) => {

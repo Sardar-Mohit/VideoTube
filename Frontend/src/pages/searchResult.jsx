@@ -1,6 +1,7 @@
-import Time from "@/hooks/Time";
 import { useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import useTimeHook from "@/hooks/useTimeHook";
+import { allSearchVideos } from "@/api/videoApi";
 import {
   Aside,
   NoVideosAvailable,
@@ -9,23 +10,18 @@ import {
 } from "@/components/index";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { allSearchVideos } from "@/api/videoApi";
 
 const VideoListing = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { result } = location.state;
   const { query } = location.state;
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState(null);
   const [selectedCells, setSelectedCells] = useState({
     uploadDate: null,
     type: null,
@@ -101,7 +97,7 @@ const VideoListing = () => {
         <Aside />
 
         <section className="flex flex-col w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-          <AlertDialog className="rounded-xl p-6 bg-white dark:bg-gray-800">
+          <AlertDialog className="rounded-xl p-6 bg-white dark:bg-white-800">
             <AlertDialogTrigger className="self-end">
               <div className="flex justify-end items-center mx-4 mt-2 text-base">
                 <button
@@ -130,7 +126,7 @@ const VideoListing = () => {
               </div>
             </AlertDialogTrigger>
             <AlertDialogContent
-              className="mx-4 rounded-xl w-full lg:max-w-4xl p-3 sm:p-4 bg-white dark:bg-gray-800"
+              className="mx-4 rounded-xl w-full lg:max-w-4xl p-3 sm:p-4 bg-black text-white dark:bg-gray-800"
               style={{
                 borderRadius: "12px",
               }}
@@ -156,7 +152,7 @@ const VideoListing = () => {
                   </svg>
                 </AlertDialogCancel>
               </div>
-              <table className="w-full text-[0.7rem] sm:text-sm  text-gray-900 dark:text-white">
+              <table className="w-full text-[0.7rem] sm:text-sm  text-white dark:text-white">
                 <thead>
                   <tr className="text-left font-semibold border-b-2 border-gray-300 dark:border-gray-700">
                     <th className="px-[0.125rem] py-4">UPLOAD DATE</th>
@@ -284,7 +280,7 @@ const VideoListing = () => {
             </AlertDialogContent>
           </AlertDialog>
 
-          {videos.length > 0 && (
+          {videos?.length > 0 && (
             <div className="flex flex-col gap-4 p-4">
               {videos?.length > 0 &&
                 videos.map((elem) => (
@@ -292,9 +288,9 @@ const VideoListing = () => {
                     key={elem._id}
                     videoId={elem._id}
                     views={elem.views}
-                    time={Time(elem.createdAt)}
+                    time={useTimeHook(elem.createdAt)}
                     title={elem.title}
-                    duration={elem.duration}
+                    videoDuration={elem.duration}
                     description={elem.description}
                     altText={elem.title}
                     thumbnail={elem.thumbnail}
@@ -306,7 +302,7 @@ const VideoListing = () => {
             </div>
           )}
 
-          {videos.length === 0 && (
+          {videos?.length === 0 && (
             <NoVideosAvailable
               title="No Search Results Found"
               description="No videos found matching your search. Try refining your keywords or filters. Explore other categories for more options!"

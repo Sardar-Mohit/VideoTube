@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VideoSkeletonCard from "../Skeleton/VideoSkeletonCard";
+import useFormattedVideoDurationHook from "@/hooks/useFormattedVideoDurationHook";
 
 const LandingVideoPageCard = ({
   id,
-  duration,
+  videoDuration,
   title,
   views,
   time,
@@ -13,6 +14,7 @@ const LandingVideoPageCard = ({
   authorName,
 }) => {
   const navigate = useNavigate();
+  const duration = useFormattedVideoDurationHook(videoDuration);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

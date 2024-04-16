@@ -3,8 +3,7 @@ import { Aside, LandingVideoPageCard } from "@/components/index";
 import { useEffect, useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { allVideos } from "@/api/videoApi";
-import Time from "@/hooks/Time";
-import VideoSkeletonCard from "@/components/Skeleton/VideoSkeletonCard";
+import useTimeHook from "@/hooks/useTimeHook";
 
 const LandingPage = () => {
   const [videos, setVideos] = useState([]);
@@ -40,13 +39,13 @@ const LandingPage = () => {
               <LandingVideoPageCard
                 key={video._id}
                 id={video._id}
-                duration={video.duration}
+                videoDuration={video.duration}
                 title={video.title}
                 views={video.views}
-                time={Time(video.createdAt)}
+                time={useTimeHook(video.createdAt)}
                 thumbnail={video.thumbnail}
-                authorName={video.owner.username}
-                authorImg={video.owner.avatar}
+                authorName={video.ownerDetails.username}
+                authorImg={video.ownerDetails.avatar}
               />
             ))}
            

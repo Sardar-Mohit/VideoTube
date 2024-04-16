@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useEffect, useState } from "react";
 import SearchVideoSkeletonCard from "../Skeleton/SearchVideoSkeletonCard";
+import useFormattedVideoDurationHook from "@/hooks/useFormattedVideoDurationHook";
 
 function VideoListingForSearch({
   time,
@@ -21,14 +22,15 @@ function VideoListingForSearch({
   altText,
   videoId,
   ownerImg,
-  duration,
   thumbnail,
   playlistId,
   description,
+  videoDuration,
   ownerUsername,
   deleteButton = false,
 }) {
   const navigate = useNavigate();
+  const duration = useFormattedVideoDurationHook(videoDuration);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -59,8 +61,17 @@ function VideoListingForSearch({
           className="w-full max-w-3xl gap-x-4 md:flex cursor-pointer"
           onClick={() => navigate("/individual-page", { state: videoId })}
         >
-          <div className="relative mb-2 w-full md:mb-0 md:w-5/12">
-            <div className="w-full pt-[56%]">
+          <div className="overflow-hidden rounded-[5px] relative mb-2 w-full md:mb-0 md:w-5/12">
+            <div className="w-full pt-[56%] bg-slate-300">
+              {/* <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: `url(${thumbnail})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  filter: "blur(10px)", // Adjust the blur amount as needed
+                }}
+              ></div> */}
               <div className="absolute inset-0">
                 <img
                   src={thumbnail}
@@ -68,7 +79,7 @@ function VideoListingForSearch({
                   className="h-full w-full bg-center object-contain"
                 />
               </div>
-              <span className="absolute bottom-1 right-1 inline-block rounded bg-black px-1.5 text-sm">
+              <span className=" bg-black absolute bottom-1 right-1 inline-block rounded px-1.5 text-sm">
                 {duration}
               </span>
             </div>

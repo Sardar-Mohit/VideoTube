@@ -1,10 +1,10 @@
-import FormatDate from "@/hooks/FormatDate";
+import useFormatDateHook from "@/hooks/useFormatDateHook";
 import { deleteVideo } from "@/api/videoApi";
 import { UploadVideoPopUp } from "@/components";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getChannelStats, getChannelVideos } from "@/api/dashboardApi";
-import { ReactionsCount } from "@/hooks/ReactionsCount";
+import { useReactionsCountHook } from "@/hooks/useReactionsCountHook";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -247,11 +247,11 @@ const Dashboard = () => {
                         <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
                           <div className="flex justify-center gap-4">
                             <span className="inline-block rounded-xl bg-green-200 px-1.5 py-0.5 text-green-700">
-                              {ReactionsCount(video.videosReactions, "likedBy")}{" "}
+                              {useReactionsCountHook(video.videosReactions, "likedBy")}{" "}
                               likes
                             </span>
                             <span className="inline-block rounded-xl bg-red-200 px-1.5 py-0.5 text-red-700">
-                              {ReactionsCount(
+                              {useReactionsCountHook(
                                 video.videosReactions,
                                 "dislikedBy"
                               )}{" "}
@@ -260,7 +260,7 @@ const Dashboard = () => {
                           </div>
                         </td>
                         <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none relative left-[4.5%]">
-                          {FormatDate(video.createdAt)}
+                          {useFormatDateHook(video.createdAt)}
                         </td>
                         <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
                           <div className="flex gap-4">

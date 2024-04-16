@@ -1,7 +1,7 @@
 import { getLikedVideosApi } from "@/api/likeApi";
 import { NoVideosAvailable, Aside, VideoListingForSearch } from "@/components";
-import Time from "@/hooks/Time";
 import { useEffect, useState } from "react";
+import useTimeHook from "@/hooks/useTimeHook";
 
 const LikedVideosPage = () => {
   const [likedVideos, setLikedVideos] = useState(null);
@@ -36,9 +36,9 @@ const LikedVideosPage = () => {
                     key={elem.videoData._id}
                     videoId={elem.videoData._id}
                     views={elem.videoData.views}
-                    time={Time(elem.videoData.createdAt)}
+                    time={useTimeHook(elem.videoData.createdAt)}
                     title={elem.videoData.title}
-                    duration={elem.videoData.duration}
+                    videoDuration={elem.videoData.duration}
                     description={elem.videoData.description}
                     altText={elem.videoData.title}
                     thumbnail={elem.videoData.thumbnail}

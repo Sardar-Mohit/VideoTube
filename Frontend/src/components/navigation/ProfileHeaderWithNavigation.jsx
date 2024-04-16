@@ -1,5 +1,5 @@
 import React from "react";
-import { ProfileBanner, ProfileBannerPicture, ProfileNavbar } from ".";
+import { ProfileBanner, ProfileBannerPicture, ProfileNavbar } from "..";
 import { useSelector } from "react-redux";
 
 const ProfileHeaderWithNavigation = ({ children }) => {

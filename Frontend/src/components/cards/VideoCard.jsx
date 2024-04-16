@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileVideoSkeletonCard from "../Skeleton/ProfileVideoSkeletonCard";
+import useFormattedVideoDurationHook from "@/hooks/useFormattedVideoDurationHook";
 
-const VideoCard = ({ duration, title, views, time, thumbnail, id }) => {
+const VideoCard = ({ videoDuration, title, views, time, thumbnail, id }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const duration = useFormattedVideoDurationHook(videoDuration);
 
   const redirectToIndividualPage = () => {
     navigate("/individual-page", { state: id });

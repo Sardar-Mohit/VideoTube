@@ -5,7 +5,7 @@ import {
   VideoListingForSearch,
   UserProfileCard,
 } from "@/components";
-import Time from "@/hooks/Time";
+import useTimeHook from "@/hooks/useTimeHook";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -52,7 +52,7 @@ const OpenedPlaylist = () => {
                   playlistTotalViews={data.playlistData.totalViews || 0}
                   title={data.playlistData.name || ""}
                   description={data.playlistData.description || ""}
-                  createdAgo={Time(data.playlistData.createdAt) || ""}
+                  createdAgo={useTimeHook(data.playlistData.createdAt) || ""}
                   subscribersCount={data.playlistData?.subscribersCount || 0}
                 />
               )}
@@ -74,9 +74,9 @@ const OpenedPlaylist = () => {
                     videoId={elem._id}
                     deleteButton={true}
                     views={elem.views}
-                    time={Time(elem.createdAt)}
+                    time={useTimeHook(elem.createdAt)}
                     title={elem.title}
-                    duration={elem.duration}
+                    videoDuration={elem.duration}
                     description={elem.description}
                     altText={elem.title}
                     thumbnail={elem.thumbnail}

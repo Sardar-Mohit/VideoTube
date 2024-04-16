@@ -180,7 +180,7 @@ const Register = () => {
                 htmlFor={"avatar"}
                 className="text-sm font-medium leading-6 text-white items-start flex"
               >
-                {"Ssss"}
+                {"Avatar :"}
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-slate-400 px-6 py-10">
                 <div className="text-center">
@@ -217,7 +217,7 @@ const Register = () => {
                   </p>
                   {errors["avatar"] && (
                     <p className="mt-2 text-sm text-red-500">
-                      {errors["avatar"].message}
+                      {errors["avatar"]?.message}
                     </p>
                   )}
                 </div>
@@ -275,7 +275,7 @@ const Register = () => {
                   </p>
                   {errors["coverImage"] && (
                     <p className="mt-2 text-sm text-red-500">
-                      {errors["coverImage"].message}
+                      {errors["coverImage"]?.message}
                     </p>
                   )}
                 </div>
@@ -283,7 +283,7 @@ const Register = () => {
             </div>
             {error && (
               <p className="mt-2 text-sm text-red-500">
-                {"2" + errors.file && errors.file.message}
+                {"2" + errors.file && errors.file?.message}
               </p>
             )}
 

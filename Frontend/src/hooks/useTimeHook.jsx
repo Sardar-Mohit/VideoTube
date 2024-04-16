@@ -1,4 +1,4 @@
-const Time = (videoCreatedAt) => {
+const useTimeHook = (videoCreatedAt) => {
   const createdAt = new Date(videoCreatedAt);
   const currentTime = new Date();
   const elapsedTime = currentTime - createdAt;
@@ -21,4 +21,4 @@ const Time = (videoCreatedAt) => {
   return timeAgo;
 };
 
-export default Time;
+export default useTimeHook;

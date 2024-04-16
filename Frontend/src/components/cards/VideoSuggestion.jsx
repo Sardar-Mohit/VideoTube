@@ -6,6 +6,7 @@ const VideoSuggestion = ({
   views,
   duration,
 }) => {
+  
   return (
     <div className="w-full gap-x-2 my-[1px] pr-2 md:flex cursor-pointer">
       <div className="relative mb-2 w-full md:mb-0 md:w-5/12">

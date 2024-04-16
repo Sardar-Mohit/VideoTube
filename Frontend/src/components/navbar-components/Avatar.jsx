@@ -1,4 +1,7 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUserAction } from "@/store/actions/authActions";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,9 +22,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { logoutUserAction } from "@/store/actions/authActions";
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
 
 const Avatar = () => {
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Avatar = () => {
   };
 
   const handleLogoutConfirmation = async () => {
-    await logout(); // Ensure asynchronous completion
+    await logout();
     setIsLogoutDialogOpen(false);
   };
 
@@ -133,7 +133,6 @@ const Avatar = () => {
                 onClose={handleLogoutCancel}
               >
                 {" "}
-                {/* Manage dialog visibility with state */}
                 <AlertDialogTrigger
                   className=" hover:text-red-500 focus:text-red-600 font-[500]"
                   onClick={handleLogoutTriggerClick}
