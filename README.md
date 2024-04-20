@@ -126,4 +126,4 @@ Before running the application, ensure you have the following installed:
 
 ## License
 
-This project is licensed under the Chai aur code channel.
+This project is licensed under the Sardar Mohit Kumar.
