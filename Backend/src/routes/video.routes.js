@@ -8,40 +8,35 @@ import {
     togglePublishStatus,
     updateVideo,
 } from "../controllers/video.controller.js"
-import {verifyJWT} from "../middlewares/auth.middleware.js"
-import {upload} from "../middlewares/multer.middleware.js"
+import { verifyJWT } from "../middlewares/auth.middleware.js"
+import { upload } from "../middlewares/multer.middleware.js"
 
 const router = Router();
-router.use(verifyJWT); // Apply verifyJWT middleware to all routes in this file
 
-router
-    .route("/")
-    .get(getAllVideos)
-    .post(
-        upload.fields([
-            {
-                name: "videoFile",
-                maxCount: 1,
-            },
-            {
-                name: "thumbnail",
-                maxCount: 1,
-            },
-            
-        ]),
-        publishAVideo
-    );
 
-router
-    .route("/:videoId")
-    .get(getVideoById)
-    .delete(deleteVideo)
-    .patch(upload.single("thumbnail"), updateVideo);
+// Routes accessible without login
+router.get("/", getAllVideos);
 
-router
-    .route("/c/:userId")
-    .get(getUserVideos)
+// Routes that require JWT verification
+router.use(verifyJWT);
 
-router.route("/toggle/publish/:videoId").patch(togglePublishStatus);
-
-export default router
+// Routes accessible after login
+router.get("/:videoId", getVideoById);
+router.post("/", upload.fields([
+    {
+        name: "videoFile",
+        maxCount: 1,
+        },
+    {
+        name: "thumbnail",
+        maxCount: 1,
+    },
+    ]), publishAVideo);
+    
+    router.get("/c/:userId", getUserVideos);
+    router.delete("/:videoId", deleteVideo);
+    router.patch("/:videoId", upload.single("thumbnail"), updateVideo);
+    router.patch("/toggle/publish/:videoId", togglePublishStatus);
+    
+    export default router;
+    

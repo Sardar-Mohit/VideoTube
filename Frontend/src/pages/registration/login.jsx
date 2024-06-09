@@ -33,8 +33,8 @@ const Login = () => {
   });
 
   useEffect(() => {
-    console.log("2222")
-    console.log(user)
+    console.log("2222");
+    console.log(user);
     if (user) {
       navigate("/landing-page");
     }
@@ -62,18 +62,16 @@ const Login = () => {
 
   return (
     <>
-      <div className="flex min-h-full flex-col items-center justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <div className="w-full items-center justify-center flex">
+      <div className="flex min-h-screen items-center justify-center py-12 px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8 p-10 bg-gray-50 rounded-xl shadow-lg">
+          <div className="flex justify-center">
             <Logo biggerDeviceWidth={28} width={28} />
           </div>
-          <h2 className="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-white">
+          <h2 className="mt-4 text-center text-3xl font-bold leading-9 tracking-tight text-white">
+            {" "}
             Sign in to your account
           </h2>
-        </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <Input
               label={"Username :"}
               name={"username"}
@@ -82,7 +80,7 @@ const Login = () => {
               errors={errors}
               defaultVal="axaa"
               required
-              />
+            />
 
             <Input
               label={"Password :"}
@@ -99,7 +97,7 @@ const Login = () => {
                 {error} {/* Displaying the error message */}
               </p>
             )}
-            
+
             <div>
               {button == false ? (
                 <button
@@ -117,7 +115,7 @@ const Login = () => {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          <p className="mt-4 text-center text-sm text-gray-500">
             Not a member? &nbsp;
             <span
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"

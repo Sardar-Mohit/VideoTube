@@ -116,17 +116,16 @@ const Register = () => {
 
   return (
     <>
-      <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="w-full items-center justify-center flex">
-          <Logo biggerDeviceWidth={28} width={28} />
-        </div>
-        <h2 className="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Register to create an account
-        </h2>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className="flex min-h-screen items-center justify-center py-12 px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8 p-10 bg-gray-50 rounded-xl shadow-lg">
+          <div className="flex justify-center">
+            <Logo biggerDeviceWidth={28} width={28} />
+          </div>
+          <h2 className="mt-4 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
+            Register to create an account
+          </h2>
           <form
-            className="space-y-2"
+            className="space-y-6"
             onSubmit={handleSubmit(onSubmit)}
             encType="multipart/form-data"
           >
@@ -166,7 +165,7 @@ const Register = () => {
               required
             />
 
-              {/* <FileUpload
+            {/* <FileUpload
               label={"Avatar :"}
               name={"avatar"}
               type={"file"}
@@ -238,7 +237,7 @@ const Register = () => {
                 htmlFor={"coverImage"}
                 className="text-sm font-medium leading-6 text-white items-start flex"
               >
-                Cover Image 
+                Cover Image
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-slate-400 px-6 py-10">
                 <div className="text-center">
@@ -302,6 +301,18 @@ const Register = () => {
                 </Button>
               )}
             </div>
+
+            <p className="mt-4 text-center text-sm text-gray-500">
+              Already a member? &nbsp;
+              <span
+                className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                Login
+              </span>
+            </p>
           </form>
         </div>
       </div>

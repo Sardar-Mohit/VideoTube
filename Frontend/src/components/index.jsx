@@ -50,8 +50,10 @@ import UploadVideoPopUp from "./video-crud/UploadVideoPopUp";
 import UploadingVideoLoading from "./video-crud/UploadingVideoLoading";
 import UpdateCommentCard from "./update/UpdateCommentCard";
 import SettingDropdown from "./navbar-components/SettingDropdown";
+import UserProfileHeaderWithNavigation from "./navigation/UserProfileHeaderWithNavigation";
 
 export {
+  UserProfileHeaderWithNavigation,
   SettingDropdown,
   Logo,
   Aside,

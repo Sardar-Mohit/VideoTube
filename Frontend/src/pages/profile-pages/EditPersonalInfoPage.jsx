@@ -1,6 +1,7 @@
+import { updateAccountDetailsApi } from "@/api/authApi";
 import { Aside, ProfileEditHeaderWithNavigation } from "@/components/index";
 import { Button } from "@/components/ui/button";
-import { changeUserDetailsAction } from "@/store/actions/authActions";
+import { updateUserAction } from "@/store/actions/authActions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
@@ -11,8 +12,8 @@ import { z } from "zod";
 const EditPersonalInfoPage = () => {
   const [button, setButton] = useState(false);
   let userData = useSelector((state) => state.auth.user);
-  let user = userData && userData.statusCode && userData.statusCode.user;
-  let dispatch = useDispatch();
+  let user = userData?.statusCode?.user;
+  const dispatch = useDispatch();
 
   const zodSchema = z.object({
     username: z
@@ -42,8 +43,9 @@ const EditPersonalInfoPage = () => {
     setButton(true);
 
     try {
-      const response = await dispatch(changeUserDetailsAction(data));
-      console.log(response);
+
+     const a =  await dispatch(updateUserAction(data));
+     console.log("a",a)
     } catch (error) {
       console.error("Error registering user:", error);
     } finally {
@@ -128,13 +130,13 @@ const EditPersonalInfoPage = () => {
                   </div>
                   <hr className="border border-gray-300" />
                   <div className="flex items-center justify-end gap-4 p-4">
-                    <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">
+                    <button type="reset" className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">
                       Cancel
                     </button>
 
                     <div>
                       {button === false ? (
-                        <button className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
+                        <button type="submit" className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
                           Update changes
                         </button>
                       ) : (

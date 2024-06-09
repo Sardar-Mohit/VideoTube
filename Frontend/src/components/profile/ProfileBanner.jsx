@@ -2,23 +2,28 @@ import {
   getSubscribersListApi,
   getSubscribedChannelsApi,
 } from "@/api/subscriptionApi";
+import { updateAvatarAction } from "@/store/actions/authActions";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-const ProfileBanner = () => {
+const ProfileBanner = ({ user }) => {
+  const dispatch = useDispatch();
   const [subscribersCount, setSubscribersCount] = useState(0);
   const [subscribedChannelsCount, setSubscribedChannelsCount] = useState(0);
-  const userData = useSelector((state) => state.auth.user);
-  const user = userData.statusCode.user;
+  const avatar = useSelector((state) => state.auth.user?.avatar);
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    console.log("dil", file);
+    if (file) {
+      dispatch(updateAvatarAction(file));
+    }
+  };
 
   const fetchSubscribersList = async () => {
     try {
       const response = await getSubscribersListApi(user._id);
-      if (
-        response &&
-        response.statusCode &&
-        response.statusCode.subscribersList
-      ) {
+      if (response?.statusCode?.subscribersList) {
         setSubscribersCount(response.statusCode.subscribersList.length);
       }
     } catch (error) {
@@ -29,11 +34,7 @@ const ProfileBanner = () => {
   const fetchSubscribedChannels = async () => {
     try {
       const response = await getSubscribedChannelsApi(user._id);
-      if (
-        response &&
-        response.statusCode &&
-        response.statusCode.subscribedChannelsList
-      ) {
+      if (response?.statusCode?.subscribedChannelsList) {
         setSubscribedChannelsCount(
           response.statusCode.subscribedChannelsList.length
         );
@@ -44,26 +45,54 @@ const ProfileBanner = () => {
   };
 
   useEffect(() => {
-    fetchSubscribersList();
-    fetchSubscribedChannels();
-  }, [user._id]);
+    if (user?._id) {
+      fetchSubscribersList();
+      fetchSubscribedChannels();
+    }
+  }, [user?._id]);
 
   return (
     <div className="flex flex-wrap gap-4 pb-4 pt-6">
-      <span className="relative -mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full border-2">
+      <span
+        onClick={() => document.getElementById("avatar").click()}
+        className="relative -mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full border-2 group cursor-pointer bg-black"
+      >
         <img
-          src={
-            user.avatar
-              ? user.avatar
-              : "https://images.pexels.com/photos/1115816/pexels-photo-1115816.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-          }
+          src={avatar ? avatar : user?.avatar}
           alt="Channel-avatar"
-          className="h-full w-full bg-center object-cover"
+          className="h-full w-full bg-center object-cover group-hover:opacity-40"
         />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <input
+            type="file"
+            id="avatar"
+            className="hidden"
+            onChange={handleAvatarChange}
+          />
+          <label
+            className="inline-block h-10 w-10 cursor-pointer rounded-lg p-1 text-[#ae7aff] bg-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+              />
+            </svg>
+          </label>
+        </div>
       </span>
+
       <div className="mr-auto inline-block">
-        <h1 className="font-bold text-xl">{user.username}</h1>
-        <p className="text-sm text-gray-400">{user.email}</p>
+        <h1 className="font-bold text-xl">{user?.username}</h1>
+        <p className="text-sm text-gray-400">{user?.email}</p>
         <p className="text-sm text-gray-400">
           {subscribersCount} Subscribers&nbsp;·&nbsp;
           {subscribedChannelsCount} Subscribed

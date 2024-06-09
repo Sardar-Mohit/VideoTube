@@ -4,8 +4,10 @@ import {
   loginUserAction,
   changePasswordAction,
   currentUserAction,
-  changeUserDetailsAction,
   logoutUserAction,
+  updateUserAction,
+  updateCoverImageAction,
+  updateAvatarAction,
 } from "../actions/authActions";
 
 const initialState = {
@@ -21,7 +23,6 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(userRegistrationAction.pending, (state) => {
-        state.user = null;
         state.error = null;
         state.loading = true;
       })
@@ -31,8 +32,8 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(userRegistrationAction.rejected, (state, action) => {
-        state.user = null;
-        state.error = action.payload || "Error occured user registeration";
+        state.error =
+          action.payload || "Error occurred during user registration";
         state.loading = false;
       })
       .addCase(loginUserAction.pending, (state) => {
@@ -41,28 +42,39 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(loginUserAction.fulfilled, (state, action) => {
+        console.log("action", action.payload);
         state.user = action.payload;
         state.error = null;
         state.loading = false;
       })
       .addCase(loginUserAction.rejected, (state, action) => {
         state.user = null;
-        state.error = action.payload || "Error occured while logging user";
+        state.error = action.payload || "Error occurred while logging user in";
+        state.loading = false;
+      })
+      .addCase(updateUserAction.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUserAction.fulfilled, (state, action) => {
+        state.user = {
+          ...state.user,
+          ...action.payload,
+        };
+        state.loading = false;
+      })
+      .addCase(updateUserAction.rejected, (state, action) => {
+        state.error = action.payload || "Error occurred while updating user";
         state.loading = false;
       })
       .addCase(logoutUserAction.pending, (state) => {
-        state.user = null;
-        state.error = null;
         state.loading = true;
       })
       .addCase(logoutUserAction.fulfilled, (state, action) => {
         state.user = null;
-        state.error = null;
         state.loading = false;
       })
       .addCase(logoutUserAction.rejected, (state, action) => {
-        state.user = null;
-        state.error = action.payload || "Error occured while logging out";
+        state.error = action.payload || "Error occurred while logging out";
         state.loading = false;
       })
       .addCase(currentUserAction.pending, (state) => {
@@ -78,7 +90,7 @@ const authSlice = createSlice({
       .addCase(currentUserAction.rejected, (state, action) => {
         state.user = initialState.user;
         state.error =
-        action.payload || "Error occurred while fetching user details";
+          action.payload || "Error occurred while fetching user details";
         state.loading = false;
       })
       .addCase(changePasswordAction.pending, (state) => {
@@ -93,23 +105,37 @@ const authSlice = createSlice({
       })
       .addCase(changePasswordAction.rejected, (state, action) => {
         state.user = initialState.user;
-        state.error = action.payload || "Error occured while changing password";
+        state.error =
+          action.payload || "Error occurred while changing password";
         state.loading = false;
       })
-      .addCase(changeUserDetailsAction.pending, (state) => {
-        state.user = initialState.user;
-        state.error = null;
+      .addCase(updateCoverImageAction.pending, (state) => {
         state.loading = true;
       })
-      .addCase(changeUserDetailsAction.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.error = null;
+      .addCase(updateCoverImageAction.fulfilled, (state, action) => {
+        console.log("action", action.payload);
+        if (state.user) {
+          state.user.coverImage = action.payload.coverImage;
+        }
         state.loading = false;
       })
-      .addCase(changeUserDetailsAction.rejected, (state, action) => {
-        state.user = initialState.user;
+      .addCase(updateCoverImageAction.rejected, (state, action) => {
         state.error =
-          action.payload || "Error occurred while updating user details";
+          action.payload || "Error occurred while updating cover image";
+        state.loading = false;
+      })
+      .addCase(updateAvatarAction.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateAvatarAction.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.avatar = action.payload.avatar;
+        }
+        state.loading = false;
+      })
+      .addCase(updateAvatarAction.rejected, (state, action) => {
+        state.error =
+          action.payload || "Error occurred while updating avatar image";
         state.loading = false;
       });
   },

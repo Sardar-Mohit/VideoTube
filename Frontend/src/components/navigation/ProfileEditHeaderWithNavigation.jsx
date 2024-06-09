@@ -3,16 +3,17 @@ import { ProfileBanner, ProfileBannerPicture, ProfileEditNavbar } from "..";
 import { useSelector } from "react-redux";
 
 const ProfileEditHeaderWithNavigation = ({ children }) => {
-  const userObj = useSelector((state) => state.auth.user);
-  let user = userObj && userObj.statusCode && userObj.statusCode.user;
-
+  const user = useSelector((state) => state.auth.user);
+  const userData = user?.statusCode?.user;
+  console.log("user")
+  console.log(user)
   return (
     <>
       {user && (
         <>
-          <ProfileBannerPicture banner={user.coverImage} />
+          <ProfileBannerPicture banner={userData?.coverImage} />
           <div className="px-4 pb-4">
-            <ProfileBanner />
+            <ProfileBanner user={userData} />
             <ProfileEditNavbar />
             {children}
           </div>

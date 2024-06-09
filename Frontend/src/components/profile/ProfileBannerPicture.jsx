@@ -1,20 +1,24 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCoverImageAction } from "@/store/actions/authActions";
 
 const ProfileBannerPicture = ({ banner }) => {
+  const dispatch = useDispatch();
+  const coverImage = useSelector((state) => state.auth.user?.coverImage);
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    // You can handle the file upload logic here
-    console.log("Selected file:", file);
+    console.log("file", file);
+    if (file) {
+      dispatch(updateCoverImageAction(file));
+    }
   };
+
   return (
     <div className="relative min-h-[150px] w-full pt-[16.28%]">
       <div className="absolute inset-0 overflow-hidden">
         <img
-          src={
-            banner
-              ? banner
-              : "https://images.pexels.com/photos/1092424/pexels-photo-1092424.jpeg?auto=compress"
-          }
+          src={coverImage ? coverImage : banner}
           alt="cover-photo"
           className="w-full h-full bg-center object-cover bg-no-repeat"
         />

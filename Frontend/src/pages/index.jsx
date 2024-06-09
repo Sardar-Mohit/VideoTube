@@ -29,8 +29,10 @@ import Login from "./registration/login";
 
 // Others
 import VideoListing from "./searchResult";
+import UserProfileHeaderWithNavigation from "@/components/navigation/UserProfileHeaderWithNavigation";
 
 export {
+  UserProfileHeaderWithNavigation,
   Subscribed,
   Tweet,
   LikedVideosPage,

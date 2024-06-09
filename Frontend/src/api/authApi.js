@@ -113,7 +113,12 @@ export const updateUserAvatarApi = async (avatarData) => {
   try {
     const request = await axios.patch(
       "http://localhost:8000/api/v1/users/avatar",
-      avatarData
+      avatarData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     console.log(request.data);
     return request.data;
@@ -127,7 +132,12 @@ export const updateUserCoverImageApi = async (coverImageData) => {
   try {
     const request = await axios.patch(
       "http://localhost:8000/api/v1/users/cover-image",
-      coverImageData
+      coverImageData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     console.log(request.data);
     return request.data;

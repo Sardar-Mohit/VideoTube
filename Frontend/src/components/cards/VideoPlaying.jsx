@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import { toggleSubscriptionApi } from "@/api/subscriptionApi";
 import { addVideoToPlaylistApi, createPlaylistApi } from "@/api/playlistApi";
 import { toggleVideoDislikeApi, toggleVideoLikeApi } from "@/api/likeApi";
+import { getUserChannelProfileApi } from "@/api/authApi";
+import { useNavigate } from "react-router-dom";
 
 const VideoPlaying = ({
   owner,
@@ -13,6 +15,7 @@ const VideoPlaying = ({
   dislikesCount,
   fetchVideo,
 }) => {
+  const navigate = useNavigate();
   const selector = useSelector((state) => state.playist.user);
   const error = useSelector((state) => state.playist.error);
   const playlistArray = selector?.statusCode?.userPlaylists;
@@ -125,6 +128,21 @@ const VideoPlaying = ({
       fetchVideo();
     } catch (error) {
       console.error("Error liking video:", error);
+    }
+  };
+
+  const userProfilePage = async () => {
+    console.log(owner._id);
+    try {
+      const response = await getUserChannelProfileApi(owner.username);
+      console.log("UserProfilePage");
+      console.log(response);
+
+      if (response.message === 200) {
+        navigate("/userProfile", { state: { userData: response.statusCode } });
+      }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
     }
   };
 
@@ -328,7 +346,7 @@ const VideoPlaying = ({
           </div>
         </div>
         <div className="mt-4 flex items-center justify-between">
-          <div className="flex items-center gap-x-4">
+          <div className="flex items-center gap-x-4" onClick={userProfilePage}>
             <div className="mt-2 h-12 w-12 shrink-0">
               <img
                 src={owner.avatar}
@@ -343,6 +361,7 @@ const VideoPlaying = ({
               </p>
             </div>
           </div>
+
           <div className="block">
             <button
               onClick={handleSubscribe}

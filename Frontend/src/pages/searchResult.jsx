@@ -197,12 +197,7 @@ const VideoListing = () => {
                       onClick={() => handleCellClick("uploadDate", "Today")}
                       onClear={(event) => handleClear("uploadDate", event)}
                     />
-                    <TableCellWithButton
-                      value="Channel"
-                      selectedValue={selectedCells.type}
-                      onClick={() => handleCellClick("type", "Channel")}
-                      onClear={(event) => handleClear("type", event)}
-                    />
+                    <td className="px-[0.125rem] py-4"></td>
                     <TableCellWithButton
                       value="4–20 minutes"
                       selectedValue={selectedCells.duration}
@@ -225,12 +220,7 @@ const VideoListing = () => {
                       onClick={() => handleCellClick("uploadDate", "This week")}
                       onClear={(event) => handleClear("uploadDate", event)}
                     />
-                    <TableCellWithButton
-                      value="Playlist"
-                      selectedValue={selectedCells.type}
-                      onClick={() => handleCellClick("type", "Playlist")}
-                      onClear={(event) => handleClear("type", event)}
-                    />
+                    <td className="px-[0.125rem] py-4"></td>
                     <TableCellWithButton
                       value="Over 20 minutes"
                       selectedValue={selectedCells.duration}
