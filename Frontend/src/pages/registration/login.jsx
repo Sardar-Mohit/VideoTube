@@ -11,8 +11,8 @@ import { loginUserAction } from "@/store/actions/authActions";
 
 const Login = () => {
   const navigate = useNavigate();
-  const error = useSelector((state) => state.auth.error);
   const user = useSelector((state) => state.auth.user);
+  const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
   const [button, setButton] = useState(false);
 

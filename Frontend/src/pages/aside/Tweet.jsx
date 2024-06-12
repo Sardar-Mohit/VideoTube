@@ -8,7 +8,7 @@ const Tweet = () => {
   const [tweetContent, setTweetContent] = useState("");
   const [userTweets, setUserTweets] = useState([]);
   const user = useSelector((state) => state.auth.user);
-  const userId = user?.statusCode?.user?._id;
+  const userId = user?._id;
 
   const getUserTweets = async () => {
     console.log("userId")

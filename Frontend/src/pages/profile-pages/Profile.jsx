@@ -21,12 +21,12 @@ const Profile = () => {
   const fetchVideo = async () => {
     console.log("ssss");
     console.log(user);
-    const userId = user.statusCode.user ? user.statusCode.user._id : null;
+    const userId = user._id;
 
     if (userId) {
       const request = await getUserVideos(userId);
       const response = request.statusCode;
-      setVideos(response.videos);
+      setVideos(response.videos.reverse());
       response.videos.length === 0 && setVideos(null);
     }
   };

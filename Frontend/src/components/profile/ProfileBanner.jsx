@@ -1,22 +1,24 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  updateAvatarAction,
+  updateCoverImageAction,
+} from "@/store/actions/authActions";
 import {
   getSubscribersListApi,
   getSubscribedChannelsApi,
 } from "@/api/subscriptionApi";
-import { updateAvatarAction } from "@/store/actions/authActions";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
-const ProfileBanner = ({ user }) => {
+const ProfileBanner = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
   const [subscribersCount, setSubscribersCount] = useState(0);
   const [subscribedChannelsCount, setSubscribedChannelsCount] = useState(0);
-  const avatar = useSelector((state) => state.auth.user?.avatar);
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
-    console.log("dil", file);
     if (file) {
-      dispatch(updateAvatarAction(file));
+      await dispatch(updateAvatarAction(file));
     }
   };
 
@@ -45,10 +47,9 @@ const ProfileBanner = ({ user }) => {
   };
 
   useEffect(() => {
-    if (user?._id) {
-      fetchSubscribersList();
-      fetchSubscribedChannels();
-    }
+    console.log("User ID:", user?._id);
+    fetchSubscribersList();
+    fetchSubscribedChannels();
   }, [user?._id]);
 
   return (
@@ -58,7 +59,7 @@ const ProfileBanner = ({ user }) => {
         className="relative -mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full border-2 group cursor-pointer bg-black"
       >
         <img
-          src={avatar ? avatar : user?.avatar}
+          src={user?.avatar}
           alt="Channel-avatar"
           className="h-full w-full bg-center object-cover group-hover:opacity-40"
         />
@@ -69,9 +70,7 @@ const ProfileBanner = ({ user }) => {
             className="hidden"
             onChange={handleAvatarChange}
           />
-          <label
-            className="inline-block h-10 w-10 cursor-pointer rounded-lg p-1 text-[#ae7aff] bg-white"
-          >
+          <label className="inline-block h-10 w-10 cursor-pointer rounded-lg p-1 text-[#ae7aff] bg-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

@@ -25,16 +25,9 @@ import {
 const SettingDropdown = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
+  const userObj = useSelector((state) => state.auth.user);
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false); 
-  let userObj = null;
-
-  if (user && user.statusCode) {
-    userObj = user.statusCode.user;
-    console.log("helloa");
-    console.log(userObj);
-  }
-
+  
   async function logout() {
     try {
       await dispatch(logoutUserAction());

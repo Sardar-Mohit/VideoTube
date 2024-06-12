@@ -7,6 +7,7 @@ import {
     getUserVideos,
     togglePublishStatus,
     updateVideo,
+    getUserWatchedVideos,
 } from "../controllers/video.controller.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js"
 import { upload } from "../middlewares/multer.middleware.js"
@@ -34,6 +35,7 @@ router.post("/", upload.fields([
     ]), publishAVideo);
     
     router.get("/c/:userId", getUserVideos);
+    router.get("/history", getUserWatchedVideos);
     router.delete("/:videoId", deleteVideo);
     router.patch("/:videoId", upload.single("thumbnail"), updateVideo);
     router.patch("/toggle/publish/:videoId", togglePublishStatus);

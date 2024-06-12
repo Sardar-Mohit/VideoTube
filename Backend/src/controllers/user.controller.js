@@ -209,7 +209,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(404, "User not found");
   }
-  
+
   return res
     .status(200)
     .json(new ApiResponse(200, { user }, "User fetched successfully"));
@@ -298,9 +298,9 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
-  const { fullName, email } = req.body;
+  const { username, fullName, email } = req.body;
 
-  if (!fullName || !email) {
+  if (!username || !fullName || !email) {
     throw new ApiError(400, "All fields are required");
   }
 
@@ -309,6 +309,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     {
       $set: {
         fullName,
+        username,
         email: email,
       },
     },
@@ -317,7 +318,9 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, user, "Account details updated successfully"));
+    .json(
+      new ApiResponse(200, { user }, "Account details updated successfully")
+    );
 });
 
 const updateUserAvatar = asyncHandler(async (req, res) => {

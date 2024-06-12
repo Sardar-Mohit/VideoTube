@@ -26,8 +26,7 @@ import {
 const Avatar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  let userObj = null;
+  const userObj = useSelector((state) => state.auth.user);
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false); // State to manage dialog visibility
 
   async function logout() {
@@ -36,12 +35,6 @@ const Avatar = () => {
     } catch (error) {
       console.error("Error logging in:", error);
     }
-  }
-
-  if (user && user.statusCode) {
-    userObj = user.statusCode.user;
-    console.log("helloa");
-    console.log(userObj);
   }
 
   const handleLogoutTriggerClick = (event) => {

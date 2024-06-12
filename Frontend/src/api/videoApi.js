@@ -63,6 +63,17 @@ export const getUserVideos = async (userId) => {
   }
 };
 
+export const getUserWatchedVideos = async (userId) => {
+  try {
+    const request = await axios.get(
+      `http://localhost:8000/api/v1/videos/w/${userId}`
+    );
+    return request.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const createVideo = async (videoData) => {
   try {
     const request = await axios.post(

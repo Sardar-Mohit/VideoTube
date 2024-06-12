@@ -11,6 +11,7 @@ export const registerUserApi = async (userData) => {
         withCredentials: true,
       }
     );
+    console.log("request.data");
     console.log(request.data);
     return request.data;
   } catch (error) {
@@ -101,7 +102,6 @@ export const updateAccountDetailsApi = async (userData) => {
       "http://localhost:8000/api/v1/users/update-account",
       userData
     );
-    console.log(request.data);
     return request.data;
   } catch (error) {
     throw error;
@@ -120,7 +120,7 @@ export const updateUserAvatarApi = async (avatarData) => {
         },
       }
     );
-    console.log(request.data);
+    console.log("avatar", request.data);
     return request.data;
   } catch (error) {
     throw error;

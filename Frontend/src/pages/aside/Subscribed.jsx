@@ -12,7 +12,7 @@ const Subscribed = () => {
   const user = useSelector((state) => state.auth.user);
 
   const getSubscribedChannels = async () => {
-    const request = await getSubscribedChannelsApi(user.statusCode.user._id);
+    const request = await getSubscribedChannelsApi(user._id);
     const response = request.statusCode.subscribedChannelsList;
     console.log("response");
     console.log(response.length);

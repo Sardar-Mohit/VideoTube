@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCoverImageAction } from "@/store/actions/authActions";
 
 const ProfileBannerPicture = ({ banner }) => {
   const dispatch = useDispatch();
-  const coverImage = useSelector((state) => state.auth.user?.coverImage);
-
-  const handleFileChange = (e) => {
+  const coverImage = useSelector((state) => state.auth.user.coverImage);
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     console.log("file", file);
     if (file) {
-      dispatch(updateCoverImageAction(file));
+      await dispatch(updateCoverImageAction(file));
     }
   };
 

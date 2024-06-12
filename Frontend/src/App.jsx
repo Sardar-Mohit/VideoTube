@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Footer, NavbarOne, NavbarTwo, UploadVideoPopUp } from "./components";
 import {
   Subscribed,
@@ -24,17 +29,29 @@ import {
   TermsAndCondition,
 } from "./pages";
 import UserProfile from "./pages/UserProfile";
+import { currentUserAction } from "./store/actions/authActions";
 
 function AppContent() {
+  const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const location = useLocation();
 
   useEffect(() => {
+    fetchCurrentUser();
+    console.log("Ggg")
+  }, [dispatch]);
+
+  useEffect(() => {
     setIsLoggedIn(!!user);
   }, [user]);
 
-  const hideHeaderAndFooter = location.pathname === "/" || location.pathname === "/register";
+  async function fetchCurrentUser() {
+    await dispatch(currentUserAction());
+  }
+
+  const hideHeaderAndFooter =
+    location.pathname === "/" || location.pathname === "/register";
 
   return (
     <div className="h-screen overflow-y-auto bg-[#121212] text-white">

@@ -252,6 +252,20 @@ const getUserVideos = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { videos }, "Videos found Successfully"));
 });
 
+const getUserWatchedVideos = asyncHandler(async (req, res) => {
+  let user = req.user;
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  let videos = user.watchHistory.populate();
+  console.log(videos);
+  res
+    .status(200)
+    .json(new ApiResponse(200, { videos }, "Videos found Successfully"));
+});
+
 const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
 
@@ -264,6 +278,20 @@ const getVideoById = asyncHandler(async (req, res) => {
   if (!video) {
     throw new ApiError(404, "Video not found");
   }
+
+  // Start a timer to update watch history and increase view count after 4 seconds
+  setTimeout(async () => {
+    // Check if the user is authenticated and the video is not in their watch history
+    if (req.user && !req.user.watchHistory.includes(videoId)) {
+      // Update user's watch history
+      req.user.watchHistory.push(videoId);
+      await req.user.save();
+
+      // Increase the view count of the video
+      video.views += 1;
+      await video.save();
+    }
+  }, 4000);
 
   // Get video reactions
   let videoReactions = await Like.aggregate([
@@ -417,5 +445,6 @@ export {
   getUserVideos,
   updateVideo,
   deleteVideo,
+  getUserWatchedVideos,
   togglePublishStatus,
 };

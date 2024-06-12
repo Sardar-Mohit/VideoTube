@@ -23,22 +23,22 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(userRegistrationAction.pending, (state) => {
-        state.error = null;
         state.loading = true;
       })
       .addCase(userRegistrationAction.fulfilled, (state, action) => {
+        console.log(1)
+        console.log(state)
+        console.log(action)
+        console.log(action.payload)
         state.user = action.payload;
         state.error = null;
         state.loading = false;
       })
       .addCase(userRegistrationAction.rejected, (state, action) => {
-        state.error =
-          action.payload || "Error occurred during user registration";
+        state.error = "Error occurred during user registration";
         state.loading = false;
       })
       .addCase(loginUserAction.pending, (state) => {
-        state.user = null;
-        state.error = null;
         state.loading = true;
       })
       .addCase(loginUserAction.fulfilled, (state, action) => {
@@ -56,10 +56,7 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(updateUserAction.fulfilled, (state, action) => {
-        state.user = {
-          ...state.user,
-          ...action.payload,
-        };
+        state.user = action.payload;
         state.loading = false;
       })
       .addCase(updateUserAction.rejected, (state, action) => {
@@ -78,8 +75,6 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(currentUserAction.pending, (state) => {
-        state.user = initialState.user;
-        state.error = null;
         state.loading = true;
       })
       .addCase(currentUserAction.fulfilled, (state, action) => {
@@ -94,8 +89,6 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(changePasswordAction.pending, (state) => {
-        state.user = initialState.user;
-        state.error = null;
         state.loading = true;
       })
       .addCase(changePasswordAction.fulfilled, (state, action) => {
@@ -115,7 +108,7 @@ const authSlice = createSlice({
       .addCase(updateCoverImageAction.fulfilled, (state, action) => {
         console.log("action", action.payload);
         if (state.user) {
-          state.user.coverImage = action.payload.coverImage;
+          state.user = action.payload;
         }
         state.loading = false;
       })
@@ -129,7 +122,7 @@ const authSlice = createSlice({
       })
       .addCase(updateAvatarAction.fulfilled, (state, action) => {
         if (state.user) {
-          state.user.avatar = action.payload.avatar;
+          state.user = action.payload;
         }
         state.loading = false;
       })

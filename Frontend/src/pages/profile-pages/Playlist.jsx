@@ -10,8 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Playlist = () => {
   const [playlist, setPlaylist] = useState([]);
-  let userData = useSelector((state) => state.auth.user);
-  let user = userData?.statusCode?.user;
+  let user = useSelector((state) => state.auth.user);
   let dispatch = useDispatch();
 
   const getPlaylist = async () => {
