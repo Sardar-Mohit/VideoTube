@@ -97,12 +97,12 @@ const VideoListing = () => {
         <Aside />
 
         <section className="flex flex-col w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-          <AlertDialog className="rounded-xl p-6 bg-white dark:bg-white-800">
+          <AlertDialog className="w-screen flex items-center justify-center rounded-l p-6 bg-white dark:bg-white-800">
             <AlertDialogTrigger className="self-end">
               <div className="flex justify-end items-center mx-4 mt-2 text-base">
                 <button
                   title="Search filters"
-                  className="text-white font-bold flex items-center justify-center gap-x-2 hover:bg-slate-500 focus:bg-slate-600 rounded-full px-2 py-1 "
+                  className="text-white font-bold flex items-center justify-center gap-x-2 hover:bg-slate-500 focus:bg-slate-600 rounded-full px-1 py-1"
                 >
                   Filters
                   <svg
@@ -125,14 +125,9 @@ const VideoListing = () => {
                 </button>
               </div>
             </AlertDialogTrigger>
-            <AlertDialogContent
-              className="mx-4 rounded-xl w-full lg:max-w-4xl p-3 sm:p-4 bg-black text-white dark:bg-gray-800"
-              style={{
-                borderRadius: "12px",
-              }}
-            >
+            <AlertDialogContent style={{borderRadius : "10px"}} className="mx-4 rounded-xl w-full max-w-md lg:max-w-4xl p-4 bg-black text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700">
               <div className="flex items-center justify-between">
-                <AlertDialogTitle className=" text-base sm:text-xl">
+                <AlertDialogTitle className="text-lg sm:text-xl">
                   Search filters
                 </AlertDialogTitle>
                 <AlertDialogCancel className="border-0">
@@ -152,28 +147,21 @@ const VideoListing = () => {
                   </svg>
                 </AlertDialogCancel>
               </div>
-              <table className="w-full text-[0.7rem] sm:text-sm  text-white dark:text-white">
+              <table className="w-full text-sm text-white dark:text-white">
                 <thead>
-                  <tr className="text-left font-semibold border-b-2 border-gray-300 dark:border-gray-700">
-                    <th className="px-[0.125rem] py-4">UPLOAD DATE</th>
-                    <th className="px-[0.125rem] py-4">TYPE</th>
-                    <th className="px-[0.125rem] py-4">DURATION</th>
-                    <th className="px-[0.125rem] py-4">SORT BY</th>
+                  <tr className="text-left font-semibold">
+                    <th className="px-1 py-2">UPLOAD DATE</th>
+                    <th className="px-1 py-2">DURATION</th>
+                    <th className="px-1 py-2">SORT BY</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-gray-300 dark:border-gray-700">
+                  <tr className="">
                     <TableCellWithButton
                       value="Last hour"
                       selectedValue={selectedCells.uploadDate}
                       onClick={() => handleCellClick("uploadDate", "Last hour")}
                       onClear={(event) => handleClear("uploadDate", event)}
-                    />
-                    <TableCellWithButton
-                      value="Video"
-                      selectedValue={selectedCells.type}
-                      onClick={() => handleCellClick("type", "Video")}
-                      onClear={(event) => handleClear("type", event)}
                     />
                     <TableCellWithButton
                       value="Under 4 minutes"
@@ -190,14 +178,13 @@ const VideoListing = () => {
                       onClear={(event) => handleClear("sortBy", event)}
                     />
                   </tr>
-                  <tr className="border-b border-gray-300 dark:border-gray-700">
+                  <tr className="">
                     <TableCellWithButton
                       value="Today"
                       selectedValue={selectedCells.uploadDate}
                       onClick={() => handleCellClick("uploadDate", "Today")}
                       onClear={(event) => handleClear("uploadDate", event)}
                     />
-                    <td className="px-[0.125rem] py-4"></td>
                     <TableCellWithButton
                       value="4–20 minutes"
                       selectedValue={selectedCells.duration}
@@ -213,14 +200,13 @@ const VideoListing = () => {
                       onClear={(event) => handleClear("sortBy", event)}
                     />
                   </tr>
-                  <tr className="border-b border-gray-300 dark:border-gray-700">
+                  <tr className="">
                     <TableCellWithButton
                       value="This week"
                       selectedValue={selectedCells.uploadDate}
                       onClick={() => handleCellClick("uploadDate", "This week")}
                       onClear={(event) => handleClear("uploadDate", event)}
                     />
-                    <td className="px-[0.125rem] py-4"></td>
                     <TableCellWithButton
                       value="Over 20 minutes"
                       selectedValue={selectedCells.duration}
@@ -236,7 +222,7 @@ const VideoListing = () => {
                       onClear={(event) => handleClear("sortBy", event)}
                     />
                   </tr>
-                  <tr className="border-b border-gray-300 dark:border-gray-700">
+                  <tr className="">
                     <TableCellWithButton
                       value="This month"
                       selectedValue={selectedCells.uploadDate}
@@ -245,8 +231,7 @@ const VideoListing = () => {
                       }
                       onClear={(event) => handleClear("uploadDate", event)}
                     />
-                    <td className="px-[0.125rem] py-4"></td>
-                    <td className="px-[0.125rem] py-4"></td>
+                    <td className="px-1 py-2"></td>
                     <TableCellWithButton
                       value="Rating"
                       selectedValue={selectedCells.sortBy}
@@ -261,9 +246,9 @@ const VideoListing = () => {
                       onClick={() => handleCellClick("uploadDate", "This year")}
                       onClear={(event) => handleClear("uploadDate", event)}
                     />
-                    <td className="px-[0.125rem] py-4"></td>
-                    <td className="px-[0.125rem] py-4"></td>
-                    <td className="px-[0.125rem] py-4"></td>
+                    <td className="px-1 py-2"></td>
+                    <td className="px-1 py-2"></td>
+                    <td className="px-1 py-2"></td>
                   </tr>
                 </tbody>
               </table>
@@ -272,23 +257,22 @@ const VideoListing = () => {
 
           {videos?.length > 0 && (
             <div className="flex flex-col gap-4 p-4">
-              {videos?.length > 0 &&
-                videos.map((elem) => (
-                  <VideoListingForSearch
-                    key={elem._id}
-                    videoId={elem._id}
-                    views={elem.views}
-                    time={useTimeHook(elem.createdAt)}
-                    title={elem.title}
-                    videoDuration={elem.duration}
-                    description={elem.description}
-                    altText={elem.title}
-                    thumbnail={elem.thumbnail}
-                    videoUrl={elem.videoFile}
-                    ownerUsername={elem.ownerDetails.username}
-                    ownerImg={elem.ownerDetails.avatar}
-                  />
-                ))}
+              {videos.map((elem) => (
+                <VideoListingForSearch
+                  key={elem._id}
+                  videoId={elem._id}
+                  views={elem.views}
+                  time={useTimeHook(elem.createdAt)}
+                  title={elem.title}
+                  videoDuration={elem.duration}
+                  description={elem.description}
+                  altText={elem.title}
+                  thumbnail={elem.thumbnail}
+                  videoUrl={elem.videoFile}
+                  ownerUsername={elem.ownerDetails.username}
+                  ownerImg={elem.ownerDetails.avatar}
+                />
+              ))}
             </div>
           )}
 

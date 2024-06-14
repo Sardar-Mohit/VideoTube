@@ -42,24 +42,22 @@ const Playlist = () => {
         <Aside />
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
           <ProfileHeaderWithNavigation>
-            <div className="grid gap-4 pt-2 sm:grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))]">
+            <div className="grid grid-cols-[repeat(auto-fit,_minmax(240px,_1fr))] gap-4 pt-2 lg:grid-cols-[repeat(3,_minmax(240px,_1fr))] xl:grid-cols-[repeat(4,_minmax(240px,_1fr))]">
               {playlist &&
                 playlist.length > 0 &&
                 playlist.map((playlistData) => {
                   return (
-                    <>
-                      <PlaylistCard
-                        key={playlistData._id}
-                        playlistId={playlistData._id}
-                        thumbnail={playlistData.videoDetails[0].thumbnail || ""}
-                        playlistTotalViews={playlistData.totalViews || 0}
-                        videosLength={playlistData.videoDetails.length || 0}
-                        createdAgo={useTimeHook(playlistData.createdAt) || ""}
-                        title={playlistData.name || ""}
-                        description={playlistData.description || ""}
-                        subscribersCount={playlistData.subscribersCount || 0}
-                      />
-                    </>
+                    <PlaylistCard
+                      key={playlistData._id}
+                      playlistId={playlistData._id}
+                      thumbnail={playlistData.videoDetails[0].thumbnail || ""}
+                      playlistTotalViews={playlistData.totalViews || 0}
+                      videosLength={playlistData.videoDetails.length || 0}
+                      createdAgo={useTimeHook(playlistData.createdAt) || ""}
+                      title={playlistData.name || ""}
+                      description={playlistData.description || ""}
+                      subscribersCount={playlistData.subscribersCount || 0}
+                    />
                   );
                 })}
               {playlist === null && (

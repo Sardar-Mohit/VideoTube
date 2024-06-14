@@ -1,4 +1,4 @@
-import { videoToPlay } from "@/api/videoApi";
+import { allVideos, videoToPlay } from "@/api/videoApi";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useReactionsCountHook } from "@/hooks/useReactionsCountHook";
@@ -19,15 +19,31 @@ const IndividualPage = () => {
   const [comments, setComments] = useState([]);
   const [commentContent, setCommentContent] = useState([]);
   const location = useLocation();
+  const [suggestionVideos, setSuggestionVideos] = useState([]);
+
+  const fetchSuggestionVideos = async () => {
+    try {
+      const request = await allVideos();
+      const response = request.statusCode;
+      const allVideosData = response.reverse();
+  
+      // Shuffle the array
+      for (let i = allVideosData.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allVideosData[i], allVideosData[j]] = [allVideosData[j], allVideosData[i]];
+      }
+  
+      setSuggestionVideos(allVideosData);
+    } catch (error) {
+      console.error("Error fetching suggestion videos:", error);
+    }
+  };
 
   const fetchVideo = async () => {
     const id = location.state;
     const videoResponse = await videoToPlay(id);
     const videoArray = videoResponse.statusCode.user[0];
     setVideo(videoArray);
-    console.log("videos comment");
-    console.log(id);
-    console.log(videoArray);
   };
 
   const fetchVideoComments = async () => {
@@ -57,6 +73,7 @@ const IndividualPage = () => {
 
   useEffect(() => {
     fetchVideo();
+    fetchSuggestionVideos();
     fetchVideoComments();
   }, []);
 
@@ -74,7 +91,10 @@ const IndividualPage = () => {
                   owner={video}
                   videoId={video.videos[0]._id}
                   fetchVideo={fetchVideo}
-                  likesCount={useReactionsCountHook(video.videoReactions, "likedBy")}
+                  likesCount={useReactionsCountHook(
+                    video.videoReactions,
+                    "likedBy"
+                  )}
                   dislikesCount={useReactionsCountHook(
                     video.videoReactions,
                     "dislikedBy"
@@ -131,69 +151,21 @@ const IndividualPage = () => {
               </div>
             </div>
 
-            <div className="col-span-12 flex w-full shrink-0 flex-col gap-3 lg:w-[350px] xl:w-[400px]">
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="JavaScript Fundamentals: Variables and Data Types"
-                title="JavaScript Fundamentals: Variables and Data Types"
-                author="Code Master"
-                views="10.3k Views · 44 minutes ago"
-                duration="20:45"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/2519817/pexels-photo-2519817.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Getting Started with Express.js"
-                title="Getting Started with Express.js"
-                author="Express Learner"
-                views="11.5k Views · 5 hours ago"
-                duration="22:18"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/1144274/pexels-photo-1144274.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Node.js Authentication with Passport.js"
-                title="Node.js Authentication with Passport.js"
-                author="Passport Pro"
-                views="21.2k Views · 15 hours ago"
-                duration="26:58"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/1144231/pexels-photo-1144231.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Data Visualization with Tableau"
-                title="Data Visualization with Tableau"
-                author="Tableau Master"
-                views="24.5k Views · 18 hours ago"
-                duration="32:14"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/1144250/pexels-photo-1144250.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Building Real-Time Applications with Socket.IO"
-                title="Building Real-Time Applications with Socket.IO"
-                author="Socket.IO Expert"
-                views="25.6k Views · 19 hours ago"
-                duration="27:37"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/1115824/pexels-photo-1115824.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Advanced CSS: Animations and Transitions"
-                title="Advanced CSS: Animations and Transitions"
-                author="CSS Animations"
-                views="28.9k Views · 22 hours ago"
-                duration="31:55"
-              />
-
-              <VideoSuggestion
-                imageUrl="https://images.pexels.com/photos/1115808/pexels-photo-1115808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                altText="Advanced React Patterns"
-                title="Advanced React Patterns"
-                author="React Patterns"
-                views="30.1k Views · 1 day ago"
-                duration="30:25"
-              />
+            <div className="col-span-12 flex w-full shrink-0 flex-col gap-3 md:w-[350px] lg:w-[400px] xl:w-[450px]">
+              {suggestionVideos?.map((video) => (
+                <VideoSuggestion
+                  key={video._id}
+                  id={video._id}
+                  duration={video.duration}
+                  title={video.title}
+                  views={video.views}
+                  imageUrl={video.thumbnail}
+                  altText={video.title}
+                  time={useTimeHook(video.createdAt)}
+                  author={video.ownerDetails.username}
+                  authorImg={video.ownerDetails.avatar}
+                />
+              ))}
             </div>
           </div>
         </section>

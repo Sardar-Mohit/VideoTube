@@ -22,12 +22,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-const SettingDropdown = () => {
+const SettingDropdown = ({ display = false }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userObj = useSelector((state) => state.auth.user);
-  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false); 
-  
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+
   async function logout() {
     try {
       await dispatch(logoutUserAction());
@@ -77,9 +77,16 @@ const SettingDropdown = () => {
               />
             </svg>
           </span>
-          <span className="block sm:hidden sm:group-hover:inline lg:inline">
-            Settings
-          </span>
+
+          {display ? (
+            <span className="block sm:hidden sm:group-hover:inline lg:inline">
+              Settings
+            </span>
+          ) : (
+            <span className="block sm:hidden sm:group-hover:inline">
+              Settings
+            </span>
+          )}
         </button>
       </DropdownMenuTrigger>
       {userObj ? (
@@ -148,25 +155,25 @@ const SettingDropdown = () => {
         </DropdownMenuContent>
       ) : (
         <DropdownMenuContent className="bg-black text-white w-40 sm:w-56">
-            <div className="sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff]">
-              <DropdownMenuItem
-                className="cursor-pointer font-[500]"
-                onClick={() => navigate("/")}
-              >
-                Log in
-              </DropdownMenuItem>
-            </div>
+          <div className="sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff]">
+            <DropdownMenuItem
+              className="cursor-pointer font-[500]"
+              onClick={() => navigate("/")}
+            >
+              Log in
+            </DropdownMenuItem>
+          </div>
 
-            <DropdownMenuSeparator className="bg-slate-400" />
+          <DropdownMenuSeparator className="bg-slate-400" />
 
-            <div className="sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff]">
-              <DropdownMenuItem
-                className="cursor-pointer font-[500]"
-                onClick={() => navigate("/register")}
-              >
-                Sign up
-              </DropdownMenuItem>
-            </div>
+          <div className="sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff]">
+            <DropdownMenuItem
+              className="cursor-pointer font-[500]"
+              onClick={() => navigate("/register")}
+            >
+              Sign up
+            </DropdownMenuItem>
+          </div>
         </DropdownMenuContent>
       )}
     </DropdownMenu>

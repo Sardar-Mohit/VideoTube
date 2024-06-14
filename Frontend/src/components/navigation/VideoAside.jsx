@@ -156,7 +156,7 @@ const VideoAside = () => {
         <li className="hidden sm:block mt-auto"></li>
         
         <li className="hidden sm:block">
-          <SettingDropdown />
+          <SettingDropdown/>
         </li>
       </ul>
     </aside>

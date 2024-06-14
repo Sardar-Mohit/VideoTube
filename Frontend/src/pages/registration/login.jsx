@@ -63,7 +63,7 @@ const Login = () => {
   return (
     <>
       <div className="flex min-h-screen items-center justify-center py-12 px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8 p-10 bg-gray-50 rounded-xl shadow-lg">
+        <div className="max-w-md w-full space-y-8 p-10 bg-gray-700 rounded-xl shadow-lg">
           <div className="flex justify-center">
             <Logo biggerDeviceWidth={28} width={28} />
           </div>

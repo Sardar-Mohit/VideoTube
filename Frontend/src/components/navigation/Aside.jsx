@@ -157,7 +157,7 @@ const Aside = () => {
           </button>
         </li>
         <li className="hidden sm:block mt-auto">
-          <SettingDropdown />
+          <SettingDropdown display={true} />
         </li>
       </ul>
     </aside>

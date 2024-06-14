@@ -3,7 +3,7 @@ import React from "react";
 const TableCellWithButton = ({ value, selectedValue, onClick, onClear }) => {
   return (
     <td
-      className={`relative cursor-pointer px-[0.125rem] py-4 ${
+      className={`relative cursor-pointer px-[0.125rem] py-2 ${
         selectedValue === value && "bg-slate-500"
       }`}
       onClick={onClick}
