@@ -12,8 +12,6 @@ const LandingPage = () => {
     const request = await allVideos();
     const response = request.statusCode;
     const allVideosData = response.reverse();
-    console.log("videos");
-    console.log(allVideosData);
     setVideos(allVideosData);
   };
 

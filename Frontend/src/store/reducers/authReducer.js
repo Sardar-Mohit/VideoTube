@@ -26,10 +26,10 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(userRegistrationAction.fulfilled, (state, action) => {
-        console.log(1)
-        console.log(state)
-        console.log(action)
-        console.log(action.payload)
+        console.log(1);
+        console.log(state);
+        console.log(action);
+        console.log(action.payload);
         state.user = action.payload;
         state.error = null;
         state.loading = false;
@@ -78,12 +78,13 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(currentUserAction.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.error = null;
+        console.log(action.payload)
+        if (action.payload) {
+          state.user = action.payload;
+        }
         state.loading = false;
       })
       .addCase(currentUserAction.rejected, (state, action) => {
-        state.user = initialState.user;
         state.error =
           action.payload || "Error occurred while fetching user details";
         state.loading = false;

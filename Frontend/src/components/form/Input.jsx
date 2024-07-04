@@ -4,6 +4,7 @@ const Input = ({
   type = "text",
   register,
   accept,
+  defaultVal,
   errors,
   required = false,
 }) => (
@@ -22,6 +23,7 @@ const Input = ({
         accept={accept}
         autoComplete="off"
         required={required}
+        defaultValue={defaultVal}
         {...register(name)}
         className={`mt-1 rounded-[5px] text-black px-2 py-[7px] border ring-slate-500 border-slate-500 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm ${
           errors[name] ? "border-red-500" : "border-gray-300"

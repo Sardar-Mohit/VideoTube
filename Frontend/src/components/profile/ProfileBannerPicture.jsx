@@ -4,7 +4,7 @@ import { updateCoverImageAction } from "@/store/actions/authActions";
 
 const ProfileBannerPicture = ({ banner }) => {
   const dispatch = useDispatch();
-  const coverImage = useSelector((state) => state.auth.user.coverImage);
+  const coverImage = useSelector((state) => state.auth.user?.coverImage);
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     console.log("file", file);
@@ -17,7 +17,7 @@ const ProfileBannerPicture = ({ banner }) => {
     <div className="relative min-h-[150px] w-full pt-[16.28%]">
       <div className="absolute inset-0 overflow-hidden">
         <img
-          src={coverImage ? coverImage : banner}
+          src={coverImage ? coverImage : banner?.coverImage}
           alt="cover-photo"
           className="w-full h-full bg-center object-cover bg-no-repeat"
         />

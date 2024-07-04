@@ -88,10 +88,15 @@ export const getCurrentUserApi = async () => {
         withCredentials: true,
       }
     );
-    console.log("h" + request.data);
+    console.log("getCurrentUserApi");
+    console.log(request.data);
+
+    
     return request.data;
   } catch (error) {
-    throw error;
+    if (error.request.status == 401) {
+      return null;
+    }
   }
 };
 

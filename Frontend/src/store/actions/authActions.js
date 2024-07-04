@@ -91,15 +91,21 @@ export const changePasswordAction = createAsyncThunk(
 
 export const currentUserAction = createAsyncThunk(
   "user/currentUser",
-  async ({ rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      console.log("current")
       const response = await getCurrentUserApi();
-      console.log("current2")
-      console.log(response)
-      return response.statusCode; // Return updated user data
+      if (response === null) {
+        return null;
+      }
+      
+      console.log("currentUserAction");
+      console.log(response.statusCode.user);
+
+      return response.statusCode.user;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      console.log("error");
+      console.log(error);
+      return rejectWithValue(error);
     }
   }
 );

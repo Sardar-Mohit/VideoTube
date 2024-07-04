@@ -32,14 +32,6 @@ const Login = () => {
     resolver: zodResolver(zodSchema),
   });
 
-  useEffect(() => {
-    console.log("2222");
-    console.log(user);
-    if (user) {
-      navigate("/landing-page");
-    }
-  }, [user, navigate]);
-
   const onSubmit = async (data, e) => {
     e.preventDefault();
     setButton(true);
@@ -59,6 +51,12 @@ const Login = () => {
       setButton(false);
     }
   };
+
+  useEffect(() => {
+    if (user !== null) {
+      navigate("/landing-page");
+    }
+  }, [user, navigate]);
 
   return (
     <>

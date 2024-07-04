@@ -1,15 +1,16 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { ProfileBanner, ProfileBannerPicture, ProfileNavbar } from "..";
 
-const ProfileHeaderWithNavigation = ({ children }) => {
-  const userData = useSelector((state) => state.auth.user);
-
+const ProfileHeaderWithNavigation = ({
+  userData,
+  isItOwnersProfile,
+  children,
+}) => {
   return (
     <>
-      <ProfileBannerPicture banner={userData?.coverImage} />
+      <ProfileBannerPicture banner={userData} />
       <div className="px-4 pb-4">
-        <ProfileBanner user={userData} />
+        <ProfileBanner isItOwnersProfile={isItOwnersProfile} user={userData} />
         <ProfileNavbar />
         {children}
       </div>

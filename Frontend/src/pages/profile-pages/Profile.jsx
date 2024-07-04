@@ -8,20 +8,31 @@ import {
 import useTimeHook from "@/hooks/useTimeHook";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const Profile = () => {
-  const [videos, setVideos] = useState([]);
+  const location = useLocation();
+  const userData = location.state?.userData;
   const user = useSelector((state) => state.auth.user);
+  const [videos, setVideos] = useState([]);
   const [uploadVideo, setUploadVideo] = useState(false);
+  const [isItOwnersProfile, setIsItOwnersProfile] = useState(false);
 
   const handleUploadVideoToggle = () => {
     setUploadVideo(!uploadVideo);
   };
 
   const fetchVideo = async () => {
-    console.log("ssss");
-    console.log(user);
-    const userId = user._id;
+    let userId;
+    if (userData) {
+      userId = userData._id;
+      if (user._id === userData._id) {
+        setIsItOwnersProfile(true);
+      }
+    } else {
+      userId = user._id;
+      setIsItOwnersProfile(true);
+    }
 
     if (userId) {
       const request = await getUserVideos(userId);
@@ -40,8 +51,11 @@ const Profile = () => {
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
         <Aside />
         <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-          <ProfileHeaderWithNavigation>
-          <div className="grid grid-cols-[repeat(auto-fit,_minmax(240px,_1fr))] gap-4 pt-2 lg:grid-cols-[repeat(3,_minmax(240px,_1fr))] xl:grid-cols-[repeat(4,_minmax(240px,_1fr))]">
+          <ProfileHeaderWithNavigation
+            userData={userData}
+            isItOwnersProfile={isItOwnersProfile}
+          >
+            <div className="grid grid-cols-[repeat(auto-fit,_minmax(240px,_1fr))] gap-4 pt-2 lg:grid-cols-[repeat(3,_minmax(240px,_1fr))] xl:grid-cols-[repeat(4,_minmax(240px,_1fr))]">
               {videos &&
                 videos.length > 0 &&
                 videos.map((video) => (

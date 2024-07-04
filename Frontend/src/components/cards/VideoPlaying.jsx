@@ -132,14 +132,15 @@ const VideoPlaying = ({
   };
 
   const userProfilePage = async () => {
-    console.log(owner._id);
+    console.log("Clicked on profile, owner ID:", owner._id);
+    
     try {
       const response = await getUserChannelProfileApi(owner.username);
-      console.log("UserProfilePage");
-      console.log(response);
+      console.log("Profile API response:", response);
 
-      if (response.message === 200) {
-        navigate("/userProfile", { state: { userData: response.statusCode } });
+      if (response.message == 200) {
+        console.log("userProfile page:", response.statusCode);
+        navigate("/profile", { state: { userData: response.statusCode } });
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
