@@ -271,7 +271,7 @@ const getVideoById = asyncHandler(async (req, res) => {
 
   // Get video
   let video = await Video.findOne({
-    _id: new mongoose.Types.ObjectId(videoId), // Ensure videoId is converted to ObjectId
+    _id: videoId, // Ensure videoId is converted to ObjectId
   });
 
   // Check if video exists
@@ -306,8 +306,8 @@ const getVideoById = asyncHandler(async (req, res) => {
   let isSubscribed = await Subscription.aggregate([
     {
       $match: {
-        subscriber: new mongoose.Types.ObjectId(req.user._id),
-        channel: new mongoose.Types.ObjectId(video.owner),
+        subscriber: new mongoose.Types.ObjectId(req.user?._id),
+        channel: new mongoose.Types.ObjectId(video?.owner),
       },
     },
   ]);

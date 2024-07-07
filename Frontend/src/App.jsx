@@ -31,6 +31,7 @@ import {
 import UserProfile from "./pages/UserProfile";
 import { currentUserAction } from "./store/actions/authActions";
 import { getCurrentUserApi } from "./api/authApi";
+import PrivateRoute from "./utils/PrivateRoute";
 
 function AppContent() {
   const location = useLocation();
@@ -39,12 +40,8 @@ function AppContent() {
 
   const fetchCurrentUser = async () => {
     const h1 = await dispatch(currentUserAction());
-    // const h = await getCurrentUserApi();
-    // const h2 = await currentUserAction();
-    console.log("h2")
-    // console.log(h)
-    console.log(h1)
-    // console.log(h2)
+    console.log("h2");
+    console.log(h1);
   };
 
   useEffect(() => {
@@ -61,25 +58,116 @@ function AppContent() {
 
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/tweet" element={<Tweet />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/playlist" element={<Playlist />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/subscribed" element={<Subscribed />} />
-        <Route path="/userProfile" element={<UserProfile />} />
         <Route path="/landing-page" element={<LandingPage />} />
-        <Route path="/history" element={<WatchHistoryPage />} />
-        <Route path="/video-listing" element={<VideoListing />} />
-        <Route path="/liked-videos" element={<LikedVideosPage />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/individual-page" element={<IndividualPage />} />
-        <Route path="/opened-playlist" element={<OpenedPlaylist />} />
-        <Route path="/change-password" element={<ChangePasswordPage />} />
-        <Route path="/upload-video-popup" element={<UploadVideoPopUp />} />
-        <Route path="/edit-channel-info" element={<EditChannelInfoPage />} />
         <Route path="/terms-and-condition" element={<TermsAndCondition />} />
-        <Route path="/edit-personal-info" element={<EditPersonalInfoPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/video-listing" element={<VideoListing />} />
+        <Route path="/individual-page" element={<IndividualPage />} />
+        <Route
+          path="/tweet"
+          element={
+            <PrivateRoute>
+              <Tweet />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/playlist"
+          element={
+            <PrivateRoute>
+              <Playlist />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/subscribed"
+          element={
+            <PrivateRoute>
+              <Subscribed />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/userProfile"
+          element={
+            <PrivateRoute>
+              <UserProfile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            <PrivateRoute>
+              <WatchHistoryPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/liked-videos"
+          element={
+            <PrivateRoute>
+              <LikedVideosPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/opened-playlist"
+          element={
+            <PrivateRoute>
+              <OpenedPlaylist />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/change-password"
+          element={
+            <PrivateRoute>
+              <ChangePasswordPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/upload-video-popup"
+          element={
+            <PrivateRoute>
+              <UploadVideoPopUp />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/edit-channel-info"
+          element={
+            <PrivateRoute>
+              <EditChannelInfoPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/edit-personal-info"
+          element={
+            <PrivateRoute>
+              <EditPersonalInfoPage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
       {!hideHeaderAndFooter && <Footer />}
     </div>

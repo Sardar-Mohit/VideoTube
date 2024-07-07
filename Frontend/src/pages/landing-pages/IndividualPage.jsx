@@ -1,6 +1,7 @@
-import { allVideos, videoToPlay } from "@/api/videoApi";
+import useTimeHook from "@/hooks/useTimeHook";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { allVideos, videoToPlay } from "@/api/videoApi";
 import { useReactionsCountHook } from "@/hooks/useReactionsCountHook";
 import {
   addCommentToVideoApi,
@@ -12,13 +13,12 @@ import {
   VideoPlaying,
   VideoSuggestion,
 } from "@/components";
-import useTimeHook from "@/hooks/useTimeHook";
 
 const IndividualPage = () => {
+  const location = useLocation();
   const [video, setVideo] = useState([]);
   const [comments, setComments] = useState([]);
   const [commentContent, setCommentContent] = useState([]);
-  const location = useLocation();
   const [suggestionVideos, setSuggestionVideos] = useState([]);
 
   const fetchSuggestionVideos = async () => {
@@ -26,28 +26,39 @@ const IndividualPage = () => {
       const request = await allVideos();
       const response = request.statusCode;
       const allVideosData = response.reverse();
-  
+
       // Shuffle the array
       for (let i = allVideosData.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [allVideosData[i], allVideosData[j]] = [allVideosData[j], allVideosData[i]];
+        [allVideosData[i], allVideosData[j]] = [
+          allVideosData[j],
+          allVideosData[i],
+        ];
       }
-  
+
       setSuggestionVideos(allVideosData);
     } catch (error) {
       console.error("Error fetching suggestion videos:", error);
     }
   };
 
-  const fetchVideo = async () => {
-    const id = location.state;
-    const videoResponse = await videoToPlay(id);
-    const videoArray = videoResponse.statusCode.user[0];
-    setVideo(videoArray);
+  const fetchVideo = async (VideoId) => {
+    try {
+      const id = VideoId ? VideoId : location.state;
+      const videoResponse = await videoToPlay(id);
+      const videoArray = videoResponse.statusCode.user[0];
+      console.log("videoArray");
+      console.log(videoArray);
+      setVideo(videoArray);
+      fetchSuggestionVideos();
+      fetchVideoComments(VideoId);
+    } catch (error) {
+      console.error("Error fetching video:", error);
+    }
   };
 
-  const fetchVideoComments = async () => {
-    const id = location.state;
+  const fetchVideoComments = async (VideoId) => {
+    const id = VideoId ? VideoId : location.state;
     const videoResponse = await getCommentsByVideoIdApi(id);
     const videoArray = videoResponse.statusCode.comments;
     setComments(videoArray);
@@ -73,8 +84,6 @@ const IndividualPage = () => {
 
   useEffect(() => {
     fetchVideo();
-    fetchSuggestionVideos();
-    fetchVideoComments();
   }, []);
 
   return (
@@ -164,6 +173,7 @@ const IndividualPage = () => {
                   time={useTimeHook(video.createdAt)}
                   author={video.ownerDetails.username}
                   authorImg={video.ownerDetails.avatar}
+                  redirectToIndividualPage={fetchVideo}
                 />
               ))}
             </div>

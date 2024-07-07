@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import useFormattedVideoDurationHook from "@/hooks/useFormattedVideoDurationHook";
 
 const VideoSuggestion = ({
   id,
@@ -9,18 +9,15 @@ const VideoSuggestion = ({
   time,
   author,
   authorImg,
+  redirectToIndividualPage,
   altText,
 }) => {
-  const navigate = useNavigate();
-
-  const redirectToIndividualPage = () => {
-    navigate(`/individual-page`, { state: { id } });
-  };
+  const videoDuration = useFormattedVideoDurationHook(duration);
 
   return (
     <div
       className="w-full gap-x-2 my-[1px] pr-2 md:flex cursor-pointer"
-      onClick={redirectToIndividualPage}
+      onClick={() => redirectToIndividualPage(id)}
     >
       <div className="relative mb-2 w-full md:mb-0 md:w-5/12">
         <div className="w-full pt-[56%]">
@@ -32,7 +29,7 @@ const VideoSuggestion = ({
             />
           </div>
           <span className="absolute bottom-1 right-1 inline-block rounded bg-black px-1.5 text-sm">
-            {duration}
+            {videoDuration}
           </span>
         </div>
       </div>

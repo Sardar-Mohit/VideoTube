@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAction } from "@/store/actions/authActions";
 import {
@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { logoutUserApi } from "@/api/authApi";
 
 const Avatar = () => {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const Avatar = () => {
   async function logout() {
     try {
       await dispatch(logoutUserAction());
+      navigate("/");
     } catch (error) {
       console.error("Error logging in:", error);
     }
@@ -150,7 +152,7 @@ const Avatar = () => {
                       className="hover:text-red-400 focus:text-red-500"
                       onClick={handleLogoutConfirmation}
                     >
-                      Continue
+                      Log out
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
