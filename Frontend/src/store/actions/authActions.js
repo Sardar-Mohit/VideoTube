@@ -99,13 +99,13 @@ export const currentUserAction = createAsyncThunk(
       }
       
       console.log("currentUserAction");
-      console.log(response.statusCode.user);
+      console.log(response?.statusCode?.user);
 
-      return response.statusCode.user;
+      return response?.statusCode?.user;
     } catch (error) {
       console.log("error");
       console.log(error);
-      return rejectWithValue(error);
+      return rejectWithValue(null);
     }
   }
 );

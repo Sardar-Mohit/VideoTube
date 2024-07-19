@@ -1,12 +1,13 @@
 import ReactPlayer from "react-player";
 import useTimeHook from "@/hooks/useTimeHook";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleSubscriptionApi } from "@/api/subscriptionApi";
 import { addVideoToPlaylistApi, createPlaylistApi } from "@/api/playlistApi";
 import { toggleVideoDislikeApi, toggleVideoLikeApi } from "@/api/likeApi";
 import { getUserChannelProfileApi } from "@/api/authApi";
 import { useNavigate } from "react-router-dom";
+import { getUserPlaylistsAction } from "@/store/actions/playlistActions";
 
 const VideoPlaying = ({
   owner,
@@ -16,17 +17,23 @@ const VideoPlaying = ({
   fetchVideo,
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const selector = useSelector((state) => state.playist.user);
   const error = useSelector((state) => state.playist.error);
   const playlistArray = selector?.statusCode?.userPlaylists;
 
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
+  const user = useSelector((state) => state.auth.user);
   const [isSubscribed, setIsSubscribed] = useState(!!owner.isSubscribed[0]);
   const [AddVideoError, setAddVideoError] = useState([]);
   const [playlistData, setPlaylistData] = useState({
     name: "",
     description: "",
   });
+
+  console.log("selector");
+  console.log(selector);
+  console.log(playlistArray);
 
   const addVideoToSelectedPlaylists = async () => {
     try {
@@ -74,6 +81,8 @@ const VideoPlaying = ({
   };
 
   const handleSubmit = async (e) => {
+    console.log("user");
+    console.log(user);
     e.preventDefault();
     console.log(playlistData);
     if (!playlistData.name || !playlistData.description) {
@@ -84,10 +93,16 @@ const VideoPlaying = ({
     try {
       const request = await createPlaylistApi(playlistData);
       console.log(request);
-      fetchVideo();
     } catch (error) {
       console.error("Error creating playlist:", error);
     }
+
+    setPlaylistData({
+      name: "",
+      description: "",
+    });
+
+    dispatch(getUserPlaylistsAction(user._id));
   };
 
   const handleChange = (e) => {
@@ -133,14 +148,15 @@ const VideoPlaying = ({
 
   const userProfilePage = async () => {
     console.log("Clicked on profile, owner ID:", owner._id);
-    
+
     try {
-      const response = await getUserChannelProfileApi(owner.username);
+      let response = await getUserChannelProfileApi(owner.username);
+
       console.log("Profile API response:", response);
 
       if (response.message == 200) {
         console.log("userProfile page:", response.statusCode);
-        navigate("/profile", { state: { userData: response.statusCode } });
+        navigate(`/profile/${response.statusCode._id}`);
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -293,7 +309,7 @@ const VideoPlaying = ({
                       ))}
                     {AddVideoError && (
                       <p className="mb-1 text-sm text-red-500">
-                        {AddVideoError} {/* Displaying the error message */}
+                        {AddVideoError}
                       </p>
                     )}
                     <button
@@ -347,7 +363,10 @@ const VideoPlaying = ({
           </div>
         </div>
         <div className="mt-4 flex items-center justify-between">
-          <div className="flex items-center gap-x-4" onClick={userProfilePage}>
+          <div
+            className="flex items-center gap-x-4 cursor-pointer"
+            onClick={userProfilePage}
+          >
             <div className="mt-2 h-12 w-12 shrink-0">
               <img
                 src={owner.avatar}

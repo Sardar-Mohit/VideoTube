@@ -47,8 +47,10 @@ const IndividualPage = () => {
       const id = VideoId ? VideoId : location.state;
       const videoResponse = await videoToPlay(id);
       const videoArray = videoResponse.statusCode.user[0];
+      
       console.log("videoArray");
       console.log(videoArray);
+      
       setVideo(videoArray);
       fetchSuggestionVideos();
       fetchVideoComments(VideoId);

@@ -164,6 +164,18 @@ export const getUserChannelProfileApi = async (username) => {
   }
 };
 
+export const getUserChannelProfileByIdApi = async (userId) => {
+  try {
+    const request = await axios.get(
+      `http://localhost:8000/api/v1/users/ci/${userId}`
+    );
+    console.log(request.data);
+    return request.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Function to get user watch history
 export const getWatchHistoryApi = async () => {
   try {

@@ -40,7 +40,7 @@ function AppContent() {
 
   const fetchCurrentUser = async () => {
     const h1 = await dispatch(currentUserAction());
-    console.log("h2");
+    console.log("h1");
     console.log(h1);
   };
 
@@ -65,7 +65,7 @@ function AppContent() {
         <Route path="/video-listing" element={<VideoListing />} />
         <Route path="/individual-page" element={<IndividualPage />} />
         <Route
-          path="/tweet"
+          path="/tweet/:userId"
           element={
             <PrivateRoute>
               <Tweet />
@@ -73,7 +73,7 @@ function AppContent() {
           }
         />
         <Route
-          path="/profile"
+          path="/profile/:userId"
           element={
             <PrivateRoute>
               <Profile />
@@ -81,7 +81,7 @@ function AppContent() {
           }
         />
         <Route
-          path="/playlist"
+          path="/playlist/:userId"
           element={
             <PrivateRoute>
               <Playlist />
@@ -97,21 +97,21 @@ function AppContent() {
           }
         />
         <Route
-          path="/subscribed"
+          path="/subscribed/:userId"
           element={
             <PrivateRoute>
               <Subscribed />
             </PrivateRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/userProfile"
           element={
             <PrivateRoute>
               <UserProfile />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="/history"
           element={

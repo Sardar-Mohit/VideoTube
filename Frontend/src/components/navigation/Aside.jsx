@@ -1,9 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { SettingDropdown } from "../index";
+import { useSelector } from "react-redux";
 
 const Aside = () => {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <aside className="group fixed inset-x-0 bottom-0 z-40 w-full shrink-0 border-t border-white bg-[#121212] px-2 py-2 sm:absolute sm:inset-y-0 sm:max-w-[70px] sm:border-r sm:border-t-0 sm:py-6 sm:hover:max-w-[250px] lg:sticky lg:max-w-[250px]">
@@ -80,7 +82,10 @@ const Aside = () => {
             </span>
           </button>
         </li>
-        <li className="hidden sm:block" onClick={() => navigate("/profile")}>
+        <li
+          className="hidden sm:block"
+          onClick={() => navigate(`/profile/${user._id}`)}
+        >
           <button className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg
@@ -110,7 +115,7 @@ const Aside = () => {
             </span>
           </button>
         </li>
-        <li className="" onClick={() => navigate("/playlist")}>
+        <li className="" onClick={() => navigate(`/playlist/${user._id}`)}>
           <button className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg
@@ -133,7 +138,7 @@ const Aside = () => {
             </span>
           </button>
         </li>
-        <li className="" onClick={() => navigate("/subscribed")}>
+        <li className="" onClick={() => navigate(`/subscribed/${user._id}`)}>
           <button className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg

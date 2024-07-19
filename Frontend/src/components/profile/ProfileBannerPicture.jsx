@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCoverImageAction } from "@/store/actions/authActions";
 
-const ProfileBannerPicture = ({ banner }) => {
+const ProfileBannerPicture = ({ userData }) => {
   const dispatch = useDispatch();
-  const coverImage = useSelector((state) => state.auth.user?.coverImage);
+  const coverImage = userData?.coverImage;
+
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     console.log("file", file);
@@ -15,12 +16,14 @@ const ProfileBannerPicture = ({ banner }) => {
 
   return (
     <div className="relative min-h-[150px] w-full pt-[16.28%]">
-      <div className="absolute inset-0 overflow-hidden">
-        <img
-          src={coverImage ? coverImage : banner?.coverImage}
-          alt="cover-photo"
-          className="w-full h-full bg-center object-cover bg-no-repeat"
-        />
+      <div className={`absolute inset-0 overflow-hidden ${coverImage ? '' : 'bg-slate-400'}`}>
+        {coverImage ? (
+          <img
+            src={coverImage}
+            alt="cover-photo"
+            className="w-full h-full object-cover"
+          />
+        ) : null}
       </div>
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <input

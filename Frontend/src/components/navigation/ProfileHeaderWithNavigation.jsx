@@ -8,10 +8,10 @@ const ProfileHeaderWithNavigation = ({
 }) => {
   return (
     <>
-      <ProfileBannerPicture banner={userData} />
+      <ProfileBannerPicture userData={userData} />
       <div className="px-4 pb-4">
-        <ProfileBanner isItOwnersProfile={isItOwnersProfile} user={userData} />
-        <ProfileNavbar />
+        <ProfileBanner user={userData} isItOwnersProfile={isItOwnersProfile} />
+        <ProfileNavbar userData={userData} />
         {children}
       </div>
     </>

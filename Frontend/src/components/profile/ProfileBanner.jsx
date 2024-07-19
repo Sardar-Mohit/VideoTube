@@ -9,9 +9,11 @@ import {
   getSubscribedChannelsApi,
 } from "@/api/subscriptionApi";
 
-const ProfileBanner = ({ isItOwnersProfile }) => {
+const ProfileBanner = ({user, isItOwnersProfile }) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
+  console.log("user11")
+  console.log(user)
+
   const [subscribersCount, setSubscribersCount] = useState(0);
   const [subscribedChannelsCount, setSubscribedChannelsCount] = useState(0);
 

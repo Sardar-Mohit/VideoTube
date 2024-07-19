@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -94,11 +94,11 @@ const Register = () => {
     }
   };
 
-  useEffect(() => {
-    if (user) {
-      navigate("/landing-page");
-    }
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate("/landing-page");
+  //   }
+  // }, [user, navigate]);
 
   return (
     <div className="flex min-h-screen items-center justify-center py-12 px-6 lg:px-8">
