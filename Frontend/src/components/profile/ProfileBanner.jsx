@@ -9,10 +9,10 @@ import {
   getSubscribedChannelsApi,
 } from "@/api/subscriptionApi";
 
-const ProfileBanner = ({user, isItOwnersProfile }) => {
+const ProfileBanner = ({ user, isItOwnersProfile }) => {
   const dispatch = useDispatch();
-  console.log("user11")
-  console.log(user)
+  console.log("user11");
+  console.log(user);
 
   const [subscribersCount, setSubscribersCount] = useState(0);
   const [subscribedChannelsCount, setSubscribedChannelsCount] = useState(0);
@@ -95,7 +95,8 @@ const ProfileBanner = ({user, isItOwnersProfile }) => {
         <h1 className="font-bold text-xl">{user?.username}</h1>
         <p className="text-sm text-gray-400">{user?.email}</p>
         <p className="text-sm text-gray-400">
-          {subscribersCount} Subscribers&nbsp;·&nbsp;
+          {subscribersCount}{" "}
+          {subscribersCount > 1 ? "Subscribers" : "Subscriber"}&nbsp;·&nbsp;
           {subscribedChannelsCount} Subscribed
         </p>
       </div>

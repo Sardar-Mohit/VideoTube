@@ -94,7 +94,7 @@ const VideoListing = () => {
   return (
     <>
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
-        <Aside />
+        <Aside /> 
 
         <section className="flex flex-col w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
           <AlertDialog className="w-screen flex items-center justify-center rounded-l p-6 bg-white dark:bg-white-800">
@@ -102,7 +102,7 @@ const VideoListing = () => {
               <div className="flex justify-end items-center mx-4 mt-2 text-base">
                 <button
                   title="Search filters"
-                  className="text-white font-bold flex items-center justify-center gap-x-2 hover:bg-slate-500 focus:bg-slate-600 rounded-full px-1 py-1"
+                  className="text-white font-bold flex items-center justify-center gap-x-2 hover:bg-slate-600 focus:bg-slate-700 rounded-full px-4 py-1"
                 >
                   Filters
                   <svg
@@ -125,7 +125,10 @@ const VideoListing = () => {
                 </button>
               </div>
             </AlertDialogTrigger>
-            <AlertDialogContent style={{borderRadius : "10px"}} className="mx-4 rounded-xl w-full max-w-md lg:max-w-4xl p-4 bg-black text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700">
+            <AlertDialogContent
+              style={{ borderRadius: "10px" }}
+              className="mx-4 rounded-xl w-full max-w-md lg:max-w-4xl p-4 bg-black text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
+            >
               <div className="flex items-center justify-between">
                 <AlertDialogTitle className="text-lg sm:text-xl">
                   Search filters
