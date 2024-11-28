@@ -1,8 +1,8 @@
-# Video Streaming Backend
+# Video Streaming Platform
 
 ## Description
 
-This backend solution powers a dynamic video streaming application, offering a robust infrastructure and APIs to seamlessly manage video content, user authentication, and engagement features and alot more.
+This fullstack solution powers a dynamic video streaming application, offering a robust infrastructure and APIs to seamlessly manage video content, user authentication, and engagement features and alot more.
 
 ## Features
 
@@ -16,19 +16,21 @@ This backend solution powers a dynamic video streaming application, offering a r
 
 ## Technologies Used
 
-- **Node.js:** JavaScript runtime for server-side development.
-- **Express.js:** Web application framework for Node.js.
 - **MongoDB:** NoSQL database for storing user data, videos, and likes.
+- **Express.js:** Web application framework for Node.js.
+- **React.js:** JavaScript framework for frontend.
+- **Node.js:** JavaScript runtime for server-side development.
 - **Mongoose:** MongoDB object modeling for Node.js.
 - **JWT (JSON Web Tokens):** Token-based authentication for securing APIs.
+- **Shadcn:** UI library for building user interfaces.
 - **RESTful APIs:** Conventional and predictable APIs for easy integration.
 
 ## Prerequisites
 
 Before running the application, ensure you have the following installed:
 
-- Node.js and npm
-- MongoDB
+- **Node.js (v14 or later)**
+- **MongoDB**: Either a local MongoDB instance or a cloud-based solution like MongoDB Atlas.
 
 ## Setup
 
@@ -126,4 +128,4 @@ Before running the application, ensure you have the following installed:
 
 ## License
 
-This project is licensed under the Sardar Mohit Kumar.
+This project is built by Sardar Mohit Kumar.
