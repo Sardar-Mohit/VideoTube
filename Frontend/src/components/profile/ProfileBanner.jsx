@@ -62,7 +62,6 @@ const ProfileBanner = ({ user, isItOwnersProfile }) => {
       >
         <img
           src={user?.avatar}
-          alt="Channel-avatar"
           className="h-full w-full bg-center object-cover group-hover:opacity-40"
         />
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">

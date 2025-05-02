@@ -1,5 +1,5 @@
 import useFormatDateHook from "@/hooks/useFormatDateHook";
-import { deleteVideo } from "@/api/videoApi";
+import { deleteVideo, togglePublishStatus } from "@/api/videoApi";
 import { UploadVideoPopUp } from "@/components";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const Dashboard = () => {
-  const userData = useSelector((state) => state.auth.user);
-  const user = userData.statusCode.user;
+  const userData = useSelector((state) => state.auth);
+  const user = userData.user;
   const [uploadVideo, setUploadVideo] = useState(false);
   const [videos, setVideos] = useState(null);
   const [stats, setStats] = useState({
@@ -42,6 +42,7 @@ const Dashboard = () => {
     const request = await getChannelVideos();
     const response = request.statusCode;
     setVideos(response);
+    console.log(response)
   };
 
   const channelStats = async () => {
@@ -59,6 +60,15 @@ const Dashboard = () => {
     try {
       const request = await deleteVideo(videoId);
       console.log(request);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const publishFunc = async (videoId) => {
+    try {
+      const request = await togglePublishStatus(videoId);
+      fetchVideo()
     } catch (error) {
       throw error;
     }
@@ -205,12 +215,14 @@ const Dashboard = () => {
                               {video.isPublished ? (
                                 <input
                                   type="checkbox"
+                                  onClick={() => publishFunc(video._id)}
                                   id="vid-pub-1"
                                   className="peer sr-only"
                                   defaultChecked={true}
                                 />
                               ) : (
                                 <input
+                                  onClick={() => publishFunc(video._id)}
                                   type="checkbox"
                                   id="vid-pub-1"
                                   className="peer sr-only"
@@ -247,7 +259,10 @@ const Dashboard = () => {
                         <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
                           <div className="flex justify-center gap-4">
                             <span className="inline-block rounded-xl bg-green-200 px-1.5 py-0.5 text-green-700">
-                              {useReactionsCountHook(video.videosReactions, "likedBy")}{" "}
+                              {useReactionsCountHook(
+                                video.videosReactions,
+                                "likedBy"
+                              )}{" "}
                               likes
                             </span>
                             <span className="inline-block rounded-xl bg-red-200 px-1.5 py-0.5 text-red-700">

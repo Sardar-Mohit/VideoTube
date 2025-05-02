@@ -20,7 +20,6 @@ const ProfileBannerPicture = ({ userData }) => {
         {coverImage ? (
           <img
             src={coverImage}
-            alt="cover-photo"
             className="w-full h-full object-cover"
           />
         ) : null}

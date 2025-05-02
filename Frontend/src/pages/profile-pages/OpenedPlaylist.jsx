@@ -7,11 +7,10 @@ import {
 } from "@/components";
 import useTimeHook from "@/hooks/useTimeHook";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const OpenedPlaylist = () => {
-  const location = useLocation();
-  const id = location.state;
+  let { playlistId } = useParams();
   const [data, setData] = useState({
     playlistData: null,
     videosData: [],
@@ -19,7 +18,7 @@ const OpenedPlaylist = () => {
   });
 
   const getPlaylistData = async () => {
-    const request = await getPlaylistByIdApi(id);
+    const request = await getPlaylistByIdApi(playlistId);
     const response = request.statusCode.getPlaylistData[0];
 
     setData({

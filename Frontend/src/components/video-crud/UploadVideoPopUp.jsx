@@ -46,29 +46,24 @@ const UploadVideoPopUp = ({ close }) => {
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-black/50">
       <form
         onSubmit={submitForm}
-        className="bg-gray-800 rounded-lg w-full max-w-lg p-8"
+        className=" bg-black text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl w-full max-w-lg p-8"
         encType="multipart/form-data"
       >
         <div className="text-xl font-semibold text-white mb-4 flex items-center justify-between">
           <h2>Upload Video</h2>
-          <h2 className="cursor-pointer text-red-600" onClick={close}>
+          <h2 className="cursor-pointer " onClick={close}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              x="0px"
-              y="0px"
-              width="36"
-              height="36"
-              viewBox="0 0 48 48"
+              enableBackground="new 0 0 24 24"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              focusable="false"
+              className="pointer-events-none w-full h-full"
             >
               <path
-                fill="#F44336"
-                d="M21.5 4.5H26.501V43.5H21.5z"
-                transform="rotate(45.001 24 24)"
-              ></path>
-              <path
-                fill="#F44336"
-                d="M21.5 4.5H26.5V43.501H21.5z"
-                transform="rotate(135.008 24 24)"
+                fill="white"
+                d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z"
               ></path>
             </svg>
           </h2>
@@ -81,7 +76,7 @@ const UploadVideoPopUp = ({ close }) => {
             type="file"
             id="upload-video"
             name="videoFile"
-            className="w-full bg-gray-700 rounded px-3 py-2 text-white"
+            className="w-full bg-white rounded px-3 py-2 text-black cursor-pointer"
             onChange={handleChange}
             required
           />
@@ -94,7 +89,7 @@ const UploadVideoPopUp = ({ close }) => {
             type="file"
             id="thumbnail"
             name="thumbnail"
-            className="w-full bg-gray-700 rounded px-3 py-2 text-white"
+            className="w-full bg-white rounded px-3 py-2 text-black cursor-pointer"
             onChange={handleChange}
             required
           />
@@ -107,7 +102,7 @@ const UploadVideoPopUp = ({ close }) => {
             type="text"
             id="title"
             name="title"
-            className="w-full bg-gray-700 rounded px-3 py-2 text-white"
+            className="w-full bg-white rounded px-3 py-2 text-black"
             onChange={handleChange}
             required
           />
@@ -119,7 +114,7 @@ const UploadVideoPopUp = ({ close }) => {
           <textarea
             id="desc"
             name="description"
-            className="w-full bg-gray-700 rounded px-3 py-2 text-white"
+            className="w-full bg-white rounded px-3 py-2 text-black"
             onChange={handleChange}
             required
           ></textarea>
@@ -133,15 +128,18 @@ const UploadVideoPopUp = ({ close }) => {
         {loading == false ? (
           <button
             type="submit"
-            className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition duration-300"
+            className="w-32 flex justify-center items-center bg-fuchsia-700 text-white px-3 py-2 rounded hover:bg-fuchsia-800 transition duration-300"
           >
             Upload
           </button>
         ) : (
-          <Button disabled size="xlg">
+          <button
+            type="submit"
+            className="w-32 flex items-center bg-slate-700 text-white px-3 py-2 rounded hover:bg-slate-800 transition duration-300"
+          >
             <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
             Please wait
-          </Button>
+          </button>
         )}
       </form>
     </div>

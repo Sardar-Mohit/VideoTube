@@ -59,7 +59,6 @@ const Avatar = () => {
         <DropdownMenuTrigger asChild>
           <div
             className="mb-8 mt-auto px-4 sm:mb-0 sm:mt-0 sm:px-0"
-            onClick={() => navigate("/profile")}
           >
             <div className="flex w-full gap-4 text-left sm:items-center">
               <img
@@ -90,7 +89,7 @@ const Avatar = () => {
           <DropdownMenuGroup>
             <DropdownMenuItem
               className="cursor-pointer font-[500]"
-              onClick={() => navigate("/profile")}
+              onClick={() => navigate(`/profile/${userObj._id}`)}
             >
               Profile
             </DropdownMenuItem>

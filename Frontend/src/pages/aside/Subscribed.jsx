@@ -29,7 +29,7 @@ const Subscribed = () => {
             <ChannelCardInSubscribed key={channel._id} channel={channel} />
           ))}
           {channels.length === 0 && (
-            <section className="w-full  h-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
+            <section className="w-full mt-12  h-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
               <div className="flex items-center justify-center">
                 <div className="w-full max-w-sm text-center">
                   <h5 className="mb-2 font-semibold">

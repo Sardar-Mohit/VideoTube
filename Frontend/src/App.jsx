@@ -104,14 +104,6 @@ function AppContent() {
             </PrivateRoute>
           }
         />
-        {/* <Route
-          path="/userProfile"
-          element={
-            <PrivateRoute>
-              <UserProfile />
-            </PrivateRoute>
-          }
-        /> */}
         <Route
           path="/history"
           element={
@@ -129,7 +121,7 @@ function AppContent() {
           }
         />
         <Route
-          path="/opened-playlist"
+          path="/opened-playlist/:playlistId"
           element={
             <PrivateRoute>
               <OpenedPlaylist />
