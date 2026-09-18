@@ -1,6 +1,4 @@
-import React from "react";
-
-const DashboardTableRow = ({}) => {
+const DashboardTableRow = () => {
   return (
     <>
       <h1>heellloo</h1>

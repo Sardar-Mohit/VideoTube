@@ -2,7 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-select option {
-    background-color: black;
-    color: white;
+:root {
+  --bgColor: #4b5563;
+  --primaryBg: #4338CA;
+  --primaryBgHover: #3730A3;
+  --primaryBgFocus: #312E81;
+  --textWhite : #ffffff;
+  --textWhiteHover : #3730A3;
 }
+

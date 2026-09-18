@@ -1,4 +1,3 @@
-import React from "react";
 import { ProfileBanner, ProfileBannerPicture, ProfileNavbar } from "..";
 
 const ProfileHeaderWithNavigation = ({
@@ -8,10 +7,19 @@ const ProfileHeaderWithNavigation = ({
 }) => {
   return (
     <>
-      <ProfileBannerPicture userData={userData} />
+      <ProfileBannerPicture
+        userData={userData}
+        isItOwnersProfile={isItOwnersProfile}
+      />
+
       <div className="px-4 pb-4">
-        <ProfileBanner user={userData} isItOwnersProfile={isItOwnersProfile} />
+        <ProfileBanner
+          user={userData}
+          isItOwnersProfile={isItOwnersProfile}
+        />
+
         <ProfileNavbar userData={userData} />
+
         {children}
       </div>
     </>

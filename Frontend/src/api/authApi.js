@@ -1,5 +1,4 @@
-import axios from "axios";
-axios.defaults.withCredentials = true;
+import axios from "axios"; 
 
 // Function to register
 export const registerUserApi = async (userData) => {
@@ -13,6 +12,7 @@ export const registerUserApi = async (userData) => {
     );
     console.log("request.data");
     console.log(request.data);
+
     return request.data;
   } catch (error) {
     throw error;
@@ -83,7 +83,6 @@ export const getCurrentUserApi = async () => {
   try {
     const request = await axios.get(
       "http://localhost:8000/api/v1/users/current-user",
-      {},
       {
         withCredentials: true,
       }
@@ -94,7 +93,7 @@ export const getCurrentUserApi = async () => {
     
     return request.data;
   } catch (error) {
-    if (error.request.status == 401) {
+    if (error.request?.status == 401) {
       return null;
     }
   }
@@ -180,7 +179,10 @@ export const getUserChannelProfileByIdApi = async (userId) => {
 export const getWatchHistoryApi = async () => {
   try {
     const request = await axios.get(
-      "http://localhost:8000/api/v1/users/history"
+      "http://localhost:8000/api/v1/users/history",
+       {
+        withCredentials: true,
+      }
     );
     console.log(request.data);
     return request.data;

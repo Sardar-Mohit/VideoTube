@@ -16,12 +16,12 @@ const router = Router();
 
 // Routes accessible without login
 router.get("/", getAllVideos);
-router.get("/:videoId", getVideoById);
 
 // Routes that require JWT verification
 router.use(verifyJWT);
 
 // Routes accessible after login
+router.get("/:videoId", getVideoById);
 router.post(
   "/",
   upload.fields([

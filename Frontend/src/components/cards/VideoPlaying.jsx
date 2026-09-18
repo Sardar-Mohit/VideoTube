@@ -24,12 +24,14 @@ const VideoPlaying = ({
 
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
   const user = useSelector((state) => state.auth.user);
-  const [isSubscribed, setIsSubscribed] = useState(!!owner.isSubscribed[0]);
+  const isSubscribed = !!owner?.isSubscribed?.[0];
   const [AddVideoError, setAddVideoError] = useState([]);
   const [playlistData, setPlaylistData] = useState({
     name: "",
     description: "",
   });
+
+  const isMyPage = user?._id === owner?._id;
 
   console.log("selector");
   console.log(selector);
@@ -65,16 +67,20 @@ const VideoPlaying = ({
   };
 
   const handleSubscribe = async () => {
-    if (!owner || !owner._id) {
+    if (!owner?._id) {
       return false;
     }
 
     try {
-      const response = await toggleSubscriptionApi(owner._id);
-      console.log(response);
+ const response = await toggleSubscriptionApi(owner._id);
+    console.log("Subscription response:", response);
 
-      setIsSubscribed((prevState) => !prevState);
-      fetchVideo();
+    await fetchVideo(videoId);
+
+    // This log is still from the current render,
+    // so don't expect owner to update immediately here.
+    console.log("OWNER SUBSCRIPTION AFTER FETCH:", owner?.isSubscribed);
+    console.log("IS SUBSCRIBED AFTER FETCH:", isSubscribed);
     } catch (error) {
       console.error("Error toggling subscription:", error);
     }
@@ -124,7 +130,7 @@ const VideoPlaying = ({
     try {
       const response = await toggleVideoLikeApi(videoId);
       console.log("Like", response); // Ensure response is logged
-      fetchVideo(); // Fetch updated video data after liking
+      fetchVideo(videoId); // Fetch updated video data after liking
     } catch (error) {
       console.error("Error liking video:", error);
     }
@@ -140,7 +146,7 @@ const VideoPlaying = ({
       const response = await toggleVideoDislikeApi(videoId);
       console.log("dislike");
       console.log(response);
-      fetchVideo();
+      fetchVideo(videoId);
     } catch (error) {
       console.error("Error liking video:", error);
     }
@@ -199,9 +205,8 @@ const VideoPlaying = ({
                 <button
                   name="like"
                   onClick={handleLike}
-                  className="text-white group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
+                  className="text-white group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10"
                   data-like={likesCount}
-                  data-like-alt={Number(likesCount) + 1}
                 >
                   <span className="inline-block w-5 group-focus/btn:text-[#ffffff]">
                     <svg
@@ -221,12 +226,9 @@ const VideoPlaying = ({
                   </span>
                 </button>
                 <button
-                  className={
-                    "group/btn flex items-center gap-x-2 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
-                  }
+                  className="group/btn flex items-center gap-x-2 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10"
                   onClick={handleDislike}
                   data-like={dislikesCount}
-                  data-like-alt={Number(dislikesCount) + 1}
                 >
                   <span className="inline-block w-5 group-focus/btn:fill-[#ff00008c]">
                     <svg
@@ -381,31 +383,32 @@ const VideoPlaying = ({
               </p>
             </div>
           </div>
-
-          <div className="block">
-            <button
-              onClick={handleSubscribe}
-              className="group/btn mr-1 flex w-full items-center gap-x-2 bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto"
-            >
-              <span className="inline-block w-5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
-                  />
-                </svg>
-              </span>
-              <span>{isSubscribed ? "Subscribed" : "Subscribe"}</span>
-            </button>
-          </div>
+          {!isMyPage && (
+            <div className="block">
+              <button
+                onClick={handleSubscribe}
+                className="group/btn mr-1 flex w-full items-center gap-x-2 bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto"
+              >
+                <span className="inline-block w-5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+                    />
+                  </svg>
+                </span>
+                <span>{isSubscribed ? "Subscribed" : "Subscribe"}</span>
+              </button>
+            </div>
+          )}
         </div>
         <hr className="my-4 border-white" />
         <div className="h-5 overflow-y-scroll group-focus:h-auto">

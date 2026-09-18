@@ -16,10 +16,10 @@ import {
 
 const IndividualPage = () => {
   const location = useLocation();
-  const [video, setVideo] = useState([]);
-  const [comments, setComments] = useState([]);
-  const [commentContent, setCommentContent] = useState([]);
-  const [suggestionVideos, setSuggestionVideos] = useState([]);
+const [video, setVideo] = useState([]);
+const [comments, setComments] = useState([]);
+const [commentContent, setCommentContent] = useState("");
+const [suggestionVideos, setSuggestionVideos] = useState([]);
 
   const fetchSuggestionVideos = async () => {
     try {
@@ -45,40 +45,46 @@ const IndividualPage = () => {
   const fetchVideo = async (VideoId) => {
     try {
       const id = VideoId ? VideoId : location.state;
+
       const videoResponse = await videoToPlay(id);
       const videoArray = videoResponse.statusCode.user[0];
-      
-      console.log("videoArray");
-      console.log(videoArray);
-      
+
       setVideo(videoArray);
       fetchSuggestionVideos();
-      fetchVideoComments(VideoId);
+      fetchVideoComments(id);
     } catch (error) {
       console.error("Error fetching video:", error);
     }
   };
 
-  const fetchVideoComments = async (VideoId) => {
-    const id = VideoId ? VideoId : location.state;
-    const videoResponse = await getCommentsByVideoIdApi(id);
-    const videoArray = videoResponse.statusCode.comments;
-    setComments(videoArray);
-    console.log("comments");
-    console.log(videoArray);
+  const fetchVideoComments = async (videoId) => {
+    try {
+      const videoResponse = await getCommentsByVideoIdApi(videoId);
+      const videoArray = videoResponse.statusCode.comments;
+
+      console.log("Fetching comments for:", videoId);
+      console.log("comments:", videoArray);
+
+      setComments(videoArray);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
   };
 
   const createComment = async (event) => {
     event.preventDefault();
 
     try {
-      const id = location.state;
+      const id = video.videos[0]._id;
+
       const newComment = await addCommentToVideoApi(id, {
         content: commentContent,
       });
+
       console.log("Comment created:", newComment);
+
       setCommentContent("");
-      fetchVideoComments();
+      fetchVideoComments(id);
     } catch (error) {
       console.error("Error creating comment:", error);
     }
@@ -148,6 +154,7 @@ const IndividualPage = () => {
                       key={comment._id}
                       commentId={comment._id}
                       ownerId={comment.owner}
+                      videoId={video.videos[0]._id}
                       fetchVideoComments={fetchVideoComments}
                       timeAgo={useTimeHook(comment.createdAt)}
                       comment={comment.content}

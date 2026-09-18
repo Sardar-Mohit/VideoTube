@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input, Logo, FileUpload } from "@/components/index";
+import { Input, Logo } from "@/components/index";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
+import "../../index.css";
 import {
   loginUserAction,
   userRegistrationAction,
@@ -66,23 +67,30 @@ const Register = () => {
       formData.append("avatar", data.avatar[0]);
       formData.append("coverImage", data.coverImage[0]);
 
+
       // Dispatch the registration action and await its completion
       const registrationResponse = await dispatch(
         userRegistrationAction(formData)
-      );
+      ).unwrap();
+
+      console.log("registrationResponse:", registrationResponse);
 
       // Check if the registration was successful
-      if (registrationResponse.payload && registrationResponse.payload._id) {
+      if (registrationResponse && registrationResponse?._id) {
         // Prepare form data for login
         const loginFormData = {
           username: data.username,
           password: data.password,
         };
+        console.log("2nd")
 
         // Dispatch the login action
         const loginResponse = await dispatch(loginUserAction(loginFormData));
+        console.log(loginResponse);
 
-        // Check if the login was successful
+        console.log("loginResponse:", loginResponse);
+        console.log("3rd");
+
         if (loginResponse.payload && loginResponse.payload._id) {
           navigate("/landing-page");
         }
@@ -94,19 +102,13 @@ const Register = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate("/landing-page");
-  //   }
-  // }, [user, navigate]);
-
   return (
     <div className="flex min-h-screen items-center justify-center py-12 px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 p-10 bg-gray-50 rounded-xl shadow-lg">
+      <div className="max-w-md w-full space-y-8 p-10 bg-[var(--bgColor)] rounded-xl shadow-lg">
         <div className="flex justify-center">
           <Logo biggerDeviceWidth={28} width={28} />
         </div>
-        <h2 className="mt-4 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-4 text-center text-3xl font-bold leading-9 tracking-tight text-[var(--textWhite)]">
           Register to create an account
         </h2>
         <form
@@ -277,7 +279,10 @@ const Register = () => {
             {button === false ? (
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md
+                bg-[var(--primaryBg)]  px-3 py-1.5 text-sm font-semibold leading-6 hover:text-[var(--textWhite)] 
+                 shadow-sm hover:bg-[var(--primaryBgHover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                  focus-visible:outline-[var(--primaryBgFocus)]"
               >
                 Sign in
               </button>
@@ -289,10 +294,10 @@ const Register = () => {
             )}
           </div>
 
-          <p className="mt-4 text-center text-sm text-gray-500">
+          <p className="mt-4 text-center text-sm text-[var(--textWhite)]">
             Already a member? &nbsp;
             <span
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"
+              className="font-semibold leading-6 text-[var(--textWhite)] hover:text-[var(--textWhiteHover)]  cursor-pointer"
               onClick={() => navigate("/")}
             >
               Login

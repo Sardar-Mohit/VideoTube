@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input, Logo } from "@/components/index";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginUserAction } from "@/store/actions/authActions";
+import "../../index.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -61,11 +62,11 @@ const Login = () => {
   return (
     <>
       <div className="flex min-h-screen items-center justify-center py-12 px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8 p-10 bg-gray-700 rounded-xl shadow-lg">
+        <div className="max-w-md w-full space-y-8 p-10 bg-[var(--bgColor)] rounded-xl shadow-lg">
           <div className="flex justify-center">
             <Logo biggerDeviceWidth={28} width={28} />
           </div>
-          <h2 className="mt-4 text-center text-3xl font-bold leading-9 tracking-tight text-white">
+          <h2 className="mt-4 text-center text-3xl font-bold leading-9 tracking-tight text-[var(--textWhite)]">
             {" "}
             Sign in to your account
           </h2>
@@ -100,7 +101,10 @@ const Login = () => {
               {button == false ? (
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="flex w-full justify-center rounded-md bg-[var(--primaryBg)] px-3 py-1.5 text-sm 
+                  font-semibold leading-6 text-[var(--textWhite)] shadow-sm hover:bg-[var(--primaryBgHover)]
+                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                    focus-visible:outline-[var(--primaryBgFocus)]"
                 >
                   Sign in
                 </button>
@@ -113,10 +117,10 @@ const Login = () => {
             </div>
           </form>
 
-          <p className="mt-4 text-center text-sm text-gray-500">
+          <p className="mt-4 text-center text-sm text-[var(--textWhite)]">
             Not a member? &nbsp;
             <span
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"
+              className="font-semibold leading-6 text-[var(--textWhite)] hover:text-[var(--textWhiteHover)] cursor-pointer"
               onClick={() => {
                 navigate("/register");
               }}

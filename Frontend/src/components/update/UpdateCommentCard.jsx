@@ -4,10 +4,11 @@ import { Button } from "../ui/button";
 import { updateCommentApi } from "@/api/commentsApi";
 
 const UpdateCommentCard = ({
-  close,
-  commentId,
-  comment,
   fetchVideoComments,
+  videoId,
+  commentId,
+  close,
+  comment,
 }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,8 @@ const UpdateCommentCard = ({
 
       const request = await updateCommentApi(commentId, commentData);
       console.log(request);
-      fetchVideoComments();
+
+      await fetchVideoComments(videoId);
       close();
     } catch (error) {
       if (error.response === 500) {

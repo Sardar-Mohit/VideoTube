@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutUserAction } from "@/store/actions/authActions";
@@ -31,6 +31,7 @@ const SettingDropdown = ({ display = false }) => {
   async function logout() {
     try {
       await dispatch(logoutUserAction());
+      navigate("/");
     } catch (error) {
       console.error("Error logging in:", error);
     }
@@ -97,12 +98,6 @@ const SettingDropdown = ({ display = false }) => {
               onClick={() => navigate("/edit-personal-info")}
             >
               Edit Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer font-[500]"
-              onClick={() => navigate("/edit-channel-info")}
-            >
-              Edit Channel
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuItem

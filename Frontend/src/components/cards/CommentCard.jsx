@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -20,15 +19,15 @@ const CommentCard = ({
   ownerId,
   comment,
   likeCount,
+  videoId,
   altText,
   timeAgo,
-  fullName,
   username,
   commentId,
   fetchVideoComments,
 }) => {
   const user = useSelector((state) => state.auth.user);
-  const userId = user?.statusCode?.user?._id;
+  const userId = user?._id;
   const [updateComment, setUpdateComment] = useState(false);
 
   const handleUpdateCommentToggle = () => {
@@ -39,7 +38,7 @@ const CommentCard = ({
     try {
       const deletedComment = await deleteCommentApi(commentId);
       console.log("Comment deleted:", deletedComment);
-      fetchVideoComments();
+      fetchVideoComments(videoId);
     } catch (error) {
       console.error("Error deleting Comment:", error);
     }
@@ -55,7 +54,7 @@ const CommentCard = ({
     try {
       const response = await toggleCommentLikeApi(commentId);
       console.log("Comment", response);
-      fetchVideoComments();
+      fetchVideoComments(videoId);
     } catch (error) {
       console.error("Error liking comment:", error);
     }
@@ -80,9 +79,8 @@ const CommentCard = ({
             <p className="mt-0 text-sm cursor-text">{comment}</p>
             <div className="flex mt-2">
               <button
-                className="group inline-flex items-center gap-x-1 outline-none after:content-[attr(data-like-count)] focus:after:content-[attr(data-like-count-alt)]"
+                className="group inline-flex items-center gap-x-1 outline-none after:content-[attr(data-like-count)]"
                 data-like-count={likeCount}
-                data-like-count-alt={Number(likeCount) + 1}
                 onClick={handleLike}
               >
                 <svg
@@ -91,7 +89,7 @@ const CommentCard = ({
                   strokeWidth="1.5"
                   stroke="currentColor"
                   aria-hidden="true"
-                  className="h-5 w-5 text-[#ffffff] group-focus:text-red-500"
+                  className="h-5 w-5 text-[#ffffff]"
                 >
                   <path
                     strokeLinecap="round"
@@ -165,6 +163,7 @@ const CommentCard = ({
             {updateComment && (
               <UpdateCommentCard
                 fetchVideoComments={fetchVideoComments}
+                videoId={videoId}
                 commentId={commentId}
                 close={handleUpdateCommentToggle}
                 comment={comment}

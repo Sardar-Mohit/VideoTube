@@ -1,6 +1,4 @@
-import React from "react";
-
-const NoVideosAvailable = ({ title = "", description = "" }) => {
+const NoVideosAvailable = ({ title = "No content", description = "This page doesnt have any content right now" }) => {
   return (
     <section className="w-full h-full items-center flex justify-center sm:ml-[70px] sm:pb-0 lg:ml-0">
       <div className="flex h-full items-center justify-center">

@@ -1,8 +1,6 @@
-import { getCurrentUserApi, getUserChannelProfileApi } from "@/api/authApi";
+import { getCurrentUserApi } from "@/api/authApi";
 import {
-  Aside,
   PlaylistCard,
-  ProfileHeaderWithNavigation,
 } from "@/components/index";
 
 import useTimeHook from "@/hooks/useTimeHook";
@@ -15,65 +13,78 @@ import ProfilesWrapper from "./ProfilesWrapper";
 const Playlist = () => {
   const { userId } = useParams();
   const dispatch = useDispatch();
-  const [playlist, setPlaylist] = useState(null);
+
+  const [playlist, setPlaylist] = useState([]);
   const [userData, setUserData] = useState(null);
+
   const user = useSelector((state) => state.auth.user);
+
   const [isItOwnersProfile, setIsItOwnersProfile] = useState(false);
 
   const getPlaylist = async () => {
     try {
       const request = await dispatch(getUserPlaylistsAction(userId));
+
       if (request.payload.message === 200) {
-        const playlistData = request?.payload?.statusCode?.userPlaylists;
+        const playlistData =
+          request?.payload?.statusCode?.userPlaylists || [];
+
         const response = playlistData.filter(
           (playlistItems) => playlistItems.videos.length > 0
         );
+
         setPlaylist(response);
-        if (response.length === 0) setPlaylist(null);
       }
     } catch (error) {
       console.error("Error fetching playlists:", error);
+      setPlaylist([]);
     }
   };
 
   const fetchUserDetails = async (userId) => {
-    const request = await getCurrentUserApi(userId);
-    const response = request.statusCode.user;
-    setUserData(response);
+    try {
+      const request = await getCurrentUserApi(userId);
+      const response = request?.statusCode?.user;
+
+      setUserData(response);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
   };
 
   useEffect(() => {
     if (userId) {
-      setIsItOwnersProfile(userId === user._id);
-      getPlaylist(userId);
+      setIsItOwnersProfile(userId === user?._id);
+      getPlaylist();
       fetchUserDetails(userId);
     } else {
       setIsItOwnersProfile(true);
     }
-  }, [userId, user._id]);
+  }, [userId, user?._id]);
 
   return (
     <ProfilesWrapper>
+      {/* Playlists */}
       <div className="grid grid-cols-[repeat(auto-fit,_minmax(240px,_1fr))] gap-4 pt-2 lg:grid-cols-[repeat(3,_minmax(240px,_1fr))] xl:grid-cols-[repeat(4,_minmax(240px,_1fr))]">
-        {playlist &&
-          playlist.length > 0 &&
-          playlist.map((playlistData) => (
-            <PlaylistCard
-              key={playlistData._id}
-              playlistId={playlistData._id}
-              thumbnail={playlistData.videoDetails[0].thumbnail || ""}
-              playlistTotalViews={playlistData.totalViews || 0}
-              videosLength={playlistData.videoDetails.length || 0}
-              createdAgo={useTimeHook(playlistData.createdAt) || ""}
-              title={playlistData.name || ""}
-              description={playlistData.description || ""}
-              subscribersCount={playlistData.subscribersCount || 0}
-            />
-          ))}
+        {playlist.map((playlistData) => (
+          <PlaylistCard
+            key={playlistData._id}
+            playlistId={playlistData._id}
+            thumbnail={playlistData.videoDetails[0]?.thumbnail || ""}
+            playlistTotalViews={playlistData.totalViews || 0}
+            videosLength={playlistData.videoDetails.length || 0}
+            createdAgo={useTimeHook(playlistData.createdAt) || ""}
+            title={playlistData.name || ""}
+            description={playlistData.description || ""}
+            subscribersCount={playlistData.subscribersCount || 0}
+            isItOwnersProfile={isItOwnersProfile}
+          />
+        ))}
       </div>
 
-      {playlist && playlist.length === 0 && (
-        <div className="flex w-full items-center justify-center p-4 my-16">
+      {/* No Playlists */}
+      {playlist.length === 0 && (
+        <div className="my-16 flex w-full items-center justify-center p-4">
           <div className="text-center">
             <p className="mb-3 w-full">
               <span className="inline-flex rounded-full bg-[#E4D3FF] p-2 text-[#AE7AFF]">
@@ -95,8 +106,14 @@ const Playlist = () => {
                 </span>
               </span>
             </p>
-            <h5 className="mb-2 font-semibold">No playlist created</h5>
-            <p>There are no playlists created on this channel.</p>
+
+            <h5 className="mb-2 font-semibold">
+              No playlist created
+            </h5>
+
+            <p>
+              There are no playlists created on this channel.
+            </p>
           </div>
         </div>
       )}

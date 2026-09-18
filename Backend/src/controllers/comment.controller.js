@@ -129,7 +129,7 @@ const deleteComment = asyncHandler(async (req, res) => {
   const { commentId } = req.params;
 
   let commentToDelete = await Comment.findByIdAndDelete({ _id: commentId });
-  if ((commentToDelete.length = 0)) {
+  if (!commentToDelete) {
     throw new ApiError(404, "Comment Doesn't Exists");
   }
 

@@ -337,6 +337,10 @@ const getVideoById = asyncHandler(async (req, res) => {
     },
   ]);
 
+  console.log("CURRENT USER:", req.user?._id);
+  console.log("VIDEO OWNER:", video?.owner);
+  console.log("IS SUBSCRIBED RESULT:", isSubscribed);
+
   return res
     .status(200)
     .json(new ApiResponse(200, { user }, "Video Found Successfully"));

@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateAvatarAction,
-  updateCoverImageAction,
-} from "@/store/actions/authActions";
+import { updateAvatarAction } from "@/store/actions/authActions";
 import {
   getSubscribersListApi,
   getSubscribedChannelsApi,
@@ -11,22 +8,29 @@ import {
 
 const ProfileBanner = ({ user, isItOwnersProfile }) => {
   const dispatch = useDispatch();
-  console.log("user11");
-  console.log(user);
+
+  const authUser = useSelector((state) => state.auth.user);
 
   const [subscribersCount, setSubscribersCount] = useState(0);
   const [subscribedChannelsCount, setSubscribedChannelsCount] = useState(0);
 
+  // Use Redux user for your own profile so the image updates immediately
+  const avatar = isItOwnersProfile ? authUser?.avatar : user?.avatar;
+
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
+
     if (file) {
       await dispatch(updateAvatarAction(file));
     }
   };
 
   const fetchSubscribersList = async () => {
+    if (!user?._id) return;
+
     try {
       const response = await getSubscribersListApi(user._id);
+
       if (response?.statusCode?.subscribersList) {
         setSubscribersCount(response.statusCode.subscribersList.length);
       }
@@ -36,8 +40,11 @@ const ProfileBanner = ({ user, isItOwnersProfile }) => {
   };
 
   const fetchSubscribedChannels = async () => {
+    if (!user?._id) return;
+
     try {
       const response = await getSubscribedChannelsApi(user._id);
+
       if (response?.statusCode?.subscribedChannelsList) {
         setSubscribedChannelsCount(
           response.statusCode.subscribedChannelsList.length
@@ -49,56 +56,75 @@ const ProfileBanner = ({ user, isItOwnersProfile }) => {
   };
 
   useEffect(() => {
-    console.log("User ID:", user?._id);
     fetchSubscribersList();
     fetchSubscribedChannels();
   }, [user?._id]);
 
   return (
     <div className="flex flex-wrap gap-4 pb-4 pt-6">
-      <span
-        onClick={() => document.getElementById("avatar").click()}
-        className="relative -mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full border-2 group cursor-pointer bg-black"
-      >
-        <img
-          src={user?.avatar}
-          className="h-full w-full bg-center object-cover group-hover:opacity-40"
-        />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <input
-            type="file"
-            id="avatar"
-            className="hidden"
-            onChange={handleAvatarChange}
+      {/* Avatar */}
+      {isItOwnersProfile ? (
+        <span
+          onClick={() => document.getElementById("avatar").click()}
+          className="group relative z-10 -mt-12 inline-block h-28 w-28 shrink-0 cursor-pointer overflow-hidden rounded-full border-2 bg-black"
+        >
+          <img
+            src={avatar}
+            alt={user?.username}
+            className="h-full w-full bg-center object-cover group-hover:opacity-40"
           />
-          <label className="inline-block h-10 w-10 cursor-pointer rounded-lg p-1 text-[#ae7aff] bg-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-              />
-            </svg>
-          </label>
-        </div>
-      </span>
 
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100">
+            <input
+              type="file"
+              id="avatar"
+              className="hidden"
+              onChange={handleAvatarChange}
+            />
+
+            <label className="inline-block h-10 w-10 cursor-pointer rounded-lg bg-white p-1 text-[#ae7aff]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                />
+              </svg>
+            </label>
+          </div>
+        </span>
+      ) : (
+        <span className="-mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full border-2 bg-black relative z-10">
+          <img
+            src={avatar}
+            alt={user?.username}
+            className="h-full w-full bg-center object-cover"
+          />
+        </span>
+      )}
+
+      {/* User information */}
       <div className="mr-auto inline-block">
-        <h1 className="font-bold text-xl">{user?.username}</h1>
+        <h1 className="text-xl font-bold">{user?.username}</h1>
+
         <p className="text-sm text-gray-400">{user?.email}</p>
+
         <p className="text-sm text-gray-400">
           {subscribersCount}{" "}
-          {subscribersCount > 1 ? "Subscribers" : "Subscriber"}&nbsp;·&nbsp;
+          {subscribersCount > 1 ? "Subscribers" : "Subscriber"}
+          &nbsp;·&nbsp;
           {subscribedChannelsCount} Subscribed
         </p>
       </div>
+
+      {/* Subscribe button for other profiles */}
       <div className="inline-block">
         {!isItOwnersProfile && (
           <div className="inline-flex min-w-[145px] justify-end">
@@ -119,8 +145,11 @@ const ProfileBanner = ({ user, isItOwnersProfile }) => {
                   />
                 </svg>
               </span>
+
               <span className="group-focus/btn:hidden">Subscribe</span>
-              <span className="hidden group-focus/btn:block">Subscribed</span>
+              <span className="hidden group-focus/btn:block">
+                Subscribed
+              </span>
             </button>
           </div>
         )}

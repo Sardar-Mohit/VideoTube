@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useTimeHook from "@/hooks/useTimeHook";
 import { allSearchVideos } from "@/api/videoApi";
 import {
@@ -30,10 +30,7 @@ const VideoListing = () => {
   });
 
   const handleSearch = async (params) => {
-    const { page, limit, sortBy, sortType, duration, uploadDate } = params;
-
-    console.log("params");
-    console.log(params);
+    const { page, limit, sortBy, duration, uploadDate } = params;
 
     const request = await allSearchVideos({
       page: page || 1,
@@ -47,6 +44,7 @@ const VideoListing = () => {
 
     console.log("videos");
     console.log(request);
+
     if (request.message === 200) {
       navigate("/video-listing", {
         state: { result: request, query: query },
@@ -64,6 +62,7 @@ const VideoListing = () => {
       };
       console.log(value);
       console.log(updatedCells);
+
       handleSearch(updatedCells);
       return updatedCells;
     });
@@ -71,6 +70,7 @@ const VideoListing = () => {
 
   const handleClear = (column, event) => {
     event.stopPropagation();
+
     setSelectedCells((prevSelectedCells) => {
       const updatedCells = {
         ...prevSelectedCells,
@@ -78,6 +78,7 @@ const VideoListing = () => {
       };
       console.log(column);
       console.log(updatedCells);
+
       handleSearch(updatedCells);
       return updatedCells;
     });

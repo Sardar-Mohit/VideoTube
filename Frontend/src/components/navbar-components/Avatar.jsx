@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAction } from "@/store/actions/authActions";
 import {
@@ -22,7 +22,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { logoutUserApi } from "@/api/authApi";
 
 const Avatar = () => {
   const navigate = useNavigate();
@@ -109,12 +108,6 @@ const Avatar = () => {
               onClick={() => navigate("/edit-personal-info")}
             >
               Edit Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer font-[500]"
-              onClick={() => navigate("/edit-channel-info")}
-            >
-              Edit Channel
             </DropdownMenuItem>
           </DropdownMenuGroup>
 

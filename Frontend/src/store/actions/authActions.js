@@ -25,7 +25,9 @@ export const updateAvatarAction = createAsyncThunk(
         return rejectWithValue(response.message);
       }
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
     }
   }
 );
@@ -43,7 +45,9 @@ export const updateCoverImageAction = createAsyncThunk(
         return rejectWithValue(response.message);
       }
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
     }
   }
 );
@@ -57,7 +61,9 @@ export const userRegistrationAction = createAsyncThunk(
       const user = response.statusCode; // Adjust this based on the actual response structure
       return user;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
     }
   }
 );
@@ -72,7 +78,9 @@ export const loginUserAction = createAsyncThunk(
       console.log("log", response);
       return response.statusCode.user; // Return updated user data
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
     }
   }
 );
@@ -84,7 +92,9 @@ export const changePasswordAction = createAsyncThunk(
       const response = await changePasswordApi(userData);
       return response.statusCode.user; // Return updated user data
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
     }
   }
 );
@@ -97,7 +107,7 @@ export const currentUserAction = createAsyncThunk(
       if (response === null) {
         return null;
       }
-      
+
       console.log("currentUserAction");
       console.log(response?.statusCode?.user);
 
@@ -117,7 +127,9 @@ export const logoutUserAction = createAsyncThunk(
       const response = await logoutUserApi(userData);
       return response.statusCode.user; // Return updated user data
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
     }
   }
 );
@@ -129,7 +141,9 @@ export const updateUserAction = createAsyncThunk(
       const response = await updateAccountDetailsApi(userData);
       return response.statusCode.user; // Return updated user data
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
     }
   }
 );

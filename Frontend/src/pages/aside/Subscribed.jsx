@@ -1,35 +1,48 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { getSubscribedChannelsApi } from "@/api/subscriptionApi";
 import { ChannelCardInSubscribed } from "@/components";
 import ProfilesWrapper from "../profile-pages/ProfilesWrapper";
 
 const Subscribed = () => {
+  const { userId } = useParams();
   const [channels, setChannels] = useState([]);
 
   const getSubscribedChannels = async () => {
     try {
-      const request = await getSubscribedChannelsApi(userData._id);
+      const request = await getSubscribedChannelsApi(userId);
       const response = request.statusCode.subscribedChannelsList;
+
       setChannels(response);
-      if (response.length === 0) setChannels(null);
     } catch (error) {
       console.error("Error fetching subscribed channels:", error);
     }
   };
 
   useEffect(() => {
-    getSubscribedChannels();
-  }, []);
+    if (userId) {
+      getSubscribedChannels();
+    }
+  }, [userId]);
 
   return (
     <ProfilesWrapper>
       <div className="flex flex-col gap-y-4 py-4">
         <div className="relative mb-2 rounded-lg py-2 pl-8 pr-4 shadow-sm">
-          {channels?.map((channel) => (
-            <ChannelCardInSubscribed key={channel._id} channel={channel} />
+          {channels.map((channel) => (
+            <ChannelCardInSubscribed
+              key={channel._id}
+              channelId={channel._id}
+              name={channel.username}
+              subscriberCount={channel.subscriberCount}
+              subscribers={channel.subscribers}
+              imageSrc={channel.avatar}
+              alt={channel.username}
+            />
           ))}
+
           {channels.length === 0 && (
-            <section className="w-full mt-12  h-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
+            <section className="w-full mt-12 h-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
               <div className="flex items-center justify-center">
                 <div className="w-full max-w-sm text-center">
                   <h5 className="mb-2 font-semibold">
