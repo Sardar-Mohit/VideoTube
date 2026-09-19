@@ -16,6 +16,7 @@ import ChannelCardInSubscribed from "./cards/ChannelCardInSubscribed";
 
 // Edit
 import EditVideoModelPopUp from "./update/EditVideoModelPopUp";
+import UpdateVideoPopUp from "./video-crud/UpdateVideoPopUp";
 
 // Empty page
 import NoVideosAvailable from "./empty-page/NoVideosAvailable";
@@ -77,6 +78,7 @@ export {
   UpdateTweetCard,
   UserProfileCard,
   UploadVideoPopUp,
+  UpdateVideoPopUp,
   DeleteVideoModel,
   NoVideosAvailable,
   UpdateCommentCard,

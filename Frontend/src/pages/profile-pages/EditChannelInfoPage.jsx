@@ -2,8 +2,10 @@ import {
   Aside,
   ProfileEditHeaderWithNavigation,
 } from "@/components";
+import { useSelector } from "react-redux";
 
 const EditChannelInfoPage = () => {
+  const user = useSelector((state) => state.auth.user);
   return (
     <>
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
@@ -26,14 +28,14 @@ const EditChannelInfoPage = () => {
                       </label>
                       <div className="flex rounded-lg border">
                         <p className="flex shrink-0 items-center border-r border-white px-3 align-middle">
-                          vidplay.com/
+                          videoTube.com/
                         </p>
                         <input
                           type="text"
                           className="w-full bg-transparent px-2 py-1.5"
                           id="username"
                           placeholder="@username"
-                          defaultValue="reactpatterns"
+                          value={user?.username}
                         />
                       </div>
                     </div>
@@ -46,9 +48,7 @@ const EditChannelInfoPage = () => {
                         rows={4}
                         id="desc"
                         placeholder="Channel Description"
-                        defaultValue={
-                          "I'm a Product Designer based in Melbourne, Australia. I specialise in UX/UI design, brand strategy, and Webflow development."
-                        }
+
                       />
                       <p className="mt-0.5 text-sm text-gray-300">
                         275 characters left

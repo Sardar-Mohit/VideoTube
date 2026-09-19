@@ -1,6 +1,6 @@
 import useFormatDateHook from "@/hooks/useFormatDateHook";
 import { deleteVideo, togglePublishStatus } from "@/api/videoApi";
-import { UploadVideoPopUp } from "@/components";
+import { UploadVideoPopUp, UpdateVideoPopUp } from "@/components";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getChannelStats, getChannelVideos } from "@/api/dashboardApi";
@@ -22,6 +22,8 @@ const Dashboard = () => {
   const user = userData.user;
 
   const [uploadVideo, setUploadVideo] = useState(false);
+  const [updateVideo, setUpdateVideo] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const [videos, setVideos] = useState(null);
 
   const [stats, setStats] = useState({
@@ -38,6 +40,11 @@ const Dashboard = () => {
 
   const handleUploadVideoToggle = () => {
     setUploadVideo(!uploadVideo);
+  };
+
+  const handleUpdateVideo = (video) => {
+    setSelectedVideo(video);
+    setUpdateVideo(true);
   };
 
   const fetchVideo = async () => {
@@ -85,7 +92,6 @@ const Dashboard = () => {
     <>
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-y-6 px-4 py-8">
-
           {/* Header */}
           <div className="flex flex-wrap justify-between gap-4">
             <div className="block">
@@ -127,7 +133,6 @@ const Dashboard = () => {
 
           {/* Stats */}
           <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4">
-
             <div className="border p-4">
               <div className="mb-4 block">
                 <span className="inline-block h-7 w-7 rounded-full bg-[#E4D3FF] p-1 text-[#ae7aff]">
@@ -154,6 +159,7 @@ const Dashboard = () => {
               </div>
 
               <h6 className="text-gray-300">Total views</h6>
+
               <p className="text-3xl font-semibold">
                 {stats.totalVideoViews}
               </p>
@@ -250,7 +256,6 @@ const Dashboard = () => {
                       className="group border"
                       key={video._id}
                     >
-
                       {/* Publish Toggle */}
                       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
                         <div className="flex justify-center">
@@ -330,7 +335,6 @@ const Dashboard = () => {
                       {/* Actions */}
                       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
                         <div className="flex gap-4">
-
                           {/* Delete */}
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
@@ -338,7 +342,20 @@ const Dashboard = () => {
                                 type="button"
                                 className="relative z-50 h-5 w-5 cursor-pointer hover:text-[#ae7aff]"
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" > <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /> </svg>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth="1.5"
+                                  stroke="currentColor"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.682-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                                  />
+                                </svg>
                               </button>
                             </AlertDialogTrigger>
 
@@ -377,7 +394,7 @@ const Dashboard = () => {
                           <button
                             type="button"
                             className="relative z-50 h-5 w-5 cursor-pointer hover:text-[#ae7aff]"
-                            onClick={handleUploadVideoToggle}
+                            onClick={() => handleUpdateVideo(video)}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -395,7 +412,6 @@ const Dashboard = () => {
                               />
                             </svg>
                           </button>
-
                         </div>
                       </td>
                     </tr>
@@ -408,7 +424,6 @@ const Dashboard = () => {
             {videos && videos.length === 0 && (
               <div className="my-8 flex w-full items-center justify-center p-4">
                 <div className="w-full max-w-sm text-center">
-
                   <p className="mb-3 w-full">
                     <span className="inline-flex rounded-full bg-[#E4D3FF] p-2 text-[#AE7AFF]">
                       <svg
@@ -465,8 +480,24 @@ const Dashboard = () => {
               </div>
             )}
 
+            {/* Upload Video Popup */}
             {uploadVideo && (
-              <UploadVideoPopUp close={handleUploadVideoToggle} />
+              <UploadVideoPopUp
+                close={handleUploadVideoToggle}
+                onVideoUpdated={fetchVideo}
+              />
+            )}
+
+            {/* Update Video Popup */}
+            {updateVideo && (
+              <UpdateVideoPopUp
+                video={selectedVideo}
+                close={() => {
+                  setUpdateVideo(false);
+                  setSelectedVideo(null);
+                }}
+                onVideoUpdated={fetchVideo}
+              />
             )}
           </div>
         </div>

@@ -1,9 +1,18 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
-export const allVideos = async () => {
+export const allVideos = async ({ page = 1, limit = 10 } = {}) => {
   try {
-    const request = await axios.get("http://localhost:8000/api/v1/videos");
+    const request = await axios.get(
+      "http://localhost:8000/api/v1/videos",
+      {
+        params: {
+          page,
+          limit,
+        },
+      }
+    );
+
     return request.data;
   } catch (error) {
     throw error;
@@ -95,8 +104,14 @@ export const updateVideo = async (videoId, videoData) => {
   try {
     const request = await axios.patch(
       `http://localhost:8000/api/v1/videos/${videoId}`,
-      videoData
+      videoData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
+
     return request.data;
   } catch (error) {
     throw error;

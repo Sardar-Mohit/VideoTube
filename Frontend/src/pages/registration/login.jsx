@@ -36,15 +36,14 @@ const Login = () => {
   const onSubmit = async (data, e) => {
     e.preventDefault();
     setButton(true);
-    console.log(data);
-    try {
-      const response = await dispatch(loginUserAction(data));
-      console.log(response);
 
-      if (response.payload) {
-        if (response.payload.message === 200) {
-          navigate("/landing-page");
-        }
+    try {
+      const response = await dispatch(loginUserAction(data)).unwrap();
+
+      console.log("loginResponse:", response);
+
+      if (response?._id) {
+        navigate("/landing-page");
       }
     } catch (error) {
       console.error("Error logging in:", error);
@@ -92,8 +91,10 @@ const Login = () => {
             />
 
             {error && (
-              <p className="mt-2 text-sm text-red-500">
-                {error} {/* Displaying the error message */}
+              <p className="text-red-500">
+                {typeof error === "string"
+                  ? error.match(/Error: (.*?)<br/)?.[1] || error
+                  : error.message}
               </p>
             )}
 
@@ -101,15 +102,16 @@ const Login = () => {
               {button == false ? (
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md bg-[var(--primaryBg)] px-3 py-1.5 text-sm 
-                  font-semibold leading-6 text-[var(--textWhite)] shadow-sm hover:bg-[var(--primaryBgHover)]
-                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                    focus-visible:outline-[var(--primaryBgFocus)]"
+                  className="flex w-full items-center justify-center rounded-md bg-[var(--primaryBg)] px-3 py-1.5 text-sm font-semibold leading-6 text-[var(--textWhite)] shadow-sm hover:bg-[var(--primaryBgHover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primaryBgFocus)]"
                 >
                   Sign in
                 </button>
               ) : (
-                <Button disabled size="xlg">
+                <Button
+                  type="submit"
+                  disabled
+                  className="flex w-full items-center justify-center rounded-md bg-[var(--primaryBg)] px-3 py-1.5 text-sm font-semibold leading-6 text-[var(--textWhite)] shadow-sm hover:bg-[var(--primaryBgHover)]"
+                >
                   <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                   Please wait
                 </Button>

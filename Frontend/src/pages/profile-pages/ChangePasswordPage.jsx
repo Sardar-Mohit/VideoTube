@@ -17,16 +17,20 @@ const ChangePasswordPage = () => {
   const error = useSelector((state) => state.auth.error);
 
   const zodSchema = z.object({
-    oldPassword: z.string().min(2).max(50),
+    oldPassword: z.string().min(1, "Current password is required"),
+
     newPassword: z
       .string()
-      .min(2)
-      .max(50)
-      .refine(
-        (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{3,}$/.test(password),
-        "Password must contain at least one uppercase letter, one lowercase letter and one digit."
+      .min(8, "Password must be at least 8 characters long.")
+      .max(50, "Password must be at most 50 characters long.")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
       ),
-    confirmPassword: z.string().min(2).max(50),
+
+    confirmPassword: z
+      .string()
+      .min(1, "Please confirm your password."),
   });
 
   const {
@@ -37,10 +41,7 @@ const ChangePasswordPage = () => {
     reset,
   } = useForm({ resolver: zodResolver(zodSchema) });
 
-  const onSubmit = async (data, e) => {
-    e.preventDefault();
-    setButton(true);
-
+  const onSubmit = async (data) => {
     if (data.newPassword !== data.confirmPassword) {
       setError("confirmPassword", {
         type: "manual",
@@ -49,19 +50,20 @@ const ChangePasswordPage = () => {
       return;
     }
 
+    setButton(true);
+
     try {
       const response = await dispatch(changePasswordAction(data));
-      console.log("hello " + response.data);
 
-      if (response.payload) {
-        if (response.payload.message === 200) {
-          console.log("changed Successfully" + response.payload);
-        }
+      console.log("Change password response:", response);
+
+      if (changePasswordAction.fulfilled.match(response)) {
+        reset();
+        console.log("Password changed successfully");
       }
     } catch (error) {
       console.error("Error changing password:", error);
     } finally {
-      reset();
       setButton(false);
     }
   };
@@ -118,8 +120,8 @@ const ChangePasswordPage = () => {
                         />
 
                         {error && (
-                          <p className="mt-2 text-sm text-red-500">
-                            {error} {/* Displaying the error message */}
+                          <p className="text-red-500">
+                            {typeof error === "string" ? error : error.message}
                           </p>
                         )}
                       </div>

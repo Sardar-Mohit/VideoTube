@@ -26,11 +26,6 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(userRegistrationAction.fulfilled, (state, action) => {
-        console.log(1);
-        console.log(state);
-        console.log(action);
-        console.log(action.payload);
-        state.user = action.payload;
         state.error = null;
         state.loading = false;
       })
@@ -98,7 +93,6 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(changePasswordAction.rejected, (state, action) => {
-        state.user = initialState.user;
         state.error =
           action.payload || "Error occurred while changing password";
         state.loading = false;

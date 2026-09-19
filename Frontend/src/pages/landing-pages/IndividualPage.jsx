@@ -1,6 +1,6 @@
 import useTimeHook from "@/hooks/useTimeHook";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { allVideos, videoToPlay } from "@/api/videoApi";
 import { useReactionsCountHook } from "@/hooks/useReactionsCountHook";
 import {

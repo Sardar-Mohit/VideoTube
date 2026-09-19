@@ -52,34 +52,36 @@ export const updateCoverImageAction = createAsyncThunk(
   }
 );
 
-// Similar updates for other actions...
 export const userRegistrationAction = createAsyncThunk(
   "user/registerUser",
   async (userData, { rejectWithValue }) => {
     try {
       const response = await registerUserApi(userData);
-      const user = response.statusCode; // Adjust this based on the actual response structure
-      return user;
+
+      return response?.statusCode;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data || error.message
-      );
+      return rejectWithValue({
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          "Error occurred during user registration",
+      });
     }
   }
 );
 
 export const loginUserAction = createAsyncThunk(
-  "user/loginUser",
-  async (userCredentials, { rejectWithValue }) => {
+  "auth/login",
+  async (userData, { rejectWithValue }) => {
     try {
-      console.log("userCredentials");
-      console.log(userCredentials);
-      const response = await loginUserApi(userCredentials);
-      console.log("log", response);
-      return response.statusCode.user; // Return updated user data
+      const response = await loginUserApi(userData);
+
+      return response?.statusCode?.user;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data || error.message
+        error.response?.data?.message ||
+          error.response?.data ||
+          error.message
       );
     }
   }

@@ -8,6 +8,7 @@ import { toggleVideoDislikeApi, toggleVideoLikeApi } from "@/api/likeApi";
 import { getUserChannelProfileApi } from "@/api/authApi";
 import { useNavigate } from "react-router-dom";
 import { getUserPlaylistsAction } from "@/store/actions/playlistActions";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const VideoPlaying = ({
   owner,
@@ -26,6 +27,7 @@ const VideoPlaying = ({
   const user = useSelector((state) => state.auth.user);
   const isSubscribed = !!owner?.isSubscribed?.[0];
   const [AddVideoError, setAddVideoError] = useState([]);
+  const [addVideoLoading, setAddVideoLoading] = useState(false);
   const [playlistData, setPlaylistData] = useState({
     name: "",
     description: "",
@@ -38,22 +40,35 @@ const VideoPlaying = ({
   console.log(playlistArray);
 
   const addVideoToSelectedPlaylists = async () => {
+    setAddVideoError("");
+
+    if (selectedPlaylists.length === 0) {
+      return false;
+    }
+
+    setAddVideoLoading(true);
+
     try {
       const promises = selectedPlaylists.map((playlistId) => {
-        return addVideoToPlaylistApi(owner?.videos[0]?._id, playlistId);
+        return addVideoToPlaylistApi(
+          owner?.videos[0]?._id,
+          playlistId
+        );
       });
 
-      if (promises.length === 0) {
-        return false;
-      }
-
       await Promise.all(promises);
+
+      setAddVideoError("");
+
       console.log("Video added to selected playlists successfully!");
     } catch (error) {
       if (error.message === "Request failed with status code 400") {
         setAddVideoError("Video is already in the playlist.");
       }
+
       console.error("Error adding video to playlists:", error);
+    } finally {
+      setAddVideoLoading(false);
     }
   };
 
@@ -72,25 +87,23 @@ const VideoPlaying = ({
     }
 
     try {
- const response = await toggleSubscriptionApi(owner._id);
-    console.log("Subscription response:", response);
+      const response = await toggleSubscriptionApi(owner._id);
+      console.log("Subscription response:", response);
 
-    await fetchVideo(videoId);
+      await fetchVideo(videoId);
 
-    // This log is still from the current render,
-    // so don't expect owner to update immediately here.
-    console.log("OWNER SUBSCRIPTION AFTER FETCH:", owner?.isSubscribed);
-    console.log("IS SUBSCRIBED AFTER FETCH:", isSubscribed);
+      // This log is still from the current render,
+      // so don't expect owner to update immediately here.
+      console.log("OWNER SUBSCRIPTION AFTER FETCH:", owner?.isSubscribed);
+      console.log("IS SUBSCRIBED AFTER FETCH:", isSubscribed);
     } catch (error) {
       console.error("Error toggling subscription:", error);
     }
   };
 
   const handleSubmit = async (e) => {
-    console.log("user");
-    console.log(user);
     e.preventDefault();
-    console.log(playlistData);
+
     if (!playlistData.name || !playlistData.description) {
       console.error("Name and description are required.");
       return;
@@ -98,17 +111,19 @@ const VideoPlaying = ({
 
     try {
       const request = await createPlaylistApi(playlistData);
-      console.log(request);
+
+      console.log("Playlist created:", request);
+
+      setPlaylistData({
+        name: "",
+        description: "",
+      });
+
+      // Refresh playlists after successful creation
+      await dispatch(getUserPlaylistsAction(user._id));
     } catch (error) {
       console.error("Error creating playlist:", error);
     }
-
-    setPlaylistData({
-      name: "",
-      description: "",
-    });
-
-    dispatch(getUserPlaylistsAction(user._id));
   };
 
   const handleChange = (e) => {
@@ -249,7 +264,14 @@ const VideoPlaying = ({
                 </button>
               </div>
               <div className="relative block">
-                <button className="peer flex items-center gap-x-2 rounded-lg bg-white px-4 py-1.5 text-black">
+                <button
+                  className="peer flex items-center gap-x-2 rounded-lg bg-white px-4 py-1.5 text-black"
+                  onClick={() => {
+                    if (user?._id) {
+                      dispatch(getUserPlaylistsAction(user._id));
+                    }
+                  }}
+                >
                   <span className="inline-block w-5">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -315,13 +337,19 @@ const VideoPlaying = ({
                       </p>
                     )}
                     <button
-                      type="submit"
-                      className="w-full mx-auto mt-0 mb-4 rounded-lg bg-[#ae7aff] px-4 py-2 text-black"
-                      onClick={() => {
-                        addVideoToSelectedPlaylists();
-                      }}
+                      type="button"
+                      disabled={addVideoLoading}
+                      className="flex w-full mx-auto mt-0 mb-4 items-center justify-center gap-2 rounded-lg bg-[#ae7aff] px-4 py-2 text-black disabled:cursor-not-allowed disabled:opacity-60"
+                      onClick={addVideoToSelectedPlaylists}
                     >
-                      Add new video to playlist
+                      {addVideoLoading ? (
+                        <>
+                          <ReloadIcon className="h-4 w-4 animate-spin" />
+                          Adding...
+                        </>
+                      ) : (
+                        "Add new video to playlist"
+                      )}
                     </button>
                   </ul>
                   <form onSubmit={handleSubmit} className="flex flex-col">

@@ -187,6 +187,7 @@ const TweetCard = ({
               <UpdateTweetCard
                 getUserTweets={getUserTweets}
                 tweetId={tweetId}
+                content={content}
                 close={handleUpdateTweetToggle}
               />
             )}

@@ -14,7 +14,6 @@ const playlistSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getUserPlaylistsAction.pending, (state) => {
-        state.user = null;
         state.error = null;
         state.loading = true;
       })

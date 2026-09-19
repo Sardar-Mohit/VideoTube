@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ import {
 
 const Register = () => {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
   const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
   const [button, setButton] = useState(false);
@@ -57,9 +58,10 @@ const Register = () => {
 
   const onSubmitingForm = async (data) => {
     setButton(true);
+
     try {
-      // Prepare form data for registration
       const formData = new FormData();
+
       formData.append("username", data.username);
       formData.append("fullName", data.fullName);
       formData.append("email", data.email);
@@ -67,40 +69,43 @@ const Register = () => {
       formData.append("avatar", data.avatar[0]);
       formData.append("coverImage", data.coverImage[0]);
 
-
-      // Dispatch the registration action and await its completion
+      // Register
       const registrationResponse = await dispatch(
         userRegistrationAction(formData)
       ).unwrap();
 
       console.log("registrationResponse:", registrationResponse);
 
-      // Check if the registration was successful
-      if (registrationResponse && registrationResponse?._id) {
-        // Prepare form data for login
+      // Login after successful registration
+      if (registrationResponse?._id) {
         const loginFormData = {
           username: data.username,
           password: data.password,
         };
-        console.log("2nd")
 
-        // Dispatch the login action
-        const loginResponse = await dispatch(loginUserAction(loginFormData));
-        console.log(loginResponse);
+        const loginResponse = await dispatch(
+          loginUserAction(loginFormData)
+        ).unwrap();
 
         console.log("loginResponse:", loginResponse);
-        console.log("3rd");
 
-        if (loginResponse.payload && loginResponse.payload._id) {
+        // Now user is logged in
+        if (loginResponse?._id) {
           navigate("/landing-page");
         }
       }
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.error("Error registering/logging in:", error);
     } finally {
       setButton(false);
     }
   };
+
+  useEffect(() => {
+    if (user !== null) {
+      navigate("/landing-page");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="flex min-h-screen items-center justify-center py-12 px-6 lg:px-8">
@@ -153,104 +158,104 @@ const Register = () => {
           />
 
           {/* <div className="col-span-full">
-            <label
-              htmlFor="avatar"
-              className="text-sm font-medium leading-6 text-white items-start flex"
-            >
-              Avatar:
-            </label>
-            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-slate-400 px-6 py-10">
-              <div className="text-center">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-300"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                  <label
-                    htmlFor="avatar"
-                    className="px-[2px] relative cursor-pointer rounded-md bg-white font-semibold text-gray-800 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+              <label
+                htmlFor="avatar"
+                className="text-sm font-medium leading-6 text-white items-start flex"
+              >
+                Avatar:
+              </label>
+              <div className="mt-2 flex justify-center rounded-lg border border-dashed border-slate-400 px-6 py-10">
+                <div className="text-center">
+                  <svg
+                    className="mx-auto h-12 w-12 text-gray-300"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
                   >
-                    <span>Upload a file</span>
-                    <input
-                      id="avatar"
-                      name="avatar"
-                      type="file"
-                      className="sr-only"
-                      accept="image/*"
-                      {...register("avatar")}
+                    <path
+                      fillRule="evenodd"
+                      d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
+                      clipRule="evenodd"
                     />
-                  </label>
-                  <p className="text-white pl-1">or drag and drop</p>
-                </div>
-                <p className="text-xs leading-5 text-white">
-                  PNG, JPG, GIF up to 10MB
-                </p>
-                {errors.avatar && (
-                  <p className="mt-2 text-sm text-red-500">
-                    {errors.avatar.message}
+                  </svg>
+                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                    <label
+                      htmlFor="avatar"
+                      className="px-[2px] relative cursor-pointer rounded-md bg-white font-semibold text-gray-800 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                    >
+                      <span>Upload a file</span>
+                      <input
+                        id="avatar"
+                        name="avatar"
+                        type="file"
+                        className="sr-only"
+                        accept="image/*"
+                        {...register("avatar")}
+                      />
+                    </label>
+                    <p className="text-white pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs leading-5 text-white">
+                    PNG, JPG, GIF up to 10MB
                   </p>
-                )}
+                  {errors.avatar && (
+                    <p className="mt-2 text-sm text-red-500">
+                      {errors.avatar.message}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="col-span-full">
-            <label
-              htmlFor="coverImage"
-              className="text-sm font-medium leading-6 text-white items-start flex"
-            >
-              Cover Image
-            </label>
-            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-slate-400 px-6 py-10">
-              <div className="text-center">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-300"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                  <label
-                    htmlFor="coverImage"
-                    className="px-[2px] relative cursor-pointer rounded-md bg-white font-semibold text-gray-800 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+            <div className="col-span-full">
+              <label
+                htmlFor="coverImage"
+                className="text-sm font-medium leading-6 text-white items-start flex"
+              >
+                Cover Image
+              </label>
+              <div className="mt-2 flex justify-center rounded-lg border border-dashed border-slate-400 px-6 py-10">
+                <div className="text-center">
+                  <svg
+                    className="mx-auto h-12 w-12 text-gray-300"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
                   >
-                    <span>Upload a file</span>
-                    <input
-                      id="coverImage"
-                      name="coverImage"
-                      accept="image/*"
-                      type="file"
-                      className="sr-only"
-                      {...register("coverImage")}
+                    <path
+                      fillRule="evenodd"
+                      d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
+                      clipRule="evenodd"
                     />
-                  </label>
-                  <p className="text-white pl-1">or drag and drop</p>
-                </div>
-                <p className="text-xs leading-5 text-white">
-                  PNG, JPG, GIF up to 10MB
-                </p>
-                {errors.coverImage && (
-                  <p className="mt-2 text-sm text-red-500">
-                    {errors.coverImage.message}
+                  </svg>
+                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                    <label
+                      htmlFor="coverImage"
+                      className="px-[2px] relative cursor-pointer rounded-md bg-white font-semibold text-gray-800 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                    >
+                      <span>Upload a file</span>
+                      <input
+                        id="coverImage"
+                        name="coverImage"
+                        accept="image/*"
+                        type="file"
+                        className="sr-only"
+                        {...register("coverImage")}
+                      />
+                    </label>
+                    <p className="text-white pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs leading-5 text-white">
+                    PNG, JPG, GIF up to 10MB
                   </p>
-                )}
+                  {errors.coverImage && (
+                    <p className="mt-2 text-sm text-red-500">
+                      {errors.coverImage.message}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          </div> */}
+            </div> */}
 
           <Input
             label="Avatar:"
@@ -272,22 +277,32 @@ const Register = () => {
           />
 
           {error && (
-            <p className="mt-2 text-sm text-red-500">{error.message}</p>
+            <p className="mt-2 text-sm text-red-500">
+              {error?.message || error}
+            </p>
           )}
 
           <div>
             {button === false ? (
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md
-                bg-[var(--primaryBg)]  px-3 py-1.5 text-sm font-semibold leading-6 hover:text-[var(--textWhite)] 
-                 shadow-sm hover:bg-[var(--primaryBgHover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                  focus-visible:outline-[var(--primaryBgFocus)]"
+                className="flex h-[38px] w-full items-center justify-center rounded-md
+      bg-[var(--primaryBg)] px-3 py-1.5 text-sm font-semibold leading-6
+      hover:text-[var(--textWhite)] shadow-sm
+      hover:bg-[var(--primaryBgHover)]
+      focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+      focus-visible:outline-[var(--primaryBgFocus)]"
               >
                 Sign in
               </button>
             ) : (
-              <Button size="xlg">
+              <Button
+                size="xlg"
+                disabled
+                className="flex h-[38px] w-full items-center justify-center rounded-md
+      bg-[var(--primaryBg)] px-3 py-1.5 text-sm font-semibold leading-6
+      shadow-sm"
+              >
                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                 Please wait
               </Button>
