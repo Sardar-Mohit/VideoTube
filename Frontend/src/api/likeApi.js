@@ -1,10 +1,9 @@
-import axios from "axios";
-axios.defaults.withCredentials = true;
+import api from "./axios";
 
 export const toggleVideoLikeApi = async (videoId) => {
   try {
-    const request = await axios.post(
-      `http://localhost:8000/api/v1/likes/toggle/v/${videoId}`
+    const request = await api.post(
+      `/likes/toggle/v/${videoId}`
     );
     return request.data;
   } catch (error) {
@@ -14,8 +13,8 @@ export const toggleVideoLikeApi = async (videoId) => {
 
 export const toggleVideoDislikeApi = async (videoId) => {
   try {
-    const request = await axios.post(
-      `http://localhost:8000/api/v1/likes/toggle/vd/${videoId}`
+    const request = await api.post(
+      `/likes/toggle/vd/${videoId}`
     );
     return request.data;
   } catch (error) {
@@ -25,8 +24,8 @@ export const toggleVideoDislikeApi = async (videoId) => {
 
 export const toggleCommentLikeApi = async (commentId) => {
   try {
-    const request = await axios.post(
-      `http://localhost:8000/api/v1/likes/toggle/c/${commentId}`
+    const request = await api.post(
+      `/likes/toggle/c/${commentId}`
     );
     return request.data;
   } catch (error) {
@@ -36,8 +35,8 @@ export const toggleCommentLikeApi = async (commentId) => {
 
 export const toggleTweetLikeApi = async (tweetId) => {
   try {
-    const request = await axios.post(
-      `http://localhost:8000/api/v1/likes/toggle/t/${tweetId}`
+    const request = await api.post(
+      `/likes/toggle/t/${tweetId}`
     );
     return request.data;
   } catch (error) {
@@ -47,8 +46,8 @@ export const toggleTweetLikeApi = async (tweetId) => {
 
 export const getLikedVideosApi = async () => {
   try {
-    const request = await axios.get(
-      `http://localhost:8000/api/v1/likes/videos`
+    const request = await api.get(
+      `/likes/videos`
     );
     return request.data;
   } catch (error) {

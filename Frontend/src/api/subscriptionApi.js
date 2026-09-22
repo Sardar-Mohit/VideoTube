@@ -1,10 +1,9 @@
-import axios from "axios";
-axios.defaults.withCredentials = true;
+import api from "./axios";
 
 export const getSubscribedChannelsApi = async (channelId) => {
   try {
-    const request = await axios.get(
-      `http://localhost:8000/api/v1/subscriptions/c/${channelId}`
+    const request = await api.get(
+      `/subscriptions/c/${channelId}`
     );
     return request.data;
   } catch (error) {
@@ -14,8 +13,8 @@ export const getSubscribedChannelsApi = async (channelId) => {
 
 export const toggleSubscriptionApi = async (channelId) => {
   try {
-    const request = await axios.post(
-      `http://localhost:8000/api/v1/subscriptions/c/${channelId}`
+    const request = await api.post(
+      `/subscriptions/c/${channelId}`
     );
     return request.data;
   } catch (error) {
@@ -25,8 +24,8 @@ export const toggleSubscriptionApi = async (channelId) => {
 
 export const getSubscribersListApi = async (subscriberId) => {
   try {
-    const request = await axios.get(
-      `http://localhost:8000/api/v1/subscriptions/u/${subscriberId}`
+    const request = await api.get(
+      `/subscriptions/u/${subscriberId}`
     );
     return request.data;
   } catch (error) {

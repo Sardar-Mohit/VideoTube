@@ -1,10 +1,9 @@
-import axios from "axios";
-axios.defaults.withCredentials = true;
+import api from "./axios";
 
 export const allVideos = async ({ page = 1, limit = 10 } = {}) => {
   try {
-    const request = await axios.get(
-      "http://localhost:8000/api/v1/videos",
+    const request = await api.get(
+      "/videos",
       {
         params: {
           page,
@@ -30,7 +29,7 @@ export const allSearchVideos = async ({
   uploadDate,
 }) => {
   try {
-    const response = await axios.get("http://localhost:8000/api/v1/videos", {
+    const response = await api.get("/videos", {
       params: {
         page: page,
         limit: limit,
@@ -50,8 +49,8 @@ export const allSearchVideos = async ({
 
 export const videoToPlay = async (videoId) => {
   try {
-    const request = await axios.get(
-      `http://localhost:8000/api/v1/videos/${videoId}`
+    const request = await api.get(
+      `/videos/${videoId}`
     );
     console.log("request");
     console.log(request);
@@ -63,8 +62,8 @@ export const videoToPlay = async (videoId) => {
 
 export const getUserVideos = async (userId) => {
   try {
-    const request = await axios.get(
-      `http://localhost:8000/api/v1/videos/c/${userId}`
+    const request = await api.get(
+      `/videos/c/${userId}`
     );
     return request.data;
   } catch (error) {
@@ -74,8 +73,8 @@ export const getUserVideos = async (userId) => {
 
 export const getUserWatchedVideos = async (userId) => {
   try {
-    const request = await axios.get(
-      `http://localhost:8000/api/v1/videos/w/${userId}`
+    const request = await api.get(
+      `/videos/w/${userId}`
     );
     return request.data;
   } catch (error) {
@@ -85,8 +84,8 @@ export const getUserWatchedVideos = async (userId) => {
 
 export const createVideo = async (videoData) => {
   try {
-    const request = await axios.post(
-      `http://localhost:8000/api/v1/videos`,
+    const request = await api.post(
+      `/videos`,
       videoData,
       {
         headers: {
@@ -102,8 +101,8 @@ export const createVideo = async (videoData) => {
 
 export const updateVideo = async (videoId, videoData) => {
   try {
-    const request = await axios.patch(
-      `http://localhost:8000/api/v1/videos/${videoId}`,
+    const request = await api.patch(
+      `/videos/${videoId}`,
       videoData,
       {
         headers: {
@@ -120,8 +119,8 @@ export const updateVideo = async (videoId, videoData) => {
 
 export const deleteVideo = async (videoId) => {
   try {
-    const request = await axios.delete(
-      `http://localhost:8000/api/v1/videos/${videoId}`
+    const request = await api.delete(
+      `/videos/${videoId}`
     );
     return request.data;
   } catch (error) {
@@ -131,8 +130,8 @@ export const deleteVideo = async (videoId) => {
 
 export const togglePublishStatus = async (videoId) => {
   try {
-    const request = await axios.patch(
-      `http://localhost:8000/api/v1/videos/toggle/publish/${videoId}`
+    const request = await api.patch(
+      `/videos/toggle/publish/${videoId}`
     );
     return request.data;
   } catch (error) {

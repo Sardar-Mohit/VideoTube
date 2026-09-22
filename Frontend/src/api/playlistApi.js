@@ -1,10 +1,9 @@
-import axios from "axios";
-axios.defaults.withCredentials = true;
+import api from "./axios";
 
 export const getPlaylistByIdApi = async (playlistId) => {
   try {
-    const request = await axios.get(
-      `http://localhost:8000/api/v1/playlist/${playlistId}`
+    const request = await api.get(
+      `/playlist/${playlistId}`
     );
     return request.data;
   } catch (error) {
@@ -14,8 +13,8 @@ export const getPlaylistByIdApi = async (playlistId) => {
 
 export const getUserPlaylistsApi = async (userId) => {
   try {
-    const request = await axios.get(
-      `http://localhost:8000/api/v1/playlist/user/${userId}`
+    const request = await api.get(
+      `/playlist/user/${userId}`
     );
     return request.data;
   } catch (error) {
@@ -25,8 +24,8 @@ export const getUserPlaylistsApi = async (userId) => {
 
 export const createPlaylistApi = async (playlistData) => {
   try {
-    const request = await axios.post(
-      `http://localhost:8000/api/v1/playlist`,
+    const request = await api.post(
+      `/playlist`,
       playlistData
     );
     return request.data;
@@ -37,8 +36,8 @@ export const createPlaylistApi = async (playlistData) => {
 
 export const addVideoToPlaylistApi = async (videoId, playlistId) => {
   try {
-    const request = await axios.patch(
-      `http://localhost:8000/api/v1/playlist/add/${videoId}/${playlistId}`,
+    const request = await api.patch(
+      `/playlist/add/${videoId}/${playlistId}`,
       {},
       { withCredentials: true }
     );
@@ -50,8 +49,8 @@ export const addVideoToPlaylistApi = async (videoId, playlistId) => {
 
 export const updatePlaylistApi = async (playlistId, playlistData) => {
   try {
-    const request = await axios.patch(
-      `http://localhost:8000/api/v1/playlist/${playlistId}`,
+    const request = await api.patch(
+      `/playlist/${playlistId}`,
       playlistData
     );
     return request.data;
@@ -62,8 +61,8 @@ export const updatePlaylistApi = async (playlistId, playlistData) => {
 
 export const removeVideoFromPlaylistApi = async (videoId, playlistId) => {
   try {
-    const request = await axios.patch(
-      `http://localhost:8000/api/v1/playlist/remove/${videoId}/${playlistId}`
+    const request = await api.patch(
+      `/playlist/remove/${videoId}/${playlistId}`
     );
     return request.data;
   } catch (error) {
@@ -73,8 +72,8 @@ export const removeVideoFromPlaylistApi = async (videoId, playlistId) => {
 
 export const deletePlaylistApi = async (playlistId) => {
   try {
-    const request = await axios.delete(
-      `http://localhost:8000/api/v1/playlist/${playlistId}`
+    const request = await api.delete(
+      `/playlist/${playlistId}`
     );
     return request.data;
   } catch (error) {

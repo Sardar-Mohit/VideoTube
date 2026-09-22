@@ -1,10 +1,10 @@
-import axios from "axios"; 
+import api from "./axios";
 
 // Function to register
 export const registerUserApi = async (userData) => {
   try {
-    const request = await axios.post(
-      "http://localhost:8000/api/v1/users/register",
+    const request = await api.post(
+      "/users/register",
       userData,
       {
         withCredentials: true,
@@ -22,8 +22,8 @@ export const registerUserApi = async (userData) => {
 // Function to login a user
 export const loginUserApi = async (userCredentials) => {
   try {
-    const request = await axios.post(
-      "http://localhost:8000/api/v1/users/login",
+    const request = await api.post(
+      "/users/login",
       userCredentials,
       {
         withCredentials: true,
@@ -39,8 +39,8 @@ export const loginUserApi = async (userCredentials) => {
 // Function to change password
 export const changePasswordApi = async (userData) => {
   try {
-    const request = await axios.post(
-      "http://localhost:8000/api/v1/users/change-password",
+    const request = await api.post(
+      "/users/change-password",
       userData,
       {
         withCredentials: true,
@@ -55,8 +55,8 @@ export const changePasswordApi = async (userData) => {
 // Function to logout a user
 export const logoutUserApi = async () => {
   try {
-    const request = await axios.post(
-      "http://localhost:8000/api/v1/users/logout"
+    const request = await api.post(
+      "/users/logout"
     );
     console.log(request.data);
     return request.data;
@@ -68,8 +68,8 @@ export const logoutUserApi = async () => {
 // Function to refresh access token
 export const refreshAccessTokenApi = async () => {
   try {
-    const request = await axios.post(
-      "http://localhost:8000/api/v1/users/refresh-token"
+    const request = await api.post(
+      "/users/refresh-token"
     );
     console.log(request.data);
     return request.data;
@@ -81,8 +81,8 @@ export const refreshAccessTokenApi = async () => {
 // Function to get current user
 export const getCurrentUserApi = async () => {
   try {
-    const request = await axios.get(
-      "http://localhost:8000/api/v1/users/current-user",
+    const request = await api.get(
+      "/users/current-user",
       {
         withCredentials: true,
       }
@@ -102,8 +102,8 @@ export const getCurrentUserApi = async () => {
 // Function to update account details
 export const updateAccountDetailsApi = async (userData) => {
   try {
-    const request = await axios.patch(
-      "http://localhost:8000/api/v1/users/update-account",
+    const request = await api.patch(
+      "/users/update-account",
       userData
     );
     return request.data;
@@ -115,8 +115,8 @@ export const updateAccountDetailsApi = async (userData) => {
 // Function to update user avatar
 export const updateUserAvatarApi = async (avatarData) => {
   try {
-    const request = await axios.patch(
-      "http://localhost:8000/api/v1/users/avatar",
+    const request = await api.patch(
+      "/users/avatar",
       avatarData,
       {
         headers: {
@@ -134,8 +134,8 @@ export const updateUserAvatarApi = async (avatarData) => {
 // Function to update user cover image
 export const updateUserCoverImageApi = async (coverImageData) => {
   try {
-    const request = await axios.patch(
-      "http://localhost:8000/api/v1/users/cover-image",
+    const request = await api.patch(
+      "/users/cover-image",
       coverImageData,
       {
         headers: {
@@ -153,8 +153,8 @@ export const updateUserCoverImageApi = async (coverImageData) => {
 // Function to get user channel profile
 export const getUserChannelProfileApi = async (username) => {
   try {
-    const request = await axios.get(
-      `http://localhost:8000/api/v1/users/c/${username}`
+    const request = await api.get(
+      `/users/c/${username}`
     );
     console.log(request.data);
     return request.data;
@@ -165,8 +165,8 @@ export const getUserChannelProfileApi = async (username) => {
 
 export const getUserChannelProfileByIdApi = async (userId) => {
   try {
-    const request = await axios.get(
-      `http://localhost:8000/api/v1/users/ci/${userId}`
+    const request = await api.get(
+      `/users/ci/${userId}`
     );
     console.log(request.data);
     return request.data;
@@ -178,8 +178,8 @@ export const getUserChannelProfileByIdApi = async (userId) => {
 // Function to get user watch history
 export const getWatchHistoryApi = async () => {
   try {
-    const request = await axios.get(
-      "http://localhost:8000/api/v1/users/history",
+    const request = await api.get(
+      "/users/history",
        {
         withCredentials: true,
       }
